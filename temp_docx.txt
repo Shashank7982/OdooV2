@@ -1,0 +1,725 @@
+IMPLEMENTATION PLAN
+Custom Accounting Add-on for Odoo 18
+Architecture · Data model · Business flows · Phased delivery · Timeline · Budget · Risk · Test plan
+Document purpose
+Full pre-implementation plan, revised from the reviewed draft to close identified gaps (validation, timeline, resourcing, budget, risk, consistent GST treatment, rendered diagrams)
+Scope
+Existing custom accounting suite plus sales, purchase, inventory, GST, and customizable-desk integration on Odoo 18
+Status
+Ready for stakeholder review and sign-off. Phase 0 must run and pass before Phase 1 begins.
+Version
+v2 — supersedes the earlier knowledge-base/image self-audit draft
+Date
+28 August 2026
+Contents
+Executive Summary
+1. Purpose, Scope, and Inputs
+2. Assumptions Requiring Validation Before Phase 1
+3. Target Architecture
+4. Target Data Model
+5. End-to-End Business Flows
+6. UI Wireframes
+7. Chart of Accounts and Configuration Plan
+8. Data Flow Diagrams
+9. Journal Rule Catalog and Validation Matrix
+10. Month-End and Year-End Close Procedure
+11. Explicit Sales-Invoice Validation Checklist
+12. Implementation Phases, Backlog, and Timeline
+13. Team, Roles, and Responsibilities
+14. Budget Framework
+15. Risk Register
+16. Open Decisions Required Before Coding
+17. Test Strategy and Traceability Scenarios
+18. Requirement Traceability Matrix
+19. Recommendation and Next Steps
+Executive Summary
+This plan sets out how to deliver a custom accounting add-on for the existing Odoo 18 installation, covering standard double-entry bookkeeping, GST, sales, purchasing, and a customizable-desk product line. It replaces an earlier draft that was strong on accounting logic and diagram coverage but was missing a schedule, resourcing, a budget framework, a risk register, and independently verified rendered diagrams. This version keeps what was already correct and adds those missing pieces.
+Two decisions gate everything else and should be made before Phase 1 starts:
+Confirm — by direct inspection, not by re-reading a prior report — that the addon list, dependency graph, and Odoo edition described in Section 2 match the real D:\Odoo18 installation.
+Decide how the customizable desk is modelled (variant, kit, manufactured BOM, or bespoke configurator), since this drives the Phase 2 estimate.
+Indicative delivery is six sequential phases over roughly 17 weeks (~4 months) for a first production release covering core accounting, sales, purchase, and GST reporting, assuming a small dedicated team (see Section 12). Cost is presented as an effort framework rather than a fixed quote, since actual cost depends on your team's rates (Section 13).
+1. Purpose, Scope, and Inputs
+1.1 Direct request
+Inspect the existing Odoo 18 installation and its current accounting-related flows and dependencies.
+Produce a full implementation plan for a custom accounting add-on.
+Provide architecture and dependency diagrams and UI wireframes before implementation begins.
+Account for a customizable-desk product if one is added to the catalogue.
+1.2 Reference material treated as business requirements
+The supplied accounting knowledge base and three workflow images (SAP-style sales information-system map, sales swimlane, purchase swimlane) are treated as business/reference requirements, not as instructions to change files or data directly. Their core requirements, carried through this plan, are:
+Standard double-entry accounting: transaction → validation → journal → ledger/subledger → trial balance → statements.
+Sales, purchasing, payment, GST, inventory, and reporting, including the specific ₹10,000 + ₹1,800 GST sales example and ₹5,000 + ₹900 GST purchase example.
+Diagrams and screen blueprints reviewable before implementation (delivered in this version as rendered images, not pseudocode — see Sections 3–5 and 8).
+1.3 In scope for the first release
+Core journal/ledger hardening on top of Odoo's standard account.move / account.move.line.
+Sales: inquiry → quotation → order → delivery → invoice → payment, with returns, credit/debit memos.
+Purchase: request → RFQ → PO → receipt (incl. backorder) → vendor bill → payment.
+Indian GST: CGST + SGST for intra-state, IGST for inter-state, aggregated into GSTR-1/3B.
+Reporting: trial balance, P&L, balance sheet, cash flow, aging, GST reports.
+1.4 Explicitly out of scope for the first release (candidates for later phases)
+Multi-currency revaluation and multi-company consolidation beyond what Odoo provides out of the box.
+E-invoice / e-way bill portal filing and GST portal submission (treated as external integration boundaries).
+POS integration and affiliate payout automation beyond what already exists.
+2. Assumptions Requiring Validation Before Phase 1
+The earlier draft presented the current-state assessment below as a confirmed fact, described as coming from "static inspection of the supplied Odoo 18 source tree." It cannot be independently verified from the artifacts available for this plan, and it is the foundation for the phase backlog in Section 12. It is carried forward here as a working assumption, not a fact, and Phase 0 includes an explicit task to confirm or correct it against the live codebase before any other work starts.
+2.1 Assumed current state (to be confirmed in Phase 0)
+Assumed: an Odoo 18 source checkout at D:\Odoo18, with standard Odoo under odoo/, standard and extended addons under addons/, PostgreSQL configuration in odoo.conf, and the existing custom accounting addons listed below.
+Layer
+Assumed addon
+Assumed responsibility
+Foundation
+custom_accounting_core
+Recurring entries, opening balances, expenses, user extensions
+Cost accounting
+custom_accounting_analytic
+Analytic plans, mandatory analytic distribution, profitability
+Fixed assets
+custom_accounting_assets
+Categories, schedules, depreciation, disposal, transfer, revaluation
+Planning
+custom_accounting_budget
+Budget workflow, actuals, variance, revisions
+Visibility
+custom_accounting_dashboard
+Receivable/payable/cash/GST/budget KPIs
+Deferrals
+custom_accounting_deferred
+Revenue/expense recognition schedules
+Collections
+custom_accounting_followup
+Overdue levels, reminders, activities
+India
+custom_accounting_indian
+GSTR-1 and GSTR-3B preparation
+Capture
+custom_accounting_ocr
+Vendor-bill upload, review, provider interface
+Reporting
+custom_accounting_reports
+Financial statements, aging, analysis, exports
+Security
+custom_accounting_security
+Roles, model access, bank-field protection
+Banking
+custom_bank_reconciliation
+Bank statement CSV import and unmatched queue
+India localization
+l10n_in*, l10n_in_gst_invoice_customization
+GST calculation, GST fields, e-invoice/e-way bill, invoice print
+2.2 Mandatory Phase-0 validation tasks
+Open D:\Odoo18\addons on the real server and confirm every addon name in the table above actually exists; remove or correct any that don't.
+Confirm whether custom_accounting_analytic genuinely overrides account.move._post — if it does, this is a high-risk cross-cutting hook and needs an integration-test pass across invoices, bills, payments, recurring entries, assets, deferrals, expenses, and GST before any change is made near it.
+Confirm the Odoo edition in use (Community vs Enterprise) — do not assume Enterprise-only features (e.g. certain dynamic reporting widgets) are available.
+Confirm whether Indian GST calculation and statutory document generation genuinely already live in l10n_in*; if so, the custom layer should aggregate and report on that data rather than recalculate it.
+Record the confirmed state in a short signed-off memo before Phase 1 begins. If material differences are found, re-estimate Sections 12–14 before proceeding.
+2.3 Architectural rules (apply regardless of what Phase 0 finds)
+Single posting authority: every business event ultimately posts through standard account.move APIs. No competing ledger engine.
+No direct balance writes: balances are derived from posted move lines only.
+Balanced posting invariant: every posted move must satisfy debit = credit in company currency, within Odoo's currency precision.
+Period control: posting must respect Odoo lock dates and any custom period policy.
+Configuration over hard-coding: accounts, taxes, journals, analytic requirements, and product categories are configurable per company.
+Reversal over deletion: posted transactions are corrected by reversal, credit note, or debit note, with a full audit trail — never a silent edit or delete.
+Optional modules remain optional: GST, affiliate, OCR, budget, and POS integrations must fail gracefully rather than hard-crash when absent.
+3. Target Architecture
+Every business event — sales, purchase, expense, bank import, or OCR capture — passes through one shared validation and accounting-policy layer before it reaches the single posting authority (Odoo's account.move / account.move.line). Ledgers, subledgers, tax, inventory valuation, assets, deferred recognition, and analytic dimensions are all views over that one posted source, feeding one reporting and export layer.
+Figure 1 — Target architecture: one shared validation layer, one posting authority, many reporting views
+This directly resolves a gap in the original knowledge base, which specified the accounting engine and database logic but did not specify how sales, purchase, banking, and OCR sources should be reconciled into one authority — here they explicitly are.
+4. Target Data Model
+The knowledge base's conceptual model (Company → Customers/Suppliers → Documents → Document Lines → Journal Header → Journal Lines → Chart of Accounts) maps directly onto existing Odoo entities, so the plan extends rather than duplicates them.
+Figure 2 — Data model: knowledge-base entities mapped to their authoritative Odoo models
+Knowledge-base entity
+Authoritative Odoo model
+Company
+res.company
+Customers / Suppliers
+res.partner (customer/supplier roles)
+Documents (invoice/RFQ/order)
+sale.order, purchase.order, and lines
+Journal Header
+account.move
+Journal Lines
+account.move.line
+Chart of Accounts
+account.account
+Product
+product.product / product.template
+5. End-to-End Business Flows
+One rule applies throughout this plan and resolves an inconsistency in the original knowledge base, which sometimes showed a single combined "GST" line and sometimes split CGST/SGST: GST is always CGST + SGST for a same-state (intra-state) transaction, and IGST for an inter-state transaction. There is no combined "GST" account in the target design — every sample posting below, and every posting in the system, uses this split.
+5.1 Sales — from inquiry to reconciled payment
+This is the revised flow, built by walking every node in the supplied sales information-system map and sales swimlane image and giving each one an explicit place in the accounting flow (Sales Support, Inquiry, Contract, Scheduling Agreement, both free-of-charge cases, Returns, and both memo types were present in the images but missing from the original knowledge-base narrative).
+Figure 3 — Revised sales-to-accounting flow
+5.2 Purchase — from request to reconciled payment
+Likewise, this flow gives the purchase swimlane's automatic/manual legend, draft-review loop, partial-receipt/backorder branch, and vendor-bill validation loop an explicit place before posting.
+Figure 4 — Revised purchase-to-accounting flow
+5.3 Worked examples (canonical — used consistently in Sections 9, 11, and 16)
+Scenario
+Debit
+Credit
+Sales invoice: ₹10,000 taxable, same-state
+Customer receivable ₹11,800
+Sales revenue ₹10,000; Output CGST ₹900; Output SGST ₹900
+Sales invoice: ₹10,000 taxable, inter-state
+Customer receivable ₹11,800
+Sales revenue ₹10,000; Output IGST ₹1,800
+Customer receipt ₹11,800
+Bank ₹11,800
+Customer receivable ₹11,800
+Purchase invoice: ₹5,000 taxable, same-state
+Inventory/purchase ₹5,000; Input CGST ₹450; Input SGST ₹450
+Supplier payable ₹5,900
+Supplier payment ₹5,900
+Supplier payable ₹5,900
+Bank ₹5,900
+6. UI Wireframes
+These are low-fidelity text wireframes, sufficient for a functional walkthrough. Before build sign-off, redraw the two customer-facing screens (sales invoice, dashboard) in the actual design tool your UX process uses — a text wireframe should not be treated as final visual design.
+6.1 Main accounting dashboard
++--------------------------------------------------------------------+| Custom Accounting                          Company [IN Company v] || Dashboard | Entries | Sales | Purchases | Banking | Reports        |+--------------------------------------------------------------------+| Period [01-Aug-2026]-[31-Aug-2026]  Journal [All v] [Refresh]      |+-------------+-------------+-------------+----------------------- +| Receivables | Payables    | Bank + Cash | GST net payable         || Rs 118,000  | Rs 74,500   | Rs 325,000  | Rs 21,600               |+-------------+-------------+-------------+-------------------------+| Exceptions: unbalanced drafts, duplicate bills, unmatched bank     || lines, missing analytic distribution, GST validation errors       |+--------------------------------------------------------------------+
+6.2 Journal entry / controlled posting form
++--------------------------------------------------------------------+| Journal Entry: [New]                State: Draft   [Post][Cancel] |+--------------------------------------------------------------------+| Journal [General v]  Date [dd/mm/yyyy]  Reference [.......]        |+--------------------------------------------------------------------+| Account            Partner    Analytic     Debit      Credit      || Receivable         ABC Ltd    Sales        11,800     0           || Sales Revenue                 Sales        0          10,000      || Output CGST                   Sales        0          900         || Output SGST                   Sales        0          900         |+--------------------------------------------------------------------+| Total debit 11,800   Total credit 11,800   Balance: Balanced      || Validation: period open . tax valid . analytic complete           |+--------------------------------------------------------------------+
+6.3 Sales invoice for a customizable desk
++--------------------------------------------------------------------+| Customer Invoice INV/2026/0012            Draft [Confirm][Send]   |+--------------------------------------------------------------------+| Customer [ABC Ltd v]  Invoice date [27/08/26]  Due [26/09/26]     || GSTIN [.............]  Place of supply [Gujarat v]                |+--------------------------------------------------------------------+| Product        Configuration      Qty  Price    Tax   Total       || Custom Desk    1400mm/Cable tray  1    10,000   18%   11,800     |+--------------------------------------------------------------------+| Untaxed 10,000  CGST 900  SGST 900   Total 11,800                 || Preview: Dr Receivable | Cr Sales | Cr CGST | Cr SGST              |+--------------------------------------------------------------------+
+6.4 Purchase / OCR review
++--------------------------------------------------------------------+| Vendor Bill Capture                    Upload [Choose PDF/Image]  |+--------------------------------------------------------------------+| Vendor [ABC Supplies v]  Status [Needs Review]                     || Invoice no [SUP-991]  Tax 900  Total 5,900  Duplicate: None       |+--------------------------------------------------------------------+| Product/account      Qty   Price   Tax   Confidence                || Desk component       1     5,000   18%   Review                   |+--------------------------------------------------------------------+| [Run extraction] [Confirm] [Create vendor bill]                    |+--------------------------------------------------------------------+
+6.5 Reports and reconciliation
++--------------------------------------------------------------------+| Report [Trial Balance v]  From [01/08/26] To [31/08/26]  [Run]    |+--------------------------------------------------------------------+| Account          Opening   Debit     Credit    Closing            || 1100 Bank         ...       ...       ...        ...              || 1300 Receivable   ...       ...       ...        ...              || 4100 Sales        ...       ...       ...        ...              |+--------------------------------------------------------------------+| Totals            ...       11,800    11,800     ...              || [Print PDF] [Export CSV/XLSX] [Open journal items]                |+--------------------------------------------------------------------+
+7. Chart of Accounts and Configuration Plan
+Restored to the knowledge base's original numbering (the earlier plan draft had collapsed these into unnumbered examples). Use the company's real chart template as source of truth; this is the minimum set to verify or configure.
+Code
+Account
+Class
+Odoo account type
+1100
+Cash
+Assets (1000-1999)
+asset_cash
+1200
+Bank
+Assets
+asset_cash
+1300
+Accounts Receivable
+Assets
+asset_receivable
+1400
+Inventory
+Assets
+asset_current
+2100
+Accounts Payable
+Liabilities (2000-2999)
+liability_payable
+2200
+GST Payable (Output CGST/SGST/IGST)
+Liabilities
+liability_current
+2300
+Loans
+Liabilities
+liability_non_current
+3100
+Capital
+Equity (3000-3999)
+equity
+3200
+Retained Earnings
+Equity
+equity_unaffected
+4100
+Sales
+Revenue (4000-4999)
+income
+4200
+Service Revenue
+Revenue
+income_other
+5100
+Purchase / COGS
+Expenses (5000-5999)
+expense_direct_cost
+5200
+Salaries
+Expenses
+expense
+5300
+Rent
+Expenses
+expense
+5400
+Utilities
+Expenses
+expense
+Configuration tasks
+Verify account code uniqueness per company.
+Configure receivable/payable accounts on partner records and property fields.
+Configure product-category income, expense, stock input/output, and valuation accounts.
+Configure input/output CGST, SGST, and IGST accounts through standard Indian tax repartition — not a single combined GST account.
+Configure bank/cash journals and outstanding accounts.
+Configure asset-category accounts and the depreciation journal.
+Configure analytic plans and mandatory-analytic policy.
+Load only company-approved configuration data; never overwrite posted production data.
+8. Data Flow Diagrams
+8.1 Level 0 — external context
+Figure 5 — Level 0 DFD: external entities exactly as listed in the knowledge base
+8.2 Level 1 — processes and data stores
+Data stores D1–D11 are logical views over existing Odoo models, not new tables.
+Figure 6 — Level 1 DFD: processes 1.0–5.0 and data stores D1–D11
+Logical store
+Authoritative Odoo source
+D1 Chart of Accounts
+account.account
+D2 Customers
+res.partner (customer role)
+D3 Suppliers
+res.partner (supplier role)
+D4 Products / Inventory
+product.product, stock.move, valuation layers
+D5 Journal Headers
+account.move
+D6 Journal Lines
+account.move.line
+D7 General Ledger
+Posted account.move.line grouped by account
+D8 Tax Transactions
+Tax-tagged account.move.line + tax repartition
+D9 Payments / Receipts
+account.payment, partial reconciliations
+D10 Audit Log
+Chatter, immutable posted-move metadata, reversal links
+D11 Accounting Periods
+Odoo lock dates + custom period policy
+9. Journal Rule Catalog and Validation Matrix
+9.1 Transaction-source and journal-rule catalog
+Transaction type
+Debit rule
+Credit rule
+SALES_INVOICE
+Customer receivable = invoice total
+Sales revenue = taxable value; Output CGST+SGST (same-state) or IGST (inter-state)
+PURCHASE_INVOICE
+Inventory/purchase = taxable value; Input CGST+SGST or IGST
+Supplier payable = invoice total
+CUSTOMER_RECEIPT
+Bank/cash = receipt amount
+Customer receivable = receipt amount
+SUPPLIER_PAYMENT
+Supplier payable = payment amount
+Bank/cash = payment amount
+ASSET_DEPRECIATION
+Depreciation expense
+Accumulated depreciation
+DEFERRED_RECOGNITION
+Target expense/revenue account per schedule
+Source deferred account
+INVENTORY_VALUATION
+Inventory / COGS / interim per stock valuation
+Counterpart valuation account
+9.2 Validation matrix and failure behaviour
+Validation
+Failure behaviour
+Transaction date present and valid
+Block save/post with field-level message
+Company matches journal, partner, account, tax, analytic, product
+Block post; no partial records
+Account exists, active, not deprecated
+Block post
+Exactly one debit/credit side per ordinary line
+Block post
+Total debit equals total credit
+Block and roll back
+Accounting period is open
+Block; log actionable message
+Tax required and tax configuration complete
+Block post
+Calculated total equals document total
+Block post
+Customer/supplier exists and is active
+Block post
+Invoice/document number unique
+Block duplicate
+Analytic distribution complete where required
+Block post
+Import file format/row validity (bank/OCR)
+Preview row errors; all-or-nothing commit
+All failures are transactional: no ledger, tax, balance, or status update happens when validation fails.
+10. Month-End and Year-End Close Procedure
+10.1 Month-end
+Finish sales, purchase, payment, receipt, expense, and bank imports for the period.
+Reconcile receivables and payables; review aged reports.
+Complete bank reconciliation and clear suspense/unmatched items.
+Post due depreciation and deferred-recognition lines.
+Review stock valuation and COGS for the period.
+Run Trial Balance and confirm debit equals credit.
+Run General Ledger, P&L, Balance Sheet, Cash Flow, aging, and GST reports.
+Post approved adjustments through controlled journal entries and rerun the adjusted Trial Balance.
+Obtain controller approval and set the Odoo lock date.
+Archive the close package: exports, approvals, exceptions, audit log.
+10.2 Year-end
+Repeat month-end controls for the full fiscal year.
+Review revenue, COGS, expenses, assets, deferred balances, tax, and intercompany balances.
+Post approved year-end adjustments.
+Generate closing entries for profit/loss accounts into retained earnings per the chart policy.
+Generate final statutory and management reports; lock the fiscal year.
+Carry forward opening balances and create next year's budgets and recurring schedules.
+Retain the final close package and reversal/adjustment references.
+11. Explicit Sales-Invoice Validation Checklist
+Before posting a sales invoice, all ten checks below must be enforced — this is the knowledge base's own validation list, unchanged, and is the acceptance basis for test scenario T01 in Section 16.
+Customer exists.
+Customer is active.
+Product exists.
+Sales account is configured and active.
+Output CGST account is configured when CGST applies.
+Output SGST account is configured when SGST applies (Output IGST when inter-state).
+Tax rate and tax repartition are valid.
+Accounting period is open.
+Invoice number is unique.
+Calculated taxable value, tax, and total match the document.
+Failure of any check must prevent posting and leave no partial journal, ledger, tax, balance, or audit trace.
+12. Implementation Phases, Backlog, and Timeline
+Six sequential phases, ~17 weeks total for a first production release. Durations assume the team in Section 13 working full-time and Phase 0 confirming the Section 2 assumptions without major surprises; add 1–2 weeks of buffer per phase if that confirmation surfaces material differences.
+Figure 7 — Indicative phase timeline
+Phase 0 — Baseline and safety gate (2 weeks)
+Freeze and document the current installed module set and database backup procedure.
+Confirm Odoo version, Python environment, PostgreSQL connectivity, and enabled companies.
+Run existing custom module tests and record failures without changing unrelated code.
+Complete the Section 2 validation tasks and sign off the corrected current-state memo.
+Produce a module-by-module Community-vs-Enterprise compatibility matrix.
+Phase 1 — Core accounting hardening (3 weeks)
+Centralize shared validation helpers (company, date, period, partner, tax, account, duplicate, analytic).
+Review any account.move._post override for safe cooperation with all posting flows.
+Add explicit balanced-entry tests at every custom entry-creation path.
+Add idempotency protection to cron-generated depreciation, deferral, and recurring moves.
+Add structured audit metadata: source model, source record, actor, timestamp, reversal link.
+Phase 2 — Product, inventory, and customizable-desk integration (4 weeks)
+Confirm the desk's product model (variant, kit, manufactured BOM, or configurator) — open decision, see Section 15.
+Configure product-category valuation and income/expense accounts.
+Test sales delivery, inventory valuation, COGS, returns, vendor receipt, vendor bill, credit notes.
+Validate CGST/SGST vs IGST tax behaviour for domestic/inter-state sales.
+Phase 3 — Operational workflows (3 weeks)
+Complete invoice/bill/payment flows and reconciliation links.
+Harden CSV/XLSX bank import with preview, row-level errors, duplicate detection, rollback.
+Harden OCR review: file-type limits, duplicate detection, manual override, no auto-post without approval.
+Validate asset creation from bill lines and disposal/transfer/revaluation flows.
+Phase 4 — Reporting and statutory outputs (3 weeks)
+Reconcile trial balance, GL, P&L, balance sheet, cash flow, aging, and GST totals to posted move lines.
+Add report filters for company, journal, account, partner, analytic dimension, and date.
+Validate GSTR-1/GSTR-3B aggregation against posted GST invoices and credit/debit notes.
+Mark portal submission / e-invoice / e-way bill as external integration boundaries needing credentials and separate tests.
+Phase 5 — Security, UX, and release (2 weeks)
+Test Accounting User, Accounting Manager, Finance Controller, Auditor, and CFO/Admin roles separately; confirm Auditor is read-only everywhere, including custom wizards.
+Confirm bank details are hidden from unauthorized roles.
+Standardize menus, breadcrumbs, status bars, and error messages.
+Package upgrade scripts, demo data, migration notes, rollback plan, and release checklist.
+Release gate
+Implementation should not begin until the Phase 0 baseline confirmation, the product-accounting decision, the tax-jurisdiction decision, and the final role matrix are all approved.
+13. Team, Roles, and Responsibilities
+13.1 Core team (minimum viable staffing)
+Role
+Allocation
+Primary responsibility
+Project sponsor (Finance Controller)
+~2 hrs/week
+Approves scope, decisions in Section 15, and each phase gate
+Functional consultant (Odoo/accounting)
+Full-time
+Owns rule catalog, chart of accounts, GST configuration, close procedure
+Technical developer (Odoo/Python)
+Full-time, 1-2 people from Phase 2
+Builds/hardens the validation layer, journal rules, integrations
+QA / test engineer
+Half-time, full-time from Phase 3
+Owns the traceability scenarios in Section 16 and regression suite
+Data/integration specialist
+As needed, Phases 3-4
+Bank import, OCR, GST report aggregation
+End-user representatives
+A few hours/week
+Sales Manager, Inventory Manager, and Accountant roles for UAT walkthroughs
+13.2 RACI for the image-derived workflow (sales and purchase)
+Activity
+Sales Mgr
+Customer
+Inventory Mgr
+Accountant
+Automation
+Create/send inquiry or quotation
+R/A
+C
+I
+I
+Email/WhatsApp optional
+Confirm order -> auto-create SO/DO
+R/A
+I
+I
+I
+Automation rule
+Validate waybill / pick / deliver
+I
+I
+R/A
+I
+Stock automation
+Create/print invoice, register payment
+R
+C
+I
+A
+Payment reconciliation
+Create draft RFQ / review / send PO
+-
+-
+-
+-
+Purchaser: R/A
+Receive products / backorder
+I
+-
+R/A
+I
+Stock automation
+Validate vendor bill
+I
+-
+I
+R/A
+OCR optional
+Pay supplier and reconcile
+I
+-
+I
+R/A
+Bank reconciliation
+R = Responsible, A = Accountable, C = Consulted, I = Informed.
+14. Budget Framework
+No blended rates or currency total is quoted here — actual cost depends on whether the team is in-house, contracted, or agency-billed, none of which is known from the material this plan was built on. What follows is an effort framework in person-weeks so you can apply your own rates.
+14.1 Effort by phase (person-weeks, all roles combined)
+Phase
+Duration
+Functional
+Development
+QA
+Total person-weeks
+0 — Baseline
+2 wk
+1.5
+1.5
+0.5
+3.5
+1 — Core hardening
+3 wk
+2
+3
+1
+6
+2 — Product/desk integration
+4 wk
+3
+4
+1.5
+8.5
+3 — Operational workflows
+3 wk
+2
+3
+2
+7
+4 — Reporting/statutory
+3 wk
+2.5
+2
+1.5
+6
+5 — Security/UX/release
+2 wk
+1
+1.5
+1.5
+4
+Total
+17 wk
+12
+15
+8
+35
+14.2 Worked illustration only — replace with your real rates
+If, purely as an illustration, a blended weekly rate of ₹80,000/person-week were used, 35 person-weeks would be about ₹28,00,000 before contingency. This number is not a quote — it exists only to show how to turn the effort table above into a budget once you substitute your own rates for functional, development, and QA resources.
+Add a contingency of 15-20% for a first release of this scope (typical for GST/localization-dependent work).
+Add licensing/hosting costs separately if not already covered by an existing Odoo subscription.
+Add external integration costs (OCR provider, e-invoice/e-way bill portal fees) separately — these are usage-based, not effort-based.
+15. Risk Register
+#
+Risk
+Impact
+Mitigation
+R1
+Section 2 current-state assumptions don't match the real D:\Odoo18 codebase
+High — invalidates Phase 7/12 backlog and estimates
+Mandatory Phase 0 validation task (2.2); re-estimate if material differences found
+R2
+account.move._post override in the analytic module is a wide cross-cutting hook
+High — regression risk across every posting path
+Full integration-test suite before touching it; no change without a passing baseline
+R3
+Odoo edition assumed to be Community but is actually Enterprise, or vice versa
+Medium — scoped features may not exist
+Confirm edition in Phase 0 before UI-dependent work is estimated
+R4
+Customizable-desk product model left undecided
+Medium — blocks accurate Phase 2 estimate
+Force the decision in Section 16 before Phase 2 starts
+R5
+GST treatment inconsistency (combined vs split CGST/SGST/IGST) resurfaces in code the way it did in documentation
+Medium — wrong tax postings
+Single canonical rule in Section 5.3, referenced everywhere; add T06/T07-style tests
+R6
+OCR / e-invoice / e-way bill third-party integration outage or credential issues
+Medium — blocks vendor-bill capture or filing
+Treat as external boundary with a manual fallback path; do not let outages block core posting
+R7
+Small team creates a single point of failure
+Medium — schedule slip if one person is unavailable
+Cross-train on the validation layer and rule catalog; document as you build
+R8
+User adoption risk — Sales/Inventory/Accounting staff resist the new controlled workflow
+Medium — shadow spreadsheets persist post go-live
+UAT with real users each phase, not just before release; visible dashboard exceptions
+R9
+Cutover from any existing manual ledger introduces opening-balance errors
+High if mishandled — misstates every subsequent report
+Parallel-run one full month-end close before decommissioning the old process
+R10
+Scope creep into multi-currency/multi-company beyond what's decided
+Medium — timeline slip
+Freeze scope per Section 16 decisions; treat additions as a new phase
+16. Open Decisions Required Before Coding
+Is the customizable desk a product variant, a kit, a manufactured BOM, or a bespoke configurator?
+Which companies/jurisdictions are in scope: India only, or multi-company India + others?
+Should the custom suite remain a separate "Custom Accounting" app, or surface inside standard Accounting/Sales/Purchase menus?
+Which features are required for the first production release versus later phases?
+Are OCR, e-invoice, e-way bill, bank integrations, and GST portal filing in scope, or only preparation/reporting?
+What approval limits apply to posting, payments, assets, budget changes, and reversals?
+None of Phase 2 onward should be estimated in detail until decisions 1 and 2 are made — they change the size of the single largest phase.
+17. Test Strategy and Traceability Scenarios
+17.1 Accounting invariants (must hold at all times)
+Every posted move is balanced.
+No posting is possible in a locked period.
+No duplicate vendor bill posts when the configured duplicate policy rejects it.
+A posted transaction is never deleted or silently edited — only reversed.
+Reversal preserves the original source and its audit trail.
+17.2 Traceability test scenarios
+ID
+Scenario
+Expected result
+T01
+Credit sale ₹10,000 + CGST ₹900 + SGST ₹900, same-state
+Dr receivable ₹11,800; Cr sales ₹10,000; Cr CGST ₹900; Cr SGST ₹900
+T02
+Customer receipt ₹11,800
+Dr bank ₹11,800; Cr receivable ₹11,800; customer balance zero
+T03
+Credit purchase ₹5,000 + CGST ₹450 + SGST ₹450
+Dr inventory ₹5,000; Dr input CGST ₹450; Dr input SGST ₹450; Cr payable ₹5,900
+T04
+Unbalanced manual journal
+Rejected; no posted move; no balance update
+T05
+Missing date/account/tax/period
+Rejected with actionable validation message
+T06
+Same-state India sale
+Standard tax engine produces CGST + SGST; report aggregates it
+T07
+Inter-state India sale
+Standard tax engine produces IGST; report aggregates it
+T08
+Custom desk sale with delivery
+Sales, stock valuation/COGS, invoice, tax, and payment links reconcile
+T09
+Custom desk return
+Stock and accounting reversal/credit note are traceable
+T10
+Month close
+Adjusted Trial Balance balances; reports reproducible; lock prevents ordinary posting
+T11
+Year close
+Closing entry/retained-earnings policy applied; next-year opening balances correct
+T12
+Reversal after posting
+Original remains intact; reversal is balanced and linked
+IMG-S01..S10
+Sales-swimlane scenarios (quotation accept/reject, contract release, backorder, FOC delivery, return, debit memo, payment receipt)
+See Section 5.1 flow — each transition creates exactly one downstream document, never a duplicate
+IMG-P01..P07
+Purchase-swimlane scenarios (RFQ validation error, PO confirmation, partial receipt, vendor-bill validation, purchase posting, supplier payment, automation audit)
+See Section 5.2 flow — same one-document-per-transition rule, plus a backorder link that closes correctly on the later receipt
+17.3 Release gate
+No phase closes, and no release ships, until every traceability scenario in its phase passes and the accounting invariants in 17.1 hold under the regression suite.
+18. Requirement Traceability Matrix
+Every substantive requirement from the supplied knowledge base and all three images, mapped to where it is actually addressed in this plan. This supersedes the two self-audit tables in the earlier draft with one consolidated, GST-consistent version.
+Source requirement
+Plan location
+Status
+Business-event input: sales, purchases, payments, receipts
+Sections 3, 5, 12
+Addressed
+Validation: date, account, tax, amount
+Section 9.2
+Addressed
+Double-entry debit/credit
+Sections 2.3, 5.3, 17.1
+Addressed
+Journal header and lines
+Section 4
+Addressed
+GL and customer/vendor/inventory/tax subledgers
+Sections 3, 4, 8
+Addressed
+Trial balance control
+Sections 10, 17
+Addressed
+P&L, balance sheet, cash flow
+Sections 3, 8, 12 (Phase 4)
+Addressed
+Level 0 / Level 1 DFD, D1-D11
+Section 8
+Addressed
+Chart of accounts and classes
+Section 7
+Addressed, codes restored
+₹10,000 + ₹1,800 GST sales example
+Section 5.3, 17.2 (T01)
+Addressed — now shown split CGST/SGST, consistently
+₹5,000 + ₹900 GST purchase example
+Section 5.3, 17.2 (T03)
+Addressed — same consistency fix
+Rule-driven accounting engine
+Section 9.1
+Addressed
+Month-end/year-end close
+Section 10
+Addressed
+Audit trail and reversal, not deletion
+Sections 2.3, 17.1
+Addressed
+Image 1 — Sales Support, Inquiry, Contract, Scheduling Agreement, FOC (both), Returns, Debit/Credit memo
+Section 5.1 flow
+Addressed — each now has an explicit place, not just a diagram label
+Image 2 — swimlane roles, accept/reject loop, auto SO/DO creation, waybill validation, payment receipt
+Section 5.1 flow, Section 13.2 RACI
+Addressed
+Image 3 — automatic/manual legend, draft review loop, backorder, vendor-bill validation, purchase journal update
+Section 5.2 flow, Section 13.2 RACI
+Addressed
+Diagrams and wireframes reviewable before implementation
+Sections 3, 4, 5, 6, 8 (rendered figures, not pseudocode)
+Addressed — closes the gap flagged in the prior review
+Timeline, resourcing, budget, risk register
+Sections 12-15
+Addressed — did not exist in the prior draft
+19. Recommendation and Next Steps
+Proceed as an integration and hardening programme on top of the existing accounting suite. Do not build a second journal/ledger engine — extend account.move / account.move.line.
+Immediate next steps
+Run the Phase 0 validation tasks in Section 2.2 against the live D:\Odoo18 installation and sign off the corrected current-state memo.
+Convene the decision workshop for Section 16, prioritizing the customizable-desk product model (decision 1) since it sizes Phase 2.
+Confirm the core team in Section 13.1 and their availability against the Section 12 timeline.
+Approve the budget framework in Section 14 once real rates are applied.
+Hold the release gate: do not start Phase 1 until Phase 0, the two priority decisions, and the role matrix are all signed off.

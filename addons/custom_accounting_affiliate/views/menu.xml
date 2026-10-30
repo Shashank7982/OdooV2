@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_custom_accounting_affiliate_root" name="Affiliates"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="65"/>
+    <menuitem id="menu_accounting_affiliate_list"
+              parent="menu_custom_accounting_affiliate_root"
+              action="website_sale_affiliate_custom.action_sale_affiliates" sequence="10"/>
+    <menuitem id="menu_accounting_affiliate_commissions"
+              parent="menu_custom_accounting_affiliate_root"
+              action="website_sale_affiliate_custom.action_affiliate_commissions" sequence="20"/>
+    <menuitem id="menu_accounting_affiliate_withdrawals"
+              parent="menu_custom_accounting_affiliate_root"
+              action="website_sale_affiliate_custom.action_affiliate_withdrawals" sequence="30"/>
+</odoo>

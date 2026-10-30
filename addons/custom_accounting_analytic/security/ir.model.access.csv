@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_profitability_report_wizard,profitability.report.wizard,model_profitability_report_wizard,account.group_account_invoice,1,1,1,1
+access_profitability_report_wizard_line,profitability.report.wizard.line,model_profitability_report_wizard_line,account.group_account_invoice,1,1,1,1

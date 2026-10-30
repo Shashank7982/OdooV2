@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Lets sales users choose USD or INR per quotation/order by picking a
+         pricelist, since sale.order derives its currency from pricelist_id. -->
+    <record id="product_pricelist_inr" model="product.pricelist">
+        <field name="name">India (INR)</field>
+        <field name="currency_id" ref="base.INR"/>
+    </record>
+
+</odoo>

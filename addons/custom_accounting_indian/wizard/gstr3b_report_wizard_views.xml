@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_gstr3b_report_wizard_form" model="ir.ui.view">
+        <field name="name">gstr3b.report.wizard.form</field>
+        <field name="model">gstr3b.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <button name="action_generate" type="object" string="Generate" class="btn-primary mb-3"/>
+                <group string="Outward Supplies (Output Tax)">
+                    <group>
+                        <field name="outward_taxable_value" readonly="1"/>
+                        <field name="output_cgst" readonly="1"/>
+                        <field name="output_sgst" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="output_igst" readonly="1"/>
+                        <field name="output_cess" readonly="1"/>
+                        <field name="total_tax_payable" readonly="1"/>
+                    </group>
+                </group>
+                <group string="Inward Supplies (Input Tax Credit)">
+                    <group>
+                        <field name="inward_taxable_value" readonly="1"/>
+                        <field name="input_cgst" readonly="1"/>
+                        <field name="input_sgst" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="input_igst" readonly="1"/>
+                        <field name="input_cess" readonly="1"/>
+                        <field name="total_itc_available" readonly="1"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="net_tax_payable" readonly="1"/>
+                </group>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_gstr3b_report_wizard" model="ir.actions.act_window">
+        <field name="name">GSTR-3B Preparation</field>
+        <field name="res_model">gstr3b.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

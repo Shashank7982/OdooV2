@@ -1,0 +1,21 @@
+{
+    'name': 'Website Sale Affiliate Custom',
+    'version': '18.0.1.0.0',
+    'category': 'Website',
+    'summary': 'Custom extensions for affiliate program: portal, coupons, commissions, withdrawals.',
+    'author': 'Custom Development',
+    'website': '',
+    'license': 'LGPL-3',
+    'depends': ['website_sale_affiliate', 'loyalty', 'portal', 'mail', 'sale_management'],
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'data/res_config_settings.xml',
+        'data/email_footer_template.xml',
+        'data/mail_templates.xml',
+        'views/affiliate_views.xml',
+        'views/portal_templates.xml',
+    ],
+    'installable': True,
+    'application': False,
+}

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_revenue_by_customer_search" model="ir.ui.view">
+        <field name="name">revenue.by.customer.search</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="product_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Product" name="group_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_revenue_by_customer" model="ir.actions.act_window">
+        <field name="name">Revenue</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('move_id.state', '=', 'posted'), ('move_id.move_type', 'in', ('out_invoice', 'out_refund')), ('account_id.account_type', 'in', ('income', 'income_other'))]</field>
+        <field name="search_view_id" ref="view_revenue_by_customer_search"/>
+        <field name="context">{'search_default_group_partner': 1}</field>
+    </record>
+
+    <record id="view_expense_by_vendor_search" model="ir.ui.view">
+        <field name="name">expense.by.vendor.search</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="account_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Vendor" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Account" name="group_account" context="{'group_by': 'account_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_expense_by_vendor" model="ir.actions.act_window">
+        <field name="name">Expense by Vendor</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('move_id.state', '=', 'posted'), ('move_id.move_type', 'in', ('in_invoice', 'in_refund')), ('account_id.account_type', 'in', ('expense', 'expense_direct_cost'))]</field>
+        <field name="search_view_id" ref="view_expense_by_vendor_search"/>
+        <field name="context">{'search_default_group_partner': 1}</field>
+    </record>
+
+    <record id="view_invoice_analysis_search" model="ir.ui.view">
+        <field name="name">invoice.analysis.search</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <filter string="Posted" name="filter_posted" domain="[('parent_state', '=', 'posted')]"/>
+                <filter string="Draft" name="filter_draft" domain="[('parent_state', '=', 'draft')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_invoice_analysis" model="ir.actions.act_window">
+        <field name="name">Invoice Analysis</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('move_id.move_type', 'in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund')), ('account_id.account_type', 'in', ('asset_receivable', 'liability_payable'))]</field>
+        <field name="search_view_id" ref="view_invoice_analysis_search"/>
+        <field name="context">{'search_default_filter_posted': 1, 'search_default_group_partner': 1}</field>
+    </record>
+
+    <record id="view_payment_analysis_search" model="ir.ui.view">
+        <field name="name">payment.analysis.search</field>
+        <field name="model">account.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Payment Method" name="group_payment_method" context="{'group_by': 'payment_method_line_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_payment_analysis" model="ir.actions.act_window">
+        <field name="name">Payment Analysis</field>
+        <field name="res_model">account.payment</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('state', 'in', ('in_process', 'paid'))]</field>
+        <field name="search_view_id" ref="view_payment_analysis_search"/>
+        <field name="context">{'search_default_group_partner': 1}</field>
+    </record>
+
+    <record id="view_product_margin_analysis_search" model="ir.ui.view">
+        <field name="name">product.margin.analysis.search</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="group_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_product_margin_analysis" model="ir.actions.act_window">
+        <field name="name">Product Margin</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('move_id.state', '=', 'posted'), ('product_id', '!=', False), ('move_id.move_type', 'in', ('out_invoice', 'out_refund', 'in_invoice', 'in_refund'))]</field>
+        <field name="search_view_id" ref="view_product_margin_analysis_search"/>
+        <field name="context">{'search_default_group_product': 1}</field>
+    </record>
+
+    <!-- Menu placement for these actions lives in views/menu.xml (all menuitems
+         centralized there), under Financial Reports > Advanced Analysis. -->
+</odoo>

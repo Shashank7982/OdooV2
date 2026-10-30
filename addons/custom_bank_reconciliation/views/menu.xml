@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_bank_reconciliation_root" name="Bank Reconciliation"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="50"/>
+    <menuitem id="menu_bank_statement_csv_import" name="Import Bank Statement (CSV/XLSX)"
+              parent="menu_bank_reconciliation_root" action="action_bank_statement_csv_import_wizard" sequence="10"/>
+    <menuitem id="menu_bank_statement_line_unmatched" name="Unmatched Transactions"
+              parent="menu_bank_reconciliation_root" action="action_bank_statement_line_unmatched" sequence="20"/>
+</odoo>

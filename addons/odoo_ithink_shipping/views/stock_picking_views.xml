@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_ithink" model="ir.ui.view">
+        <field name="name">stock.picking.form.ithink</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock_delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='tracking']" position="inside">
+                <button type="object" class="oe_link" name="action_ithink_sync_tracking"
+                        string="Sync Status"
+                        invisible="delivery_type != 'ithink' or not ithink_awb_number"/>
+                <button type="object" class="oe_link" name="action_ithink_generate_label"
+                        string="Get Label"
+                        invisible="delivery_type != 'ithink' or not ithink_awb_number"/>
+                <button type="object" class="oe_link" name="action_ithink_generate_manifest"
+                        string="Get Manifest"
+                        invisible="delivery_type != 'ithink' or not ithink_awb_number"/>
+            </xpath>
+            <xpath expr="//group[@name='carrier_data']" position="inside">
+                <field name="ithink_awb_number" invisible="delivery_type != 'ithink'"/>
+                <field name="ithink_logistic_name" invisible="delivery_type != 'ithink'"/>
+                <field name="ithink_status" invisible="delivery_type != 'ithink'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

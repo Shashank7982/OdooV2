@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- No separate "Analytic" app menu, and no separate "Advanced Analytics"
+         menu either - Profitability Analysis lives inside the "Advanced
+         Analysis" group under Financial Reports, alongside Revenue Analysis /
+         Product Margin / etc. -->
+    <menuitem id="menu_profitability_analysis"
+              name="Profitability Analysis"
+              parent="custom_accounting_reports.menu_advanced_analysis_root"
+              action="action_profitability_report_wizard"
+              sequence="50"/>
+</odoo>

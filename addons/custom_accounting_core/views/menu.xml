@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_custom_accounting_core_root" name="Custom Accounting"
+              action="account.open_account_journal_dashboard_kanban"
+              sequence="15"/>
+    <menuitem id="menu_dashboard_journals" name="Dashboard"
+              parent="menu_custom_accounting_core_root" action="account.open_account_journal_dashboard_kanban" sequence="1"/>
+    <menuitem id="menu_custom_accounting_entries_root" name="Entries"
+              parent="menu_custom_accounting_core_root" sequence="5"/>
+    <menuitem id="menu_journal_entries" name="Journal Entries"
+              parent="menu_custom_accounting_entries_root" action="account.action_move_journal_line" sequence="1"/>
+    <menuitem id="menu_journal_items" name="Journal Items (Lines)"
+              parent="menu_custom_accounting_entries_root" action="account.action_account_moves_all" sequence="2"/>
+
+    <menuitem id="menu_recurring_entries" name="Recurring Journal Entries"
+              parent="menu_custom_accounting_entries_root" action="action_account_recurring_entry" sequence="10"/>
+    <menuitem id="menu_opening_balance_wizard" name="Set Opening Balances"
+              parent="menu_custom_accounting_entries_root" action="action_account_opening_balance_wizard" sequence="20"/>
+
+    <!-- Keep the complete accounting setup discoverable from the custom app. -->
+    <menuitem id="menu_custom_accounting_configuration_root" name="Configuration"
+              parent="menu_custom_accounting_core_root" sequence="90"/>
+    <menuitem id="menu_custom_accounting_chart_of_accounts" name="Chart of Accounts"
+              parent="menu_custom_accounting_configuration_root" action="account.action_account_form" sequence="10"/>
+    <menuitem id="menu_custom_accounting_journals" name="Journals"
+              parent="menu_custom_accounting_configuration_root" action="account.action_account_journal_form" sequence="20"/>
+    <menuitem id="menu_custom_accounting_taxes" name="Taxes"
+              parent="menu_custom_accounting_configuration_root" action="account.action_tax_form" sequence="30"/>
+    <menuitem id="menu_custom_accounting_analytic_accounts" name="Analytic Accounts"
+              parent="menu_custom_accounting_configuration_root" action="analytic.action_account_analytic_account_form" sequence="40"/>
+    <menuitem id="menu_custom_accounting_analytic_plans" name="Analytic Plans"
+              parent="menu_custom_accounting_configuration_root" action="analytic.account_analytic_plan_action" sequence="50"/>
+    <menuitem id="menu_custom_accounting_analytic_rules" name="Analytic Distribution Rules"
+              parent="menu_custom_accounting_configuration_root" action="analytic.action_analytic_distribution_model" sequence="60"/>
+    <menuitem id="menu_custom_accounting_settings" name="Accounting Settings"
+              parent="menu_custom_accounting_configuration_root" action="account.action_account_config" sequence="70" groups="base.group_system"/>
+</odoo>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="marketing_inbound_mail_menu"
+              name="Inbound Mail Log"
+              parent="mass_mailing.mass_mailing_menu_root"
+              action="marketing_inbound_mail_action"
+              groups="group_marketing_mail_gateway_user"
+              sequence="45"/>
+</odoo>

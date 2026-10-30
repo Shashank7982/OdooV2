@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="affiliate_withdrawal_view_form_accounting" model="ir.ui.view">
+        <field name="name">affiliate.withdrawal.form.accounting</field>
+        <field name="model">affiliate.withdrawal</field>
+        <field name="inherit_id" ref="website_sale_affiliate_custom.affiliate_withdrawal_view_form"/>
+        <field name="arch" type="xml">
+            <field name="amount" position="after">
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="journal_id" invisible="state == 'paid'"/>
+            </field>
+            <field name="payment_date" position="after">
+                <field name="payment_id" invisible="not payment_id"/>
+            </field>
+            <button name="action_reject" position="after">
+                <button name="action_view_payment" type="object" string="View Payment"
+                        invisible="not payment_id" class="btn-secondary"/>
+            </button>
+        </field>
+    </record>
+
+    <record id="affiliate_withdrawal_view_list_accounting" model="ir.ui.view">
+        <field name="name">affiliate.withdrawal.list.accounting</field>
+        <field name="model">affiliate.withdrawal</field>
+        <field name="inherit_id" ref="website_sale_affiliate_custom.affiliate_withdrawal_view_list"/>
+        <field name="arch" type="xml">
+            <field name="payment_date" position="after">
+                <field name="payment_id"/>
+            </field>
+        </field>
+    </record>
+</odoo>

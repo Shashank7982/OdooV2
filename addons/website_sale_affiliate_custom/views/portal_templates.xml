@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Portal: Add Affiliate link to /my sidebar -->
+    <template id="portal_my_home_affiliate" name="Show Affiliate"
+        inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/website_sale_affiliate_custom/static/description/icon.png'"/>
+                <t t-set="title">Affiliate Program</t>
+                <t t-set="url" t-value="'/my/affiliate'"/>
+                <t t-set="text">View your affiliate dashboard</t>
+                <t t-set="placeholder_count" t-value="'affiliate_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Portal: Affiliate Dashboard Page -->
+    <template id="portal_my_affiliate" name="My Affiliate Dashboard">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="1"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Affiliate Dashboard</t>
+            </t>
+
+            <div class="container mt-4">
+                <!-- Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted">Total Clicks</h5>
+                                <h2 class="text-primary"><t t-out="affiliate.total_clicks"/></h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted">Total Commission</h5>
+                                <h2 class="text-success">
+                                    <t t-out="affiliate.total_commission"
+                                       t-options="{'widget': 'monetary', 'display_currency': affiliate.currency_id}"/>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted">Pending</h5>
+                                <h2 class="text-warning">
+                                    <t t-out="affiliate.pending_commission"
+                                       t-options="{'widget': 'monetary', 'display_currency': affiliate.currency_id}"/>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-muted">Paid</h5>
+                                <h2 class="text-info">
+                                    <t t-out="affiliate.paid_commission"
+                                       t-options="{'widget': 'monetary', 'display_currency': affiliate.currency_id}"/>
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Affiliate Link -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Your Affiliate Link</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" readonly="readonly"
+                                t-att-value="affiliate_link" id="affiliate_link_input"/>
+                            <button class="btn btn-primary" type="button"
+                                onclick="navigator.clipboard.writeText(document.getElementById('affiliate_link_input').value)">
+                                Copy Link
+                            </button>
+                        </div>
+                        <small class="text-muted mt-1 d-block">
+                            Affiliate Key: <strong><t t-out="affiliate.key"/></strong>
+                            | Commission Rate: <strong><t t-out="affiliate.commission_rate"/>%</strong>
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Withdrawal Request -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Request Withdrawal</h5>
+                        <form method="POST" action="/my/affiliate/withdraw">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <input type="number" name="amount" class="form-control"
+                                            placeholder="Amount" step="0.01" min="0" required="required"/>
+                                        <button type="submit" class="btn btn-success">Request Withdrawal</button>
+                                    </div>
+                                    <small class="text-muted">
+                                        Available: <t t-out="affiliate.pending_commission"
+                                            t-options="{'widget': 'monetary', 'display_currency': affiliate.currency_id}"/>
+                                    </small>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Recent Commissions -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Commissions</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Amount</th>
+                                    <th>Rate</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="commissions" t-as="c">
+                                    <tr>
+                                        <td><t t-out="c.sale_order_id.name"/></td>
+                                        <td>
+                                            <t t-out="c.amount"
+                                               t-options="{'widget': 'monetary', 'display_currency': c.currency_id}"/>
+                                        </td>
+                                        <td><t t-out="c.rate"/>%</td>
+                                        <td>
+                                            <span t-attf-class="badge #{
+                                                'bg-success' if c.state == 'confirmed' else
+                                                'bg-danger' if c.state == 'cancelled' else
+                                                'bg-secondary'}">
+                                                <t t-out="c.state"/>
+                                            </span>
+                                        </td>
+                                        <td><t t-out="c.create_date" t-options="{'widget': 'date'}"/></td>
+                                    </tr>
+                                </t>
+                                <t t-if="not commissions">
+                                    <tr><td colspan="5" class="text-center text-muted py-3">No commissions yet.</td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Withdrawals -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Withdrawals</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Requested</th>
+                                    <th>Paid</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="withdrawals" t-as="w">
+                                    <tr>
+                                        <td>
+                                            <t t-out="w.amount"
+                                               t-options="{'widget': 'monetary', 'display_currency': w.currency_id}"/>
+                                        </td>
+                                        <td>
+                                            <span t-attf-class="badge #{
+                                                'bg-success' if w.state == 'paid' else
+                                                'bg-warning' if w.state == 'approved' else
+                                                'bg-danger' if w.state == 'rejected' else
+                                                'bg-secondary'}">
+                                                <t t-out="w.state"/>
+                                            </span>
+                                        </td>
+                                        <td><t t-out="w.request_date" t-options="{'widget': 'date'}"/></td>
+                                        <td><t t-out="w.payment_date" t-options="{'widget': 'date'}"/></td>
+                                    </tr>
+                                </t>
+                                <t t-if="not withdrawals">
+                                    <tr><td colspan="4" class="text-center text-muted py-3">No withdrawals yet.</td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Clicks -->
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-header">
+                        <h5 class="mb-0">Recent Clicks</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>URL</th>
+                                    <th>Converted</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="clicks" t-as="click">
+                                    <tr>
+                                        <td><t t-out="click.click_date" t-options="{'widget': 'datetime'}"/></td>
+                                        <td><t t-out="click.url"/></td>
+                                        <td>
+                                            <span t-if="click.converted" class="badge bg-success">Yes</span>
+                                            <span t-else="" class="badge bg-secondary">No</span>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <t t-if="not clicks">
+                                    <tr><td colspan="3" class="text-center text-muted py-3">No clicks recorded yet.</td></tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

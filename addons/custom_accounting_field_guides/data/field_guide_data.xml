@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="guide_partner_gst" model="account.field.guide">
+        <field name="name">Customer/Vendor GST &amp; Business Details</field>
+        <field name="key">res_partner_gst</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">gst_partner</field>
+        <field name="model_name">res.partner</field>
+        <field name="menu_path">Accounting/Sales &gt; Customers, or Contacts app</field>
+        <field name="field_names">name
+vat
+l10n_in_pan
+gst_cin
+gst_iec
+gst_tan
+gst_fssai
+gst_is_food_business
+business_type
+business_type_other
+gst_contact_person
+gst_contact_number
+street
+city
+state_id
+country_id
+zip</field>
+        <field name="notes">vat = GSTIN. Leave business_type_other blank unless Business Type = Other.</field>
+    </record>
+
+    <record id="guide_invoice" model="account.field.guide">
+        <field name="name">Customer Invoice</field>
+        <field name="key">account_move_invoice</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">invoice</field>
+        <field name="model_name">account.move</field>
+        <field name="menu_path">Accounting &gt; Customers &gt; Invoices</field>
+        <field name="field_names">partner_id
+invoice_date
+invoice_date_due
+invoice_origin
+ref
+journal_id
+currency_id
+payment_reference
+gst_campaign_name</field>
+        <field name="notes">Line items (product, quantity, unit price, tax, HSN/SAC) are entered on the Invoice Lines tab, not listed here - they are a sub-list, not single fields.</field>
+    </record>
+
+    <record id="guide_vendor_bill" model="account.field.guide">
+        <field name="name">Vendor Bill</field>
+        <field name="key">account_move_vendor_bill</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">vendor_bill</field>
+        <field name="model_name">account.move</field>
+        <field name="menu_path">Accounting &gt; Vendors &gt; Bills</field>
+        <field name="field_names">partner_id
+ref
+invoice_date
+invoice_date_due
+journal_id
+currency_id
+payment_reference</field>
+        <field name="notes">Line items are entered on the Invoice Lines tab. For a scanned bill, use the Vendor Bill Digitization (OCR) upload instead of manual entry.</field>
+    </record>
+
+    <record id="guide_payment" model="account.field.guide">
+        <field name="name">Register Payment</field>
+        <field name="key">account_payment</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">payment</field>
+        <field name="model_name">account.payment</field>
+        <field name="menu_path">Accounting &gt; Customers/Vendors &gt; Payments</field>
+        <field name="field_names">partner_id
+payment_type
+partner_type
+amount
+currency_id
+journal_id
+payment_method_line_id
+date
+memo</field>
+    </record>
+
+    <record id="guide_bank_journal" model="account.field.guide">
+        <field name="name">Bank / Cash Journal Setup</field>
+        <field name="key">account_journal_bank</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">bank_journal</field>
+        <field name="model_name">account.journal</field>
+        <field name="menu_path">Accounting &gt; Configuration &gt; Journals</field>
+        <field name="field_names">name
+type
+code
+currency_id
+bank_account_id
+company_id</field>
+    </record>
+
+    <record id="guide_asset" model="account.field.guide">
+        <field name="name">Fixed Asset</field>
+        <field name="key">account_asset</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">asset</field>
+        <field name="model_name">account.asset</field>
+        <field name="menu_path">Accounting &gt; Accounting &gt; Assets</field>
+        <field name="field_names">name
+category_id
+partner_id
+analytic_account_id
+purchase_date
+purchase_value
+salvage_value
+duration_months
+declining_rate</field>
+        <field name="notes">method, duration_months and declining_rate default from the chosen Asset Category - only override duration/rate if this specific asset differs from its category.</field>
+    </record>
+
+    <record id="guide_budget" model="account.field.guide">
+        <field name="name">Budget</field>
+        <field name="key">account_budget</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">budget</field>
+        <field name="model_name">account.budget</field>
+        <field name="menu_path">Accounting &gt; Accounting &gt; Budgets</field>
+        <field name="field_names">name
+analytic_account_id
+budget_type
+period_type
+date_from
+date_to
+budgeted_amount</field>
+    </record>
+
+    <record id="guide_deferred" model="account.field.guide">
+        <field name="name">Deferred Revenue / Expense Schedule</field>
+        <field name="key">account_deferred_schedule</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">deferred</field>
+        <field name="model_name">account.deferred.schedule</field>
+        <field name="menu_path">Accounting &gt; Accounting &gt; Deferred Revenue/Expense</field>
+        <field name="field_names">name
+partner_id
+deferred_type
+journal_id
+source_account_id
+target_account_id
+total_amount
+start_date
+end_date</field>
+        <field name="notes">The monthly recognition line_ids are generated by the schedule, not entered manually.</field>
+    </record>
+
+    <record id="guide_followup" model="account.field.guide">
+        <field name="name">Customer Follow-up Level</field>
+        <field name="key">account_followup_level</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">followup</field>
+        <field name="model_name">account.followup.level</field>
+        <field name="menu_path">Accounting &gt; Configuration &gt; Follow-up Levels</field>
+        <field name="field_names">name
+delay_days
+action
+mail_template_id
+activity_type_id
+activity_summary</field>
+    </record>
+
+    <record id="guide_affiliate_withdrawal" model="account.field.guide">
+        <field name="name">Affiliate Withdrawal / Payout</field>
+        <field name="key">affiliate_withdrawal</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">affiliate</field>
+        <field name="model_name">affiliate.withdrawal</field>
+        <field name="menu_path">Website &gt; Affiliates &gt; Withdrawals</field>
+        <field name="field_names">journal_id</field>
+        <field name="notes">Only the payment journal is admin-entered here - amount/affiliate/state come from the affiliate portal request itself. If "affiliate.withdrawal" is not found, the base affiliate module providing it is not installed.</field>
+    </record>
+
+    <record id="guide_company_gst" model="account.field.guide">
+        <field name="name">Company GST / Invoice Branding Settings</field>
+        <field name="key">res_company_gst</field>
+        <field name="guide_type">field_guide</field>
+        <field name="feature_group">company</field>
+        <field name="model_name">res.company</field>
+        <field name="menu_path">Settings &gt; Companies &gt; (your company)</field>
+        <field name="field_names">vat
+l10n_in_pan
+l10n_in_cin
+l10n_in_iec
+l10n_in_tan
+l10n_in_fssai
+gst_invoice_contact_name
+gst_invoice_contact_number
+gst_bank_name
+gst_bank_account_holder
+gst_bank_account_number
+gst_bank_ifsc
+gst_bank_branch
+gst_show_bank_details
+gst_mask_account_number
+gst_show_upi_qr
+gst_qr_merchant_name
+gst_qr_include_amount
+gst_signatory_name
+gst_signatory_designation
+gst_signature_image
+gst_company_stamp</field>
+        <field name="notes">gst_signature_image and gst_company_stamp are image uploads (signature/stamp), not text - upload the image directly in Odoo.</field>
+    </record>
+
+    <record id="guide_bank_csv_import" model="account.field.guide">
+        <field name="name">Bank Statement CSV Import</field>
+        <field name="key">bank_statement_csv_import</field>
+        <field name="guide_type">data_template</field>
+        <field name="feature_group">bank_journal</field>
+        <field name="model_name">bank.statement.csv.import.wizard</field>
+        <field name="menu_path">Accounting &gt; Accounting &gt; Bank &gt; Import Bank Statement (CSV)</field>
+        <field name="field_names">journal_id
+date_format
+delimiter
+csv_file</field>
+        <field name="notes">This is the wizard's own fields, not the CSV columns - use the wizard's dedicated "Download Sample CSV Template" button for the actual CSV column template (date, label, amount, partner_name, reference).</field>
+    </record>
+
+</odoo>

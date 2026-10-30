@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_asset_form" model="ir.ui.view">
+        <field name="name">account.asset.form</field>
+        <field name="model">account.asset</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_schedule" type="object" string="Generate Depreciation Schedule" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_dispose" type="object" string="Dispose" invisible="state not in ('running',)" confirm="Dispose this asset and write off its remaining book value?"/>
+                    <button name="action_sell" type="object" string="Sell" invisible="state not in ('draft', 'running')"/>
+                    <button name="action_transfer" type="object" string="Transfer" invisible="state not in ('draft', 'running')"/>
+                    <button name="action_revalue" type="object" string="Revalue" invisible="state not in ('running',)"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" invisible="state in ('draft', 'disposed', 'sold')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,disposed,sold"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="category_id"/>
+                            <field name="asset_type"/>
+                            <field name="analytic_account_id"/>
+                            <field name="partner_id"/>
+                            <field name="purchase_date"/>
+                        </group>
+                        <group>
+                            <field name="purchase_value"/>
+                            <field name="salvage_value"/>
+                            <field name="book_value"/>
+                            <field name="depreciated_value"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Category Defaults" name="category_defaults">
+                            <group>
+                                <group string="Depreciation Method">
+                                    <field name="method"/>
+                                    <field name="duration_months" invisible="method != 'linear'"/>
+                                    <field name="declining_rate" invisible="method != 'declining'"/>
+                                </group>
+                                <group string="Accounts &amp; Journal">
+                                    <field name="category_journal_id"/>
+                                    <field name="category_asset_account_id"/>
+                                    <field name="category_depreciation_account_id"/>
+                                    <field name="category_expense_account_id"/>
+                                    <field name="category_gain_account_id"/>
+                                    <field name="category_loss_account_id"/>
+                                    <field name="category_revaluation_account_id"/>
+                                </group>
+                            </group>
+                            <p class="text-muted">
+                                These come from the asset's Category. To change them for this asset only,
+                                edit or duplicate the Category from the field above.
+                            </p>
+                        </page>
+                        <page string="Depreciation Schedule" name="schedule">
+                            <field name="depreciation_line_ids">
+                                <list editable="bottom" create="false">
+                                    <field name="sequence"/>
+                                    <field name="date"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="posted"/>
+                                    <field name="move_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_asset_list" model="ir.ui.view">
+        <field name="name">account.asset.list</field>
+        <field name="model">account.asset</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="asset_type"/>
+                <field name="purchase_date"/>
+                <field name="purchase_value" sum="Total"/>
+                <field name="book_value" sum="Total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_account_asset_fixed" model="ir.actions.act_window">
+        <field name="name">Fixed Asset</field>
+        <field name="res_model">account.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('asset_type', '=', 'fixed')]</field>
+    </record>
+
+    <record id="action_account_asset_intangible" model="ir.actions.act_window">
+        <field name="name">Intangible Asset</field>
+        <field name="res_model">account.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('asset_type', '=', 'intangible')]</field>
+    </record>
+
+    <record id="view_account_asset_pivot" model="ir.ui.view">
+        <field name="name">account.asset.pivot</field>
+        <field name="model">account.asset</field>
+        <field name="arch" type="xml">
+            <pivot string="Asset Report">
+                <field name="asset_type" type="row"/>
+                <field name="category_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="purchase_value" type="measure"/>
+                <field name="depreciated_value" type="measure"/>
+                <field name="book_value" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_account_asset_report" model="ir.actions.act_window">
+        <field name="name">Asset Report</field>
+        <field name="res_model">account.asset</field>
+        <field name="view_mode">pivot,list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gstr1_report_wizard,gstr1.report.wizard,model_gstr1_report_wizard,account.group_account_invoice,1,1,1,1
+access_gstr1_report_wizard_line,gstr1.report.wizard.line,model_gstr1_report_wizard_line,account.group_account_invoice,1,1,1,1
+access_gstr1_report_hsn_line,gstr1.report.hsn.line,model_gstr1_report_hsn_line,account.group_account_invoice,1,1,1,1
+access_gstr3b_report_wizard,gstr3b.report.wizard,model_gstr3b_report_wizard,account.group_account_invoice,1,1,1,1

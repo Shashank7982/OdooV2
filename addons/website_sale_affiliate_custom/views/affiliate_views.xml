@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- ===================== -->
+    <!-- Sale Affiliate Views  -->
+    <!-- ===================== -->
+
+    <!-- Affiliate Form View -->
+    <record id="sale_affiliate_view_form" model="ir.ui.view">
+        <field name="name">sale.affiliate.form</field>
+        <field name="model">sale.affiliate</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_coupon" type="object" string="Generate Coupon" class="oe_highlight" invisible="not coupon_program_id"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Affiliate Name"/>
+                        </h1>
+                    </div>
+                    <group string="Affiliate Links">
+                        <field name="key" string="Key Code"/>
+                        <field name="affiliate_url" widget="CopyClipboardChar" string="Affiliate Link"/>
+                        <field name="affiliate_param_url" widget="CopyClipboardChar" string="Shop Link"/>
+                    </group>
+                    <group>
+                        <group string="General">
+                            <field name="partner_id"/>
+                            <field name="is_active"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group string="Commission Settings">
+                            <field name="commission_rate"/>
+                            <field name="discount_rate"/>
+                            <field name="coupon_program_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Statistics">
+                            <field name="total_clicks"/>
+                            <field name="total_commission" widget="monetary"/>
+                            <field name="pending_commission" widget="monetary"/>
+                            <field name="paid_commission" widget="monetary"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Clicks" name="clicks">
+                            <field name="click_ids">
+                                <list>
+                                    <field name="click_date"/>
+                                    <field name="ip_address"/>
+                                    <field name="url"/>
+                                    <field name="converted"/>
+                                    <field name="sale_order_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Commissions" name="commissions">
+                            <field name="commission_ids">
+                                <list>
+                                    <field name="sale_order_id"/>
+                                    <field name="amount" widget="monetary"/>
+                                    <field name="rate"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'confirmed'"
+                                        decoration-danger="state == 'cancelled'"
+                                        decoration-info="state == 'draft'"/>
+                                    <field name="create_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Withdrawals" name="withdrawals">
+                            <field name="withdrawal_ids">
+                                <list>
+                                    <field name="amount" widget="monetary"/>
+                                    <field name="state" widget="badge"
+                                        decoration-success="state == 'paid'"
+                                        decoration-warning="state == 'approved'"
+                                        decoration-danger="state == 'rejected'"
+                                        decoration-info="state == 'draft'"/>
+                                    <field name="request_date"/>
+                                    <field name="payment_date"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Affiliate List View -->
+    <record id="sale_affiliate_view_list" model="ir.ui.view">
+        <field name="name">sale.affiliate.list</field>
+        <field name="model">sale.affiliate</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="key"/>
+                <field name="commission_rate"/>
+                <field name="discount_rate"/>
+                <field name="total_clicks"/>
+                <field name="total_commission" widget="monetary"/>
+                <field name="pending_commission" widget="monetary"/>
+                <field name="is_active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sale_affiliates" model="ir.actions.act_window">
+        <field name="name">Affiliates</field>
+        <field name="res_model">sale.affiliate</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ========================= -->
+    <!-- Affiliate Click Views     -->
+    <!-- ========================= -->
+
+    <record id="affiliate_click_view_list" model="ir.ui.view">
+        <field name="name">affiliate.click.list</field>
+        <field name="model">affiliate.click</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="affiliate_id"/>
+                <field name="click_date"/>
+                <field name="ip_address"/>
+                <field name="url"/>
+                <field name="converted"/>
+                <field name="sale_order_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="affiliate_click_view_form" model="ir.ui.view">
+        <field name="name">affiliate.click.form</field>
+        <field name="model">affiliate.click</field>
+        <field name="arch" type="xml">
+            <form string="Affiliate Click">
+                <sheet>
+                    <group>
+                        <group string="Click Info">
+                            <field name="affiliate_id"/>
+                            <field name="click_date"/>
+                            <field name="ip_address"/>
+                        </group>
+                        <group string="Result">
+                            <field name="url"/>
+                            <field name="referrer_url"/>
+                            <field name="converted"/>
+                            <field name="sale_order_id"
+                                invisible="not converted"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================== -->
+    <!-- Affiliate Commission Views     -->
+    <!-- ============================== -->
+
+    <record id="affiliate_commission_view_list" model="ir.ui.view">
+        <field name="name">affiliate.commission.list</field>
+        <field name="model">affiliate.commission</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="affiliate_id"/>
+                <field name="sale_order_id"/>
+                <field name="amount" widget="monetary"/>
+                <field name="rate"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'confirmed'"
+                    decoration-danger="state == 'cancelled'"
+                    decoration-info="state == 'draft'"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="affiliate_commission_view_form" model="ir.ui.view">
+        <field name="name">affiliate.commission.form</field>
+        <field name="model">affiliate.commission</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" type="object" string="Confirm"
+                        invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                        invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="affiliate_id"/>
+                            <field name="sale_order_id"/>
+                        </group>
+                        <group>
+                            <field name="amount" widget="monetary"/>
+                            <field name="rate"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============================== -->
+    <!-- Affiliate Withdrawal Views     -->
+    <!-- ============================== -->
+
+    <record id="affiliate_withdrawal_view_list" model="ir.ui.view">
+        <field name="name">affiliate.withdrawal.list</field>
+        <field name="model">affiliate.withdrawal</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="affiliate_id"/>
+                <field name="amount" widget="monetary"/>
+                <field name="state" widget="badge"
+                    decoration-success="state == 'paid'"
+                    decoration-warning="state == 'approved'"
+                    decoration-danger="state == 'rejected'"
+                    decoration-info="state == 'draft'"/>
+                <field name="request_date"/>
+                <field name="payment_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="affiliate_withdrawal_view_form" model="ir.ui.view">
+        <field name="name">affiliate.withdrawal.form</field>
+        <field name="model">affiliate.withdrawal</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" type="object" string="Approve"
+                        invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_pay" type="object" string="Mark as Paid"
+                        invisible="state != 'approved'" class="oe_highlight"/>
+                    <button name="action_reject" type="object" string="Reject"
+                        invisible="state not in ('draft', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,paid"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="affiliate_id"/>
+                            <field name="amount" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="request_date"/>
+                            <field name="payment_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ============== -->
+    <!-- Menu Actions   -->
+    <!-- ============== -->
+
+    <record id="action_affiliate_clicks" model="ir.actions.act_window">
+        <field name="name">Affiliate Clicks</field>
+        <field name="res_model">affiliate.click</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_affiliate_commissions" model="ir.actions.act_window">
+        <field name="name">Affiliate Commissions</field>
+        <field name="res_model">affiliate.commission</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_affiliate_withdrawals" model="ir.actions.act_window">
+        <field name="name">Affiliate Withdrawals</field>
+        <field name="res_model">affiliate.withdrawal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Top-level Affiliate menu -->
+    <menuitem id="menu_affiliate_root"
+        name="Affiliates"
+        web_icon="website_sale_affiliate_custom,static/description/icon.png"
+        sequence="65"/>
+
+    <menuitem id="menu_affiliate_management"
+        name="Management"
+        parent="menu_affiliate_root"
+        sequence="10"/>
+
+    <menuitem id="menu_affiliate_list"
+        name="Affiliates"
+        parent="menu_affiliate_management"
+        action="action_sale_affiliates"
+        sequence="5"/>
+
+    <menuitem id="menu_affiliate_clicks"
+        name="Clicks"
+        parent="menu_affiliate_management"
+        action="action_affiliate_clicks"
+        sequence="10"/>
+
+    <menuitem id="menu_affiliate_commissions"
+        name="Commissions"
+        parent="menu_affiliate_management"
+        action="action_affiliate_commissions"
+        sequence="20"/>
+
+    <menuitem id="menu_affiliate_withdrawals"
+        name="Withdrawals"
+        parent="menu_affiliate_management"
+        action="action_affiliate_withdrawals"
+        sequence="30"/>
+
+</odoo>

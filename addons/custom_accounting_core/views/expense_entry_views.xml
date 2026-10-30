@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_expense_entry_form" model="ir.ui.view">
+        <field name="name">custom.expense.entry.form</field>
+        <field name="model">custom.expense.entry</field>
+        <field name="arch" type="xml">
+            <form string="Expense">
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'submitted'" groups="account.group_account_manager"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state != 'submitted'" groups="account.group_account_manager"/>
+                    <button name="action_post" type="object" string="Post" class="btn-primary" invisible="state != 'approved'" groups="account.group_account_invoice"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" invisible="state not in ('rejected', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" class="oe_stat_button" icon="fa-book" name="action_view_move" invisible="not move_id">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Journal Entry</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="expense_type" widget="radio" required="1"/>
+                            <field name="date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                        <group>
+                            <field name="partner_id" invisible="expense_type not in ('vendor', 'office', 'purchase')"
+                                required="expense_type in ('vendor', 'office', 'purchase')"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                groups="analytic.group_analytic_accounting"
+                                options="{'account_field': 'account_id'}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="description"/>
+                            <field name="account_id"/>
+                            <field name="amount"/>
+                            <field name="tax_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="payment_method"/>
+                            <field name="counterpart_account_id"
+                                invisible="expense_type in ('vendor', 'office', 'purchase')"/>
+                            <field name="receipt" filename="receipt_filename"/>
+                            <field name="receipt_filename" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Vendor Expense Details" invisible="expense_type != 'vendor'">
+                        <group>
+                            <field name="vendor_bill_ref"/>
+                            <field name="payment_term_id"/>
+                        </group>
+                        <group>
+                            <field name="tax_ids" widget="many2many_tags" string="GST"/>
+                        </group>
+                    </group>
+
+                    <group string="Office Expense Details" invisible="expense_type != 'office'">
+                    </group>
+
+                    <group string="Purchase Details" invisible="expense_type != 'purchase'">
+                        <group>
+                            <field name="purchase_order_ref"/>
+                            <field name="product_id"/>
+                        </group>
+                    </group>
+
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_expense_entry_list" model="ir.ui.view">
+        <field name="name">custom.expense.entry.list</field>
+        <field name="model">custom.expense.entry</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'rejected'" decoration-success="state == 'posted'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="expense_type"/>
+                <field name="partner_id"/>
+                <field name="description"/>
+                <field name="amount" sum="Total"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="state" widget="badge"
+                    decoration-info="state == 'submitted'"
+                    decoration-success="state in ('approved', 'posted')"
+                    decoration-danger="state == 'rejected'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_expense_entry_search" model="ir.ui.view">
+        <field name="name">custom.expense.entry.search</field>
+        <field name="model">custom.expense.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="description"/>
+                <filter string="Draft" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Submitted" name="filter_submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Posted" name="filter_posted" domain="[('state', '=', 'posted')]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Expense Type" name="group_type" context="{'group_by': 'expense_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Vendor" name="group_vendor" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_expense_entry" model="ir.actions.act_window">
+        <field name="name">Expenses</field>
+        <field name="res_model">custom.expense.entry</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_expense_entry_search"/>
+        <field name="context">{'search_default_filter_my': 0}</field>
+    </record>
+
+</odoo>

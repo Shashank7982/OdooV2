@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_shiprocket" model="ir.ui.view">
+        <field name="name">stock.picking.form.shiprocket</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock_delivery.view_picking_withcarrier_out_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='tracking']" position="inside">
+                <button type="object" class="oe_link" name="action_shiprocket_sync_tracking"
+                        string="Sync Status"
+                        invisible="delivery_type != 'shiprocket' or not carrier_tracking_ref"/>
+                <button type="object" class="oe_link" name="action_shiprocket_generate_label"
+                        string="Get Label"
+                        invisible="delivery_type != 'shiprocket' or not shiprocket_shipment_id"/>
+                <button type="object" class="oe_link" name="action_shiprocket_generate_manifest"
+                        string="Get Manifest"
+                        invisible="delivery_type != 'shiprocket' or not shiprocket_shipment_id"/>
+            </xpath>
+            <xpath expr="//group[@name='carrier_data']" position="inside">
+                <field name="shiprocket_shipment_id" invisible="delivery_type != 'shiprocket'"/>
+                <field name="shiprocket_status" invisible="delivery_type != 'shiprocket'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

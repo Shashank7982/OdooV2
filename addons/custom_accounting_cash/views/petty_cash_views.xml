@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_petty_cash_count_list" model="ir.ui.view">
+        <field name="name">account.petty.cash.count.list</field>
+        <field name="model">account.petty.cash.count</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/><field name="count_date"/><field name="location_id"/>
+                <field name="book_balance"/><field name="counted_amount"/><field name="variance"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_account_petty_cash_count_form" model="ir.ui.view">
+        <field name="name">account.petty.cash.count.form</field>
+        <field name="model">account.petty.cash.count</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" type="object" string="Approve Count" class="btn-primary" invisible="state != 'draft'" groups="account.group_account_manager"/>
+                    <button name="action_create_adjustment" type="object" string="Create Adjustment" invisible="state != 'approved' or not variance" groups="account.group_account_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group><field name="count_date"/><field name="location_id"/><field name="journal_id" readonly="1"/></group>
+                    <group string="Reconciliation">
+                        <field name="book_balance" readonly="1"/><field name="counted_amount"/><field name="variance" readonly="1"/><field name="variance_account_id" invisible="not variance"/>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_account_petty_cash_count" model="ir.actions.act_window">
+        <field name="name">Petty Cash Counts</field>
+        <field name="res_model">account.petty.cash.count</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

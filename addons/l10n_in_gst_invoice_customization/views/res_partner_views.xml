@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_gst_invoice" model="ir.ui.view">
+        <field name="name">res.partner.form.gst.invoice</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='vat_vies_container']" position="after">
+                <field name="business_type"/>
+                <field name="business_type_other" placeholder="Specify business type"
+                       invisible="business_type != 'other'"
+                       required="business_type == 'other'"/>
+                <field name="gst_cin" placeholder="CIN Number"
+                       required="business_type in ('private_limited', 'public_limited')"/>
+                <field name="gst_iec" placeholder="IEC Code"/>
+                <field name="gst_tan" placeholder="TAN Number"
+                       required="business_type in ('private_limited', 'public_limited') or gst_tan_applicable"/>
+                <field name="gst_tan_applicable"
+                       invisible="business_type in ('private_limited', 'public_limited')"/>
+                <field name="gst_is_food_business"/>
+                <field name="gst_fssai" placeholder="FSSAI Number"
+                       required="gst_is_food_business or business_type in ('restaurant', 'cloud_kitchen', 'food_manufacturing', 'food_catering', 'food_retail_grocery')"/>
+            </xpath>
+            <xpath expr="//field[@name='website']" position="after">
+                <field name="gst_contact_person" placeholder="Contact Person Name"/>
+                <field name="gst_contact_number" placeholder="Contact Person Number"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

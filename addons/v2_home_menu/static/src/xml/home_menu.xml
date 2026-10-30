@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<t t-name="v2_home_menu.HomeMenu" owl="1">
+    <div class="v2_home_menu h-100 d-flex flex-column" tabindex="-1">
+
+        <!-- ── Background particles (pure CSS) ── -->
+        <div class="v2hm_bg" aria-hidden="true">
+            <span class="v2hm_orb v2hm_orb1"/>
+            <span class="v2hm_orb v2hm_orb2"/>
+            <span class="v2hm_orb v2hm_orb3"/>
+        </div>
+
+        <!-- ── Header: greeting + clock + search ── -->
+        <div class="v2hm_header text-center py-5 px-3 position-relative">
+            <p class="v2hm_greeting mb-1">
+                <t t-esc="state.greeting"/> 👋
+            </p>
+            <div class="v2hm_clock" id="v2hm_clock">
+                <t t-esc="state.currentTime"/>
+            </div>
+            <p class="v2hm_date mb-4">
+                <t t-esc="state.currentDate"/>
+            </p>
+
+            <!-- Search bar -->
+            <div class="v2hm_search_wrap mx-auto position-relative">
+                <span class="v2hm_search_icon">
+                    <i class="fa fa-search"/>
+                </span>
+                <input
+                    t-ref="searchInput"
+                    id="v2hm_search_input"
+                    type="text"
+                    class="v2hm_search_input"
+                    placeholder="Search apps and menus…"
+                    autocomplete="off"
+                    t-model="state.searchValue"
+                    t-on-input="onSearchInput"
+                    t-on-focus="onSearchFocus"
+                    t-on-blur="onSearchBlur"
+                />
+                <button t-if="state.searchValue"
+                    class="v2hm_search_clear"
+                    t-on-click="clearSearch"
+                    aria-label="Clear search">
+                    <i class="fa fa-times"/>
+                </button>
+
+                <!-- Search dropdown -->
+                <div t-if="state.isSearchOpen" class="v2hm_search_dropdown" role="listbox">
+                    <t t-foreach="state.searchResults" t-as="result" t-key="result.id">
+                        <button
+                            class="v2hm_search_result"
+                            type="button"
+                            t-on-mousedown.prevent="() => this.openSearchResult(result)">
+                            <span class="v2hm_sr_icon">
+                                <i t-att-class="result.type === 'app' ? 'fa fa-th-large' : 'fa fa-bars'"/>
+                            </span>
+                            <span class="v2hm_sr_label">
+                                <t t-esc="result.label"/>
+                            </span>
+                            <span class="v2hm_sr_type text-muted small ms-auto">
+                                <t t-esc="result.type === 'app' ? 'App' : result.parents"/>
+                            </span>
+                        </button>
+                    </t>
+                    <div t-if="state.searchResults.length === 0" class="v2hm_search_empty">
+                        No results found
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── App grid ── -->
+        <div class="v2hm_grid_wrap flex-grow-1 overflow-auto px-4 pb-5">
+            <div class="v2hm_grid" role="listbox">
+                <t t-foreach="filteredApps" t-as="app" t-key="app.id">
+                    <button
+                        t-att-id="'v2hm_app_' + app_index"
+                        class="v2hm_app_card"
+                        type="button"
+                        role="option"
+                        t-att-aria-label="app.label"
+                        t-on-click="() => this.openApp(app)">
+
+                        <!-- Icon box -->
+                        <div class="v2hm_icon_box" t-att-style="getAppStyle(app)">
+                            <t t-if="app.webIconData">
+                                <img class="v2hm_app_img" t-att-src="app.webIconData" t-att-alt="app.label"/>
+                            </t>
+                            <t t-else="">
+                                <i t-att-class="getIconClass(app)" t-att-style="getIconColor(app)"/>
+                            </t>
+                        </div>
+
+                        <!-- Label -->
+                        <span class="v2hm_app_label">
+                            <t t-esc="app.label"/>
+                        </span>
+
+                    </button>
+                </t>
+
+                <!-- Empty state when search yields nothing -->
+                <div t-if="filteredApps.length === 0 and state.searchValue" class="v2hm_no_results">
+                    <i class="fa fa-search fa-2x mb-2 opacity-50"/>
+                    <p>No apps match "<strong><t t-esc="state.searchValue"/></strong>"</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</t>
+
+</templates>

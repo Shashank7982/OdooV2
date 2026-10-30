@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_accounting_dashboard_form" model="ir.ui.view">
+        <field name="name">accounting.dashboard.form</field>
+        <field name="model">accounting.dashboard</field>
+        <field name="arch" type="xml">
+            <form string="Accounting Dashboard" class="o_accounting_dashboard">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Custom Accounting Dashboard</h1>
+                        <p class="text-muted">Review receivables, payables, cash, profit, GST, budgets, and exceptions.</p>
+                    </div>
+                    <group col="4" class="mb-3">
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="currency_id" options="{'no_create': True}"/>
+                    </group>
+                    <button name="action_refresh" type="object" string="Refresh Dashboard" icon="fa-refresh" class="btn-primary mb-4"/>
+                    <div class="row g-3">
+                        <div class="col-12 col-xl-3"><div class="card border-primary h-100"><div class="card-header bg-primary text-white">Receivables</div><div class="card-body"><label for="total_receivable" string="Outstanding"/><field name="total_receivable" nolabel="1" class="fs-3 fw-bold"/><label for="overdue_invoice_count" string="Overdue invoices"/><field name="overdue_invoice_count" nolabel="1"/><label for="overdue_invoice_amount" string="Overdue amount"/><field name="overdue_invoice_amount" nolabel="1"/><label for="upcoming_collections" string="Upcoming collections"/><field name="upcoming_collections" nolabel="1"/></div></div></div>
+                        <div class="col-12 col-xl-3"><div class="card border-warning h-100"><div class="card-header bg-warning">Payables</div><div class="card-body"><label for="total_payable" string="Outstanding"/><field name="total_payable" nolabel="1" class="fs-3 fw-bold"/><label for="upcoming_payments" string="Upcoming payments"/><field name="upcoming_payments" nolabel="1"/></div></div></div>
+                        <div class="col-12 col-xl-3"><div class="card border-success h-100"><div class="card-header bg-success text-white">Bank and Cash</div><div class="card-body"><label for="bank_balance" string="Bank balance"/><field name="bank_balance" nolabel="1" class="fs-3 fw-bold"/><label for="cash_balance" string="Cash balance"/><field name="cash_balance" nolabel="1"/><label for="unreconciled_count" string="Unreconciled transactions"/><field name="unreconciled_count" nolabel="1"/></div></div></div>
+                        <div class="col-12 col-xl-3"><div class="card border-info h-100"><div class="card-header bg-info">Profit and Loss</div><div class="card-body"><label for="monthly_revenue" string="Revenue"/><field name="monthly_revenue" nolabel="1"/><label for="monthly_expense" string="Expense"/><field name="monthly_expense" nolabel="1"/><label for="monthly_profit" string="Profit"/><field name="monthly_profit" nolabel="1" class="fs-3 fw-bold"/></div></div></div>
+                    </div>
+                    <group string="Tax, GST, and Budget Controls" class="mt-4">
+                        <group invisible="not gst_module_installed"><field name="gst_output_tax"/><field name="gst_input_credit"/><field name="gst_net_payable"/></group>
+                        <group invisible="gst_module_installed"><p class="text-muted">GST preparation module is not installed.</p></group>
+                        <group invisible="not budget_module_installed"><field name="budget_total"/><field name="budget_actual"/><field name="budget_variance"/></group>
+                        <group invisible="budget_module_installed"><p class="text-muted">Budget module is not installed.</p></group>
+                    </group>
+                    <div class="alert alert-secondary mt-3"><strong>Available from this Accounting menu:</strong> Sales and Purchase workflows, Bank Reconciliation, Cash Management, Bill Digitization, GST Reports, Financial Reports, Budgets, Assets, Deferred Revenue/Expense, and Period Close.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_accounting_dashboard" model="ir.actions.act_window">
+        <field name="name">Accounting Dashboard</field>
+        <field name="res_model">accounting.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+    </record>
+</odoo>

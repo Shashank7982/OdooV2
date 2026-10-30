@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_stripe_config_settings" model="ir.ui.view">
+        <field name="name">payment.stripe.config.settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="arch" type="xml">
+            <form string="Stripe Settings">
+                <group>
+                    <field name="stripe_publishable_key"/>
+                    <field name="stripe_secret_key"/>
+                </group>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_affiliate_click_manager,affiliate.click.manager,model_affiliate_click,website_sale_affiliate_custom.group_affiliate_manager,1,1,1,1
+access_affiliate_commission_manager,affiliate.commission.manager,model_affiliate_commission,website_sale_affiliate_custom.group_affiliate_manager,1,1,1,1
+access_affiliate_withdrawal_manager,affiliate.withdrawal.manager,model_affiliate_withdrawal,website_sale_affiliate_custom.group_affiliate_manager,1,1,1,1
+access_affiliate_click_user,affiliate.click.user,model_affiliate_click,base.group_user,1,0,0,0
+access_affiliate_commission_user,affiliate.commission.user,model_affiliate_commission,base.group_user,1,0,0,0
+access_affiliate_withdrawal_user,affiliate.withdrawal.user,model_affiliate_withdrawal,base.group_user,1,0,1,0
+access_affiliate_click_portal,affiliate.click.portal,model_affiliate_click,base.group_portal,1,0,0,0
+access_affiliate_commission_portal,affiliate.commission.portal,model_affiliate_commission,base.group_portal,1,0,0,0
+access_affiliate_withdrawal_portal,affiliate.withdrawal.portal,model_affiliate_withdrawal,base.group_portal,1,0,1,0
+access_sale_affiliate_manager,sale.affiliate.manager,model_sale_affiliate,website_sale_affiliate_custom.group_affiliate_manager,1,1,1,1
+access_sale_affiliate_user,sale.affiliate.user,model_sale_affiliate,base.group_user,1,0,0,0

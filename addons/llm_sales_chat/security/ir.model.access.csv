@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_llm_chat_wizard_user,llm.chat.wizard.user,model_llm_chat_wizard,base.group_user,1,1,1,1
+access_llm_chat_tools_user,llm.chat.tools.user,model_llm_chat_tools,base.group_user,1,1,1,1
+access_llm_chat_public_tools_user,llm.chat.public.tools.user,model_llm_chat_public_tools,base.group_user,1,1,1,1

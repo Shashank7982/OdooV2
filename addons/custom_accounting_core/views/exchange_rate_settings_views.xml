@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_exchange_rate" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.exchange.rate</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//setting[@id='main_currency']" position="after">
+                <setting id="exchange_rate_api" string="Live Exchange Rates"
+                         help="Use ExchangeRate-API rates in Odoo's native currency conversion and dashboards."
+                         groups="account.group_account_manager">
+                    <div class="content-group">
+                        <div class="row mt16">
+                            <label for="exchange_rate_api_key" class="col-lg-4 o_light_label"/>
+                            <field name="exchange_rate_api_key" password="True" placeholder="Paste API key"/>
+                        </div>
+                        <div class="row mt8">
+                            <label for="exchange_rate_last_update" class="col-lg-4 o_light_label"/>
+                            <field name="exchange_rate_last_update" readonly="1"/>
+                        </div>
+                        <button name="action_update_exchange_rates" type="object"
+                                string="Update Rates Now" class="btn-primary mt16" icon="fa-refresh"/>
+                        <button name="action_test_exchange_rate_connection" type="object"
+                                string="Test Connection" class="btn-secondary mt16 ms-2" icon="fa-plug"/>
+                        <div class="row mt16">
+                            <label for="manual_exchange_rate_currency_id" class="col-lg-4 o_light_label"/>
+                            <field name="manual_exchange_rate_currency_id"/>
+                        </div>
+                        <div class="row mt8">
+                            <label for="manual_exchange_rate_value" class="col-lg-4 o_light_label"/>
+                            <field name="manual_exchange_rate_value" placeholder="e.g. 83.000000"/>
+                        </div>
+                        <div class="row mt8">
+                            <label for="manual_exchange_rate_date" class="col-lg-4 o_light_label"/>
+                            <field name="manual_exchange_rate_date"/>
+                        </div>
+                        <div class="text-muted mt8">
+                            Enter company currency for 1 unit of the selected currency (for example, 1 USD = 83 INR: enter 83).
+                        </div>
+                        <button name="action_set_manual_exchange_rate" type="object"
+                                string="Save Manual Rate" class="btn-secondary mt16" icon="fa-save"/>
+                        <button name="action_clear_manual_exchange_rate" type="object"
+                                string="Clear Manual Override" class="btn-link mt16 ms-2" icon="fa-times"/>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

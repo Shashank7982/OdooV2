@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_custom_sales_inquiry_user,custom.sales.inquiry user,model_custom_sales_inquiry,base.group_user,1,1,1,1
+access_custom_sales_inquiry_line_user,custom.sales.inquiry.line user,model_custom_sales_inquiry_line,base.group_user,1,1,1,1
+access_custom_sales_contract_user,custom.sales.contract user,model_custom_sales_contract,base.group_user,1,1,1,1
+access_custom_scheduling_agreement_user,custom.sales.scheduling.agreement user,model_custom_sales_scheduling_agreement,base.group_user,1,1,1,1
+access_custom_sales_return_user,custom.sales.return.request user,model_custom_sales_return_request,base.group_user,1,1,1,1
+access_custom_sales_waybill_user,custom.sales.waybill user,model_custom_sales_waybill,base.group_user,1,1,1,1
+access_custom_purchase_request_user,custom.purchase.request user,model_custom_purchase_request,base.group_user,1,1,1,1
+access_custom_purchase_request_line_user,custom.purchase.request.line user,model_custom_purchase_request_line,base.group_user,1,1,1,1
+access_custom_desk_configuration_user,custom.desk.configuration user,model_custom_desk_configuration,base.group_user,1,1,1,1
+access_custom_accounting_close_user,custom.accounting.close user,model_custom_accounting_close,account.group_account_manager,1,1,1,1
+access_account_petty_cash_topup_user,account.petty.cash.topup user,model_account_petty_cash_topup,base.group_user,1,1,1,1
+access_account_ocr_provider_config_manager,account.ocr.provider.config manager,model_account_ocr_provider_config,base.group_system,1,1,1,1

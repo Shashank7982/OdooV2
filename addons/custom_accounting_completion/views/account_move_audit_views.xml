@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_move_audit_source_tracking" model="ir.ui.view">
+        <field name="name">account.move.form.audit.source.tracking</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='misc_group']" position="inside">
+                <separator string="Audit &amp; Source Tracking" colspan="2"/>
+                <field name="source_model" readonly="1"/>
+                <field name="source_res_id" readonly="1"/>
+                <field name="source_user_id" readonly="1"/>
+                <field name="source_event_key" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

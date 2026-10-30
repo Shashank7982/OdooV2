@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_res_partner_type_wizard_form" model="ir.ui.view">
+        <field name="name">res.partner.type.wizard.form</field>
+        <field name="model">res.partner.type.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add New Contact">
+                <group>
+                    <field name="company_type" widget="radio" options="{'horizontal': true}"/>
+                    <field name="name" placeholder="e.g. Acme Corp or Jane Doe"
+                        string="Contact Name / Legal Company Name"/>
+                </group>
+                <group string="Primary Contact Type">
+                    <field name="contact_type" widget="radio" nolabel="1" colspan="2"/>
+                </group>
+                <group string="Customer Category" invisible="contact_type != 'customer'">
+                    <field name="customer_classification" widget="radio" nolabel="1" colspan="2"/>
+                </group>
+                <group string="Also acts as (optional - a contact can have more than one role)">
+                    <group>
+                        <field name="role_employee"/>
+                        <field name="role_vendor"/>
+                        <field name="role_customer"/>
+                    </group>
+                    <group>
+                        <field name="role_affiliate"/>
+                        <field name="role_consultant"/>
+                        <field name="role_other"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_continue" type="object" string="Continue" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_res_partner_type_wizard" model="ir.actions.act_window">
+        <field name="name">Add New Contact</field>
+        <field name="res_model">res.partner.type.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_new_contact"
+        name="Add New Contact"
+        action="action_res_partner_type_wizard"
+        parent="contacts.res_partner_menu_contacts"
+        sequence="1"/>
+
+</odoo>

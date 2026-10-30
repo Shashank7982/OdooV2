@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_assets_root" name="Asset"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="80"/>
+    <menuitem id="menu_account_asset_fixed" name="Fixed Asset"
+              parent="menu_assets_root" action="action_account_asset_fixed" sequence="10"/>
+    <menuitem id="menu_account_asset_intangible" name="Intangible Asset"
+              parent="menu_assets_root" action="action_account_asset_intangible" sequence="20"/>
+    <menuitem id="menu_account_asset_report" name="Asset Report"
+              parent="menu_assets_root" action="action_account_asset_report" sequence="30"/>
+    <!-- No separate "Asset Categories" menu - category fields (accounts,
+         journal, depreciation method) are shown read-only directly on the
+         asset form's "Category Defaults" tab. Categories are still created/
+         edited via the quick-create/edit on the Category field there. -->
+</odoo>

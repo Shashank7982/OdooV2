@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_affiliate" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.affiliate</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Affiliate Program" name="affiliate_program">
+                    <block title="Affiliate Settings">
+                        <setting string="Default Commission Rate" help="Default commission percentage applied to new affiliates.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="affiliate_default_commission_rate" class="col-lg-3 o_light_label"/>
+                                    <field name="affiliate_default_commission_rate"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Minimum Withdrawal Amount" help="Minimum amount an affiliate must earn before requesting a withdrawal.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="affiliate_min_withdrawal_amount" class="col-lg-3 o_light_label"/>
+                                    <field name="affiliate_min_withdrawal_amount"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="Auto-Approve Withdrawals" help="Automatically approve affiliate withdrawal requests.">
+                            <field name="affiliate_auto_approve_withdrawals"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

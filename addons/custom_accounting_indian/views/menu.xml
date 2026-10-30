@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_gst_reports_root" name="GST Reports"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="30"/>
+    <menuitem id="menu_gstr1_report" name="GSTR-1 Preparation"
+              parent="menu_gst_reports_root" action="action_gstr1_report_wizard" sequence="10"/>
+    <menuitem id="menu_gstr3b_report" name="GSTR-3B Preparation"
+              parent="menu_gst_reports_root" action="action_gstr3b_report_wizard" sequence="20"/>
+</odoo>

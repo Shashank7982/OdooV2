@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_budget_manager,account.budget.manager,model_account_budget,account.group_account_manager,1,1,1,1
+access_account_budget_user,account.budget.user,model_account_budget,account.group_account_invoice,1,0,0,0
+access_account_budget_revision_manager,account.budget.revision.manager,model_account_budget_revision,account.group_account_manager,1,1,1,1
+access_account_budget_revision_user,account.budget.revision.user,model_account_budget_revision,account.group_account_invoice,1,0,0,0

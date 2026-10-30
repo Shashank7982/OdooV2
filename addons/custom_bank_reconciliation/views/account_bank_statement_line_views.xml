@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bank_statement_line_unmatched_list" model="ir.ui.view">
+        <field name="name">account.bank.statement.line.unmatched.list</field>
+        <field name="model">account.bank.statement.line</field>
+        <field name="arch" type="xml">
+            <list string="Unmatched Bank Transactions">
+                <field name="date"/>
+                <field name="journal_id"/>
+                <field name="payment_ref"/>
+                <field name="partner_id"/>
+                <field name="amount" sum="Total"/>
+                <field name="is_reconciled"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bank_statement_line_unmatched_search" model="ir.ui.view">
+        <field name="name">account.bank.statement.line.unmatched.search</field>
+        <field name="model">account.bank.statement.line</field>
+        <field name="arch" type="xml">
+            <search string="Unmatched Bank Transactions">
+                <field name="payment_ref"/>
+                <field name="ref"/>
+                <field name="partner_id"/>
+                <field name="journal_id"/>
+                <filter string="Unreconciled" name="unreconciled" domain="[('is_reconciled', '=', False)]"/>
+                <filter string="Reconciled" name="reconciled" domain="[('is_reconciled', '=', True)]"/>
+                <separator/>
+                <filter string="This Month" name="this_month"
+                        domain="[('date', '&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+                <filter string="Last 3 Months" name="last_3_months"
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(months=3)).strftime('%Y-%m-01'))]"/>
+                <separator/>
+                <filter string="No Partner" name="no_partner" domain="[('partner_id', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Journal" name="group_journal" context="{'group_by': 'journal_id'}"/>
+                    <filter string="Partner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_bank_statement_line_unmatched_pivot" model="ir.ui.view">
+        <field name="name">account.bank.statement.line.unmatched.pivot</field>
+        <field name="model">account.bank.statement.line</field>
+        <field name="arch" type="xml">
+            <pivot string="Unmatched Bank Transactions">
+                <field name="journal_id" type="row"/>
+                <field name="date" type="col" interval="month"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_bank_statement_line_unmatched_graph" model="ir.ui.view">
+        <field name="name">account.bank.statement.line.unmatched.graph</field>
+        <field name="model">account.bank.statement.line</field>
+        <field name="arch" type="xml">
+            <graph string="Unmatched Bank Transactions" type="bar">
+                <field name="date" interval="month"/>
+                <field name="amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_bank_statement_line_unmatched" model="ir.actions.act_window">
+        <field name="name">Unmatched Bank Transactions</field>
+        <field name="res_model">account.bank.statement.line</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_bank_statement_line_unmatched_search"/>
+        <field name="context">{'search_default_unreconciled': 1}</field>
+        <field name="domain">[]</field>
+    </record>
+</odoo>

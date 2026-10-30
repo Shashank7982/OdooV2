@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="marketing_inbound_mail_view_list" model="ir.ui.view">
+        <field name="name">marketing.inbound.mail.list</field>
+        <field name="model">marketing.inbound.mail</field>
+        <field name="arch" type="xml">
+            <list string="Marketing Inbound Mail" decoration-danger="state == 'error'" decoration-muted="state == 'duplicate'">
+                <field name="received_date"/>
+                <field name="email_from"/>
+                <field name="subject"/>
+                <field name="body_preview" string="Message"/>
+                <field name="category" widget="badge" decoration-warning="category == 'bounce'" decoration-danger="category == 'unsubscribe'" decoration-success="category == 'reply'"/>
+                <field name="state" widget="badge"/>
+                <field name="campaign_id"/>
+                <field name="partner_id"/>
+                <field name="lead_id"/>
+                <field name="fetchmail_server_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="marketing_inbound_mail_view_form" model="ir.ui.view">
+        <field name="name">marketing.inbound.mail.form</field>
+        <field name="model">marketing.inbound.mail</field>
+        <field name="arch" type="xml">
+            <form string="Marketing Inbound Mail">
+                <header>
+                    <button name="action_retry_processing" type="object" string="Retry Processing" class="btn-primary" invisible="state not in ('new', 'error')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="subject"/>
+                            <field name="email_from"/>
+                            <field name="email_to"/>
+                            <field name="received_date"/>
+                            <field name="category"/>
+                        </group>
+                        <group>
+                            <field name="fetchmail_server_id"/>
+                            <field name="campaign_id"/>
+                            <field name="mailing_id"/>
+                            <field name="mailing_trace_id"/>
+                            <field name="partner_id"/>
+                            <field name="mailing_contact_id"/>
+                            <field name="lead_id"/>
+                        </group>
+                    </group>
+                    <group invisible="not error_message">
+                        <field name="error_message"/>
+                    </group>
+                    <notebook>
+                        <page string="Message Body">
+                            <field name="body"/>
+                        </page>
+                        <page string="Technical">
+                            <group>
+                                <field name="message_id"/>
+                                <field name="in_reply_to"/>
+                                <field name="related_res_model"/>
+                                <field name="related_res_id"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="marketing_inbound_mail_view_search" model="ir.ui.view">
+        <field name="name">marketing.inbound.mail.search</field>
+        <field name="model">marketing.inbound.mail</field>
+        <field name="arch" type="xml">
+            <search string="Marketing Inbound Mail">
+                <field name="email_from"/>
+                <field name="subject"/>
+                <field name="body_preview" string="Message Content"/>
+                <field name="campaign_id"/>
+                <field name="partner_id"/>
+                <field name="lead_id"/>
+                <filter string="Replies" name="filter_reply" domain="[('category', '=', 'reply')]"/>
+                <filter string="Bounces" name="filter_bounce" domain="[('category', '=', 'bounce')]"/>
+                <filter string="Unsubscribe Requests" name="filter_unsubscribe" domain="[('category', '=', 'unsubscribe')]"/>
+                <separator/>
+                <filter string="Errors" name="filter_error" domain="[('state', '=', 'error')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="groupby_category" context="{'group_by': 'category'}"/>
+                    <filter string="Status" name="groupby_state" context="{'group_by': 'state'}"/>
+                    <filter string="Campaign" name="groupby_campaign" context="{'group_by': 'campaign_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="marketing_inbound_mail_action" model="ir.actions.act_window">
+        <field name="name">Marketing Inbound Mail</field>
+        <field name="res_model">marketing.inbound.mail</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="marketing_inbound_mail_view_search"/>
+        <field name="context">{'search_default_filter_error': 0}</field>
+    </record>
+</odoo>

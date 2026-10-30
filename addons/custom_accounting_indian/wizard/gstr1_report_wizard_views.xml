@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_gstr1_report_wizard_form" model="ir.ui.view">
+        <field name="name">gstr1.report.wizard.form</field>
+        <field name="model">gstr1.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group>
+                        <field name="total_b2b_taxable"/>
+                        <field name="total_b2c_taxable"/>
+                        <field name="total_tax"/>
+                    </group>
+                </group>
+                <button name="action_generate" type="object" string="Generate" class="btn-primary mb-3"/>
+                <notebook>
+                    <page string="B2B Invoices" name="b2b">
+                        <field name="b2b_line_ids">
+                            <list create="false" decoration-muted="total_value &lt; 0">
+                                <field name="move_id" column_invisible="True"/>
+                                <field name="invoice_number" string="Invoice no."/>
+                                <field name="invoice_date" string="Invoice date"/>
+                                <field name="total_value" string="Total invoice value (₹)" sum="Total"/>
+                                <field name="taxable_value" string="Total taxable value (₹)" sum="Total"/>
+                                <field name="igst_amount" string="Integrated tax (₹)" sum="Total"/>
+                                <field name="cgst_amount" string="Central tax (₹)" sum="Total"/>
+                                <field name="sgst_amount" string="State/UT tax (₹)" sum="Total"/>
+                                <field name="cess_amount" string="Cess (₹)" sum="Total"/>
+                                <field name="source" string="Source"/>
+                                <field name="partner_name" optional="hide"/>
+                                <field name="partner_gstin" optional="hide"/>
+                                <field name="tax_amount" optional="hide" sum="Total"/>
+                                <button name="action_view_invoice" type="object" string="View" icon="fa-external-link"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="B2C Invoices" name="b2c">
+                        <field name="b2c_line_ids">
+                            <list create="false" decoration-muted="total_value &lt; 0">
+                                <field name="move_id" column_invisible="True"/>
+                                <field name="invoice_number" string="Invoice no."/>
+                                <field name="invoice_date" string="Invoice date"/>
+                                <field name="total_value" string="Total invoice value (₹)" sum="Total"/>
+                                <field name="taxable_value" string="Total taxable value (₹)" sum="Total"/>
+                                <field name="igst_amount" string="Integrated tax (₹)" sum="Total"/>
+                                <field name="cgst_amount" string="Central tax (₹)" sum="Total"/>
+                                <field name="sgst_amount" string="State/UT tax (₹)" sum="Total"/>
+                                <field name="cess_amount" string="Cess (₹)" sum="Total"/>
+                                <field name="source" string="Source"/>
+                                <button name="action_view_invoice" type="object" string="View" icon="fa-external-link"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="HSN Summary" name="hsn">
+                        <field name="hsn_line_ids" readonly="1">
+                            <list>
+                                <field name="hsn_code"/>
+                                <field name="quantity" sum="Total"/>
+                                <field name="taxable_value" sum="Total"/>
+                                <field name="tax_amount" sum="Total"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_gstr1_report_wizard" model="ir.actions.act_window">
+        <field name="name">GSTR-1 Preparation</field>
+        <field name="res_model">gstr1.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('website_sale_affiliate_custom.group_affiliate_manager'))]"/>
+    </record>
+
+    <data noupdate="1">
+        <!-- Affiliate Manager Group -->
+        <record id="group_affiliate_manager" model="res.groups">
+            <field name="name">Affiliate Manager</field>
+            <field name="category_id" ref="base.module_category_website"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Record rules -->
+        <record id="affiliate_click_company_rule" model="ir.rule">
+            <field name="name">Affiliate Click: multi-company</field>
+            <field name="model_id" ref="model_affiliate_click"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="affiliate_commission_company_rule" model="ir.rule">
+            <field name="name">Affiliate Commission: multi-company</field>
+            <field name="model_id" ref="model_affiliate_commission"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="affiliate_withdrawal_company_rule" model="ir.rule">
+            <field name="name">Affiliate Withdrawal: multi-company</field>
+            <field name="model_id" ref="model_affiliate_withdrawal"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>

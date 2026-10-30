@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_gst_invoice" model="ir.ui.view">
+        <field name="name">account.move.form.gst.invoice</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@class='alert alert-warning w-100 d-flex align-items-center gap-1']" position="before">
+                <div class="alert alert-danger w-100 d-flex align-items-center gap-1" invisible="not gst_missing_fields_warning" role="alert">
+                    <field name="gst_missing_fields_warning" nolabel="1" readonly="1"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

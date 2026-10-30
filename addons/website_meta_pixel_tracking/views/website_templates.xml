@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="meta_pixel_base_code" inherit_id="website.layout" name="Meta Pixel Base Code">
+        <xpath expr="//head" position="inside">
+            <t t-if="website.meta_pixel_id">
+                <script type="text/javascript">
+                    !function(f,b,e,v,n,t,s)
+                    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                    n.queue=[];t=b.createElement(e);t.async=!0;
+                    t.src=v;s=b.getElementsByTagName(e)[0];
+                    s.parentNode.insertBefore(t,s)}(window, document,'script',
+                    'https://connect.facebook.net/en_US/fbevents.js');
+                    fbq('init', '<t t-esc="website.meta_pixel_id"/>');
+                    fbq('track', 'PageView');
+                </script>
+                <noscript>
+                    <img height="1" width="1" style="display:none"
+                         t-attf-src="https://www.facebook.com/tr?id=#{website.meta_pixel_id}&amp;ev=PageView&amp;noscript=1"/>
+                </noscript>
+                <script type="text/javascript">
+                    (function () {
+                        var url = window.location.pathname;
+                        fetch('/meta_pixel/track_pageview', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({jsonrpc: '2.0', method: 'call', params: {url: url}}),
+                        });
+                    })();
+                </script>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="meta_pixel_purchase_event" inherit_id="website_sale.confirmation" name="Meta Pixel Purchase Event">
+        <xpath expr="//t[@t-call='website_sale.checkout_layout']" position="inside">
+            <t t-if="website.meta_pixel_id">
+                <script type="text/javascript">
+                    if (window.fbq) {
+                        fbq('track', 'Purchase', {
+                            value: <t t-esc="order.amount_total"/>,
+                            currency: '<t t-esc="order.currency_id.name"/>',
+                        });
+                    }
+                </script>
+            </t>
+        </xpath>
+    </template>
+</odoo>

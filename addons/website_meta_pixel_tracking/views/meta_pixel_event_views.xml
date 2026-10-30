@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_meta_pixel_event_list" model="ir.ui.view">
+        <field name="name">meta.pixel.event.list</field>
+        <field name="model">meta.pixel.event</field>
+        <field name="arch" type="xml">
+            <list default_order="create_date desc">
+                <field name="create_date" string="Date"/>
+                <field name="event_type"/>
+                <field name="website_id"/>
+                <field name="url"/>
+                <field name="value" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="partner_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_meta_pixel_event_graph" model="ir.ui.view">
+        <field name="name">meta.pixel.event.graph</field>
+        <field name="model">meta.pixel.event</field>
+        <field name="arch" type="xml">
+            <graph type="bar" string="Meta Pixel Events">
+                <field name="create_date" type="row" interval="day"/>
+                <field name="event_type" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_meta_pixel_event_search" model="ir.ui.view">
+        <field name="name">meta.pixel.event.search</field>
+        <field name="model">meta.pixel.event</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="url"/>
+                <field name="website_id"/>
+                <filter string="Page Views" name="page_view" domain="[('event_type', '=', 'page_view')]"/>
+                <filter string="Purchases" name="purchase" domain="[('event_type', '=', 'purchase')]"/>
+                <filter string="Leads" name="lead" domain="[('event_type', '=', 'lead')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Event Type" name="group_event_type" context="{'group_by': 'event_type'}"/>
+                    <filter string="Website" name="group_website" context="{'group_by': 'website_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_meta_pixel_event" model="ir.actions.act_window">
+        <field name="name">Meta Pixel Events</field>
+        <field name="res_model">meta.pixel.event</field>
+        <field name="view_mode">graph,list</field>
+    </record>
+
+    <menuitem id="menu_meta_pixel_events" name="Meta Pixel Events"
+              parent="website.menu_website_configuration" action="action_meta_pixel_event" sequence="60"/>
+</odoo>

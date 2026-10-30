@@ -1,0 +1,546 @@
+<style>
+    /* Base Styles and Resets */
+    .dh-dashboard-desc,
+    .dh-dashboard-desc * {
+        box-sizing: border-box;
+    }
+
+    .dh-dashboard-desc {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 0;
+        overflow-x: hidden;
+        font-family: 'Montserrat', 'Source Sans Pro', sans-serif;
+        color: #333;
+        background-color: #fff;
+    }
+
+    /* Odoo Grid Overrides - Essential for Responsiveness */
+    .dh-dashboard-desc .oe_container {
+        padding: 0;
+        margin: 0;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .dh-dashboard-desc .oe_row {
+        padding: 0;
+        margin: 0 auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        display: block !important;
+    }
+
+    /* Bootstrap Row Fix */
+    .dh-dashboard-desc .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    /* Responsive Images */
+    .dh-dashboard-desc img {
+        display: block;
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Tab styles */
+    .dh-dashboard-desc .nav-tabs .nav-link {
+        white-space: normal;
+        transition: all 0.3s ease;
+        border: none !important;
+    }
+    
+    .dh-dashboard-desc .nav-tabs .nav-link.active {
+        background-color: #1c3f61 !important;
+        color: #fff !important;
+    }
+
+    /* Section Spacing */
+    .dh-section {
+        padding: 40px 15px;
+    }
+
+    /* Typography */
+    .dh-title {
+        color: #275888;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    /* Highlights Background Fix */
+    .dh-highlight-text {
+        background-position: center 60%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding: 0 10px;
+        display: inline-block;
+    }
+
+    @media (max-width: 767.98px) {
+        .dh-section {
+            padding: 30px 10px;
+        }
+
+        .dh-dashboard-desc .oe_slogan,
+        .dh-dashboard-desc h2,
+        .dh-dashboard-desc h3,
+        .dh-dashboard-desc h4,
+        .dh-dashboard-desc h6,
+        .dh-dashboard-desc p,
+        .dh-dashboard-desc a,
+        .dh-dashboard-desc li,
+        .dh-dashboard-desc span {
+            overflow-wrap: anywhere;
+        }
+
+        .dh-dashboard-desc .nav-tabs {
+            gap: 10px;
+        }
+
+        .dh-dashboard-desc .nav-tabs .nav-item {
+            width: 100%;
+            margin: 0 !important;
+        }
+
+        .dh-dashboard-desc .nav-tabs .nav-link {
+            width: 100%;
+            padding: 12px 18px !important;
+            border-radius: 10px !important;
+        }
+
+        .dh-dashboard-desc .d-flex.align-items-center.p-3.border-bottom {
+            align-items: flex-start !important;
+        }
+
+        .dh-dashboard-desc .d-flex.align-items-center.justify-content-center.bg-light.rounded.border.mr-3 {
+            min-width: 56px !important;
+            min-height: 56px !important;
+            margin-right: 12px !important;
+            flex-shrink: 0;
+        }
+
+        .dh-dashboard-desc p[style*="letter-spacing: 4px"] {
+            letter-spacing: 2px !important;
+            font-size: 11px !important;
+        }
+
+        .dh-dashboard-desc .flex-sm-row {
+            flex-direction: column !important;
+        }
+        
+        .dh-dashboard-desc .mx-sm-2 {
+            margin-left: 0 !important;
+            margin-right: 0 !important;
+            margin-bottom: 15px;
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .dh-section {
+            padding: 25px 8px;
+        }
+
+        .dh-dashboard-desc div[style*="aspect-ratio: 1 / 2"] {
+            max-width: 220px !important;
+            border-width: 6px !important;
+            border-top-width: 24px !important;
+            border-bottom-width: 24px !important;
+            border-radius: 24px !important;
+        }
+
+        .dh-dashboard-desc div[style*="top: -20px"],
+        .dh-dashboard-desc div[style*="top: -15px"] {
+            top: -12px !important;
+        }
+        
+        .dh-title {
+            font-size: 24px !important;
+        }
+    }
+</style>
+
+<div class="dh-dashboard-desc">
+    <!-- Top Hero Section -->
+    <section class="dh-section text-center" style="background-color: #f8faff;">
+        <div class="container-fluid">
+            <h2 class="dh-title" style="font-size: clamp(24px, 4vw, 35px); text-transform: none; margin-top: 0;">
+                <span class="dh-highlight-text" style="background-image: url(https://apps.odoo.com/openerp_website/static/src/img/highlights/yellow_highlight_bold_05.svg);">
+                    Dynamic Home Dashboard
+                </span>
+            </h2>
+            <h3 style="font-size: clamp(16px, 3vw, 22px); color: #275888; font-family: 'Times New Roman', serif; text-transform: uppercase; opacity: 0.8; margin-bottom: 30px;">
+                Elevate Your Odoo Workspace Navigation
+            </h3>
+            <!-- Hero Buttons -->
+            <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center">
+                <a href="mailto:snakedragtechsolutions@gmail.com"
+                    class="mx-sm-2 text-center"
+                    style="background-color: #5154A5; padding: 12px 30px; border-radius: 50px; color: #fff; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-decoration: none; width: 100%; max-width: 280px; display: block;">
+                    <i class="fa fa-envelope mr-2"></i> Contact Me
+                </a>
+                <a href="https://www.youtube.com/watch?v=GtYn5QDXjx4"
+                    class="mx-sm-2 text-center"
+                    style="background-color: #5154A5; padding: 12px 30px; border-radius: 50px; color: #fff; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-decoration: none; width: 100%; max-width: 280px; display: block;">
+                    <i class="fa fa-play-circle mr-2"></i> Demo Video
+                </a>
+            </div>
+        </div><br/>
+    </section>
+
+    <!-- Overview Section -->
+    <section class="dh-section">
+        <div class="container-fluid text-center">
+            <h2 class="dh-title" style="font-size: clamp(28px, 5vw, 40px); display: inline-block;">
+                <span class="dh-highlight-text" style="background-image: url(https://apps.odoo.com/openerp_website/static/src/img/highlights/yellow_highlight_bold_05.svg);">
+                    Overview
+                </span>
+            </h2>
+            <p style="color: #37686b; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 15px;">
+                Dynamic Home Dashboard
+            </p>
+            <div style="width: 60px; height: 4px; background: #94c23d; margin: 0 auto 30px auto;"></div>
+
+            <div class="row">
+                <div class="col-12 text-left">
+                    <div class="p-3 p-md-4 bg-light rounded shadow-sm">
+                        <p style="text-align: justify; font-size: clamp(15px, 2vw, 18px); color: #333; line-height: 1.8; margin: 0;">
+                            <i class="fa fa-quote-left" style="color: #94c23d; margin-right: 10px; opacity: 0.8;"></i>
+                            Transform your standard Odoo home screen into a fully customizable, drag-and-drop desktop
+                            environment. The Dynamic Home Dashboard module completely revitalizes the standard Odoo home
+                            screen, giving users full control over their workspace layout and organization.
+                            <i class="fa fa-quote-right" style="color: #94c23d; margin-left: 10px; opacity: 0.8;"></i>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Supported Editions Section -->
+    <section class="dh-section bg-light">
+        <div class="container-fluid text-center">
+            <h2 class="dh-title" style="font-size: clamp(24px, 4vw, 35px);">
+                <span class="dh-highlight-text" style="background-image: url(https://apps.odoo.com/openerp_website/static/src/img/highlights/blue_highlight_01.svg);">
+                    Supported
+                </span> Editions
+            </h2>
+            <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center mt-4">
+                <!-- Enterprise Badge -->
+                <span class="mx-sm-2 text-center"
+                    style="background-color: #5154A5; padding: 12px 25px; border-radius: 50px; color: #fff; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 220px; display: block; margin-bottom: 15px;">
+                    <i class="fa fa-building mr-2"></i> Enterprise
+                </span>
+                <!-- Odoo.sh Badge -->
+                <span class="mx-sm-2 text-center"
+                    style="background-color: #5154A5; padding: 12px 25px; border-radius: 50px; color: #fff; font-size: 16px; font-weight: 600; box-shadow: 0 4px 6px rgba(0,0,0,0.1); width: 100%; max-width: 220px; display: block; margin-bottom: 15px;">
+                    <i class="fa fa-cloud mr-2"></i> Odoo.sh
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Highlights -->
+    <section class="dh-section">
+        <div class="container-fluid text-center">
+            <h2 class="dh-title" style="font-size: clamp(28px, 5vw, 45px); margin-bottom: 10px;">
+                Key Highlights
+            </h2>
+            <p style="color: #37686b; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 20px;">
+                Dynamic Home Dashboard
+            </p>
+            <div style="width: 100px; height: 5px; background: #94c23d; margin: 0 auto 40px auto;"></div>
+
+            <div class="row text-left">
+                <div class="col-12 col-md-6 mb-4">
+                    <div class="h-100 bg-white shadow-sm rounded-lg border">
+                        <div class="d-flex align-items-center p-3 border-bottom">
+                            <div class="d-flex align-items-center justify-content-center bg-light rounded border mr-3"
+                                style="min-width: 65px; min-height: 65px; border-color: #e5e7eb !important;">
+                                <img src="1-Guided-Setup.png" width="40" alt="Icon">
+                            </div>
+                            <h4 class="m-0 font-weight-bold" style="color: #5154a5;">Interactive Drag & Drop</h4>
+                        </div>
+                        <div class="p-3 p-md-4">
+                            <h6 class="font-italic font-weight-bold mb-3">Arrange once. Work comfortably.</h6>
+                            <ul class="text-muted pl-4 m-0" style="line-height: 1.8;">
+                                <li>Easily click, hold, and move app icons</li>
+                                <li>Arrange according to your daily workflow</li>
+                                <li>Real-time persistence of dashboard layout</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 mb-4">
+                    <div class="h-100 bg-white shadow-sm rounded-lg border">
+                        <div class="d-flex align-items-center p-3 border-bottom">
+                            <div class="d-flex align-items-center justify-content-center bg-light rounded border mr-3"
+                                style="min-width: 65px; min-height: 65px; border-color: #e5e7eb !important;">
+                                <img src="2-Initial-Data.png" width="40" alt="Icon">
+                            </div>
+                            <h4 class="m-0 font-weight-bold" style="color: #5154a5;">Advanced Sorting</h4>
+                        </div>
+                        <div class="p-3 p-md-4">
+                            <h6 class="font-italic font-weight-bold mb-3">Organize fast. Find faster.</h6>
+                            <ul class="text-muted pl-4 m-0" style="line-height: 1.8;">
+                                <li>Sort applications A to Z or Z to A</li>
+                                <li>Reset to default Odoo arrangement instantly</li>
+                                <li>Automatic alphabet-based menu grouping</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 mb-4">
+                    <div class="h-100 bg-white shadow-sm rounded-lg border">
+                        <div class="d-flex align-items-center p-3 border-bottom">
+                            <div class="d-flex align-items-center justify-content-center bg-light rounded border mr-3"
+                                style="min-width: 65px; min-height: 65px; border-color: #e5e7eb !important;">
+                                <img src="3-Product-Catalog.png" width="40" alt="Icon">
+                            </div>
+                            <h4 class="m-0 font-weight-bold" style="color: #5154a5;">Live Timer Clock</h4>
+                        </div>
+                        <div class="p-3 p-md-4">
+                            <h6 class="font-italic font-weight-bold mb-3">Track time. Manage productivity.</h6>
+                            <ul class="text-muted pl-4 m-0" style="line-height: 1.8;">
+                                <li>Sleek, real-time clock on the dashboard</li>
+                                <li>Keep track of daily tasks and schedule</li>
+                                <li>Clean, modern analog/digital display</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 mb-4">
+                    <div class="h-100 bg-white shadow-sm rounded-lg border">
+                        <div class="d-flex align-items-center p-3 border-bottom">
+                            <div class="d-flex align-items-center justify-content-center bg-light rounded border mr-3"
+                                style="min-width: 65px; min-height: 65px; border-color: #e5e7eb !important;">
+                                <img src="4-Inventory-Accuracy.png" width="40" alt="Icon">
+                            </div>
+                            <h4 class="m-0 font-weight-bold" style="color: #5154a5;">Integrated Search</h4>
+                        </div>
+                        <div class="p-3 p-md-4">
+                            <h6 class="font-italic font-weight-bold mb-3">Find everything. Work seamlessly.</h6>
+                            <ul class="text-muted pl-4 m-0" style="line-height: 1.8;">
+                                <li>Compatible with Odoo's native search</li>
+                                <li>Search menus directly from the dashboard</li>
+                                <li>Responsive design for all resolutions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Visual Experience Tabs -->
+    <section class="dh-section bg-light">
+        <div class="container-fluid text-center">
+            <h2 class="dh-title" style="font-size: clamp(24px, 4vw, 35px); margin-bottom: 30px;">
+                <span class="dh-highlight-text" style="background-image: url(https://apps.odoo.com/openerp_website/static/src/img/highlights/green_highlight_03.svg);">
+                    Visual
+                </span> Experience
+            </h2>
+
+            <div class="row">
+                <div class="col-12">
+                    <ul class="nav nav-tabs justify-content-center flex-column flex-md-row border-0 mb-4" role="tablist">
+                        <li class="nav-item mx-md-2 mb-2 mb-md-0">
+                            <a class="nav-link active font-weight-bold text-center d-block shadow-sm" id="desktop-tab" data-toggle="tab" data-bs-toggle="tab"
+                                href="#desktop_view" role="tab"
+                                style="border-radius: 30px; padding: 12px 30px; background-color: #295585; color: #fff;">
+                                <i class="fa fa-desktop mr-2"></i> Desktop View
+                            </a>
+                        </li>
+                        <li class="nav-item mx-md-2">
+                            <a class="nav-link font-weight-bold text-center d-block shadow-sm" id="mobile-tab" data-toggle="tab" data-bs-toggle="tab" href="#mobile_view"
+                                role="tab"
+                                style="border-radius: 30px; padding: 12px 30px; background-color: #295585; color: #fff;">
+                                <i class="fa fa-mobile mr-2"></i> Mobile View
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content bg-transparent border-0 p-0 text-left">
+                        <!-- Desktop Content -->
+                        <div class="tab-pane fade show active" id="desktop_view" role="tabpanel">
+                            <div class="mb-5">
+                                <div class="p-2 p-md-3 bg-white shadow-sm rounded border">
+                                    <img src="1.png" class="img-fluid rounded w-100" alt="Full Screen Dashboard">
+                                </div>
+                                <p class="mt-3 text-muted font-italic text-center">Complete Interactive Dashboard Layout</p>
+                            </div>
+
+                            <div class="row mb-5 align-items-center">
+                                <div class="col-12 col-md-5 mb-4 text-center">
+                                    <h4 class="font-weight-bold mb-3" style="color: #5154A5;">Shortlist Selection</h4>
+                                    <div class="p-2 border bg-white shadow-sm rounded">
+                                        <img src="2.png" class="img-fluid rounded w-100" alt="Sorting Options List">
+                                    </div>
+                                    <p class="mt-2 small text-muted">Select your preferred app sorting method.</p>
+                                </div>
+
+                                <div class="col-12 col-md-2 mb-4 text-center d-none d-md-block">
+                                    <i class="fa fa-arrow-right fa-3x" style="color: #5154A5; opacity: 0.3;"></i>
+                                </div>
+                                <div class="col-12 col-md-2 mb-4 text-center d-block d-md-none">
+                                    <i class="fa fa-arrow-down fa-2x" style="color: #5154A5; opacity: 0.3;"></i>
+                                </div>
+
+                                <div class="col-12 col-md-5 mb-4 text-center">
+                                    <h4 class="font-weight-bold mb-3" style="color: #5154A5;">Instant Preview</h4>
+                                    <div class="p-2 border bg-white shadow-sm rounded">
+                                        <img src="3.png" class="img-fluid rounded w-100" alt="Dashboard Preview After Sorting">
+                                    </div>
+                                    <p class="mt-2 small text-muted">See your dashboard transform immediately.</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-5 text-center">
+                                <h4 class="font-weight-bold mb-3" style="color: #5154A5;">Integrated Search Functionality</h4>
+                                <div class="p-2 p-md-3 bg-white shadow-sm rounded border">
+                                    <img src="4.png" class="img-fluid rounded w-100" alt="Search Functionality">
+                                </div>
+                                <p class="mt-3 text-muted">Quickly find any app or menu with our fully integrated native search bar.</p>
+                            </div>
+                        </div>
+
+                        <!-- Mobile Content -->
+                        <div class="tab-pane fade" id="mobile_view" role="tabpanel">
+                            <div class="mb-5 text-center">
+                                <h2 class="font-weight-bold mb-4" style="color: #5154A5; font-size: clamp(22px, 3.5vw, 32px);">Premium Mobile Experience</h2>
+
+                                <div class="mx-auto shadow-lg"
+                                    style="position: relative; width: 100%; max-width: 260px; aspect-ratio: 1 / 2; border: 10px solid #333; border-top-width: 35px; border-bottom-width: 35px; border-radius: 36px; background: #333; overflow: hidden;">
+                                    <div style="position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 50px; height: 4px; background: #555; border-radius: 10px;"></div>
+                                    <img src="M1.png" alt="Mobile Dashboard View" class="w-100 h-100" style="object-fit: cover; background: #fff;">
+                                </div>
+
+                                <div class="mt-4 mx-auto px-3" style="max-width: 600px;">
+                                    <h4 class="font-weight-bold" style="color: #333;">Fully Responsive Dashboard</h4>
+                                    <p class="text-muted" style="line-height: 1.8; font-size: 15px;">
+                                        Experience a <b>fluid, app-like interface</b> on your mobile device.
+                                        Our dashboard automatically adapts to any screen size.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-5 align-items-center justify-content-center bg-white py-4 rounded shadow-sm">
+                                <div class="col-12 col-md-5 mb-4 text-center">
+                                    <h4 class="font-weight-bold mb-3" style="color: #5154A5;">One-Tap Sorting</h4>
+                                    <div class="mx-auto shadow"
+                                        style="position: relative; width: 100%; max-width: 220px; aspect-ratio: 1 / 2; border: 8px solid #333; border-top-width: 30px; border-bottom-width: 30px; border-radius: 30px; background: #333; overflow: hidden;">
+                                        <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 40px; height: 3px; background: #555; border-radius: 10px;"></div>
+                                        <img src="M2.png" alt="Mobile Shortlist Menu" class="w-100 h-100" style="object-fit: cover; background: #fff;">
+                                    </div>
+                                    <p class="mt-3 text-muted px-2 small">Access advanced sorting options with a clean, mobile-optimized menu.</p>
+                                </div>
+
+                                <div class="col-12 col-md-1 mb-4 text-center d-none d-md-block">
+                                    <i class="fa fa-chevron-right fa-2x" style="color: #5154A5; opacity: 0.3;"></i>
+                                </div>
+
+                                <div class="col-12 col-md-5 mb-4 text-center">
+                                    <h4 class="font-weight-bold mb-3" style="color: #5154A5;">Instant Refresh</h4>
+                                    <div class="mx-auto shadow"
+                                        style="position: relative; width: 100%; max-width: 220px; aspect-ratio: 1 / 2; border: 8px solid #333; border-top-width: 30px; border-bottom-width: 30px; border-radius: 30px; background: #333; overflow: hidden;">
+                                        <div style="position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 40px; height: 3px; background: #555; border-radius: 10px;"></div>
+                                        <img src="M3.png" alt="Mobile Sorting Preview" class="w-100 h-100" style="object-fit: cover; background: #fff;">
+                                    </div>
+                                    <p class="mt-3 text-muted px-2 small">See your changes applied immediately with zero lag.</p>
+                                </div>
+                            </div>
+
+                            <div class="row justify-content-center mb-5">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-12 col-md-4 mb-3">
+                                            <div class="shadow-sm text-center border bg-white p-3 rounded-lg h-100">
+                                                <i class="fa fa-hand-pointer-o fa-2x mb-3" style="color: #5154A5;"></i>
+                                                <h6 class="font-weight-bold">Touch Optimized</h6>
+                                                <p class="small text-muted m-0">Designed for easy thumb navigation.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4 mb-3">
+                                            <div class="shadow-sm text-center border bg-white p-3 rounded-lg h-100">
+                                                <i class="fa fa-refresh fa-2x mb-3" style="color: #48b01e;"></i>
+                                                <h6 class="font-weight-bold">Real-time Sync</h6>
+                                                <p class="small text-muted m-0">Desktop changes reflect instantly.</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 col-md-4 mb-3">
+                                            <div class="shadow-sm text-center border bg-white p-3 rounded-lg h-100">
+                                                <i class="fa fa-check-circle fa-2x mb-3" style="color: #5154A5;"></i>
+                                                <h6 class="font-weight-bold">Full Access</h6>
+                                                <p class="small text-muted m-0">Get the full desktop power on mobile.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-5">
+                                <h4 class="font-weight-bold mb-3" style="color: #5154A5;">Mobile Drag & Drop Interface</h4>
+                                <p class="text-muted mb-4 mx-auto" style="max-width: 700px;">
+                                    Simply long-press any app icon and move it to your preferred position.
+                                </p>
+                                <div class="row">
+                                    <div class="col-6 col-md-4 mb-4">
+                                        <div class="p-1 bg-white shadow-sm rounded border">
+                                            <img src="M5.png" class="img-fluid rounded" alt="Mobile 1">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-4 mb-4">
+                                        <div class="p-1 bg-white shadow-sm rounded border">
+                                            <img src="M6.png" class="img-fluid rounded" alt="Mobile 2">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-4 mb-4">
+                                        <div class="p-1 bg-white shadow-sm rounded border">
+                                            <img src="M7.png" class="img-fluid rounded" alt="Mobile 3">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-4 mb-4">
+                                        <div class="p-1 bg-white shadow-sm rounded border">
+                                            <img src="M8.png" class="img-fluid rounded" alt="Mobile 4">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-4 mb-4">
+                                        <div class="p-1 bg-white shadow-sm rounded border">
+                                            <img src="M9.png" class="img-fluid rounded" alt="Mobile 5">
+                                        </div>
+                                    </div>
+                                    <div class="col-6 col-md-4 mb-4">
+                                        <div class="p-1 bg-white shadow-sm rounded border">
+                                            <img src="M10.png" class="img-fluid rounded" alt="Mobile 6">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Support Footer -->
+    <section class="dh-section">
+        <div class="container-fluid">
+            <div style="background-color: #275888; border-radius: 20px; padding: 40px 20px; text-align: center; color: #fff; box-shadow: 0 10px 30px rgba(39, 88, 136, 0.3);">
+                <h2 class="font-weight-bold" style="font-size: clamp(22px, 4vw, 30px); margin-bottom: 15px; color: #fff;">Need Help or Support?</h2>
+                <p style="font-size: 16px; margin-bottom: 25px; opacity: 0.9;">If you have any questions, feel free to contact us.</p>
+                <a href="mailto:snakedragtechsolutions@gmail.com"
+                    class="d-inline-block text-truncate shadow"
+                    style="background-color: #fff; color: #275888; padding: 14px 30px; border-radius: 50px; text-decoration: none; font-weight: bold; font-size: 16px; max-width: 100%;">
+                    <i class="fa fa-envelope mr-2"></i> snakedragtechsolutions@gmail.com
+                </a>
+            </div>
+        </div>
+    </section>
+</div>

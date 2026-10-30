@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_petty_cash_voucher" model="ir.sequence">
+        <field name="name">Petty Cash Voucher</field>
+        <field name="code">account.petty.cash.voucher</field>
+        <field name="prefix">PCV/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_petty_cash_count" model="ir.sequence">
+        <field name="name">Petty Cash Count</field>
+        <field name="code">account.petty.cash.count</field>
+        <field name="prefix">PCC/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

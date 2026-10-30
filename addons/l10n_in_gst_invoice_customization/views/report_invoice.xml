@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="gst_report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+
+        <!-- ================= 0. GST invoice grid/box styling ================= -->
+        <xpath expr="//div[@class='row']" position="before">
+            <t t-if="o.company_id.account_fiscal_country_id.code == 'IN'">
+                <style>
+                    .gst_invoice_box { border: 1px solid #333; padding: 10px 12px; }
+                    .gst_invoice_box + .gst_invoice_box { border-top: none; }
+                    .gst_box_title { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .04em; color: #555; margin-bottom: 4px; font-weight: 700; }
+                    .gst_kv_table { width: 100%; font-size: 0.82rem; border-collapse: collapse; }
+                    .gst_kv_table td { padding: 1px 4px 1px 0; vertical-align: top; }
+                    .gst_addr_row { display: flex; }
+                    .gst_addr_col { flex: 1 1 50%; border: 1px solid #333; padding: 10px 12px; }
+                    .gst_addr_col + .gst_addr_col { border-left: none; }
+                    .gst_addr_name { font-weight: 700; margin-bottom: 2px; }
+                    table.o_main_table.gst_table, table.o_main_table.gst_table th, table.o_main_table.gst_table td {
+                        border: 1px solid #333 !important;
+                    }
+                    table.o_main_table.gst_table thead th { background-color: #f0f0f0; font-size: 0.78rem; }
+                    table.o_total_table.gst_totals, table.o_total_table.gst_totals td { border: 1px solid #333 !important; }
+                    table.o_total_table.gst_totals tr.o_total td { background-color: #f0f0f0; font-size: 1rem; }
+                </style>
+            </t>
+        </xpath>
+
+        <!-- ================= A. Seller GST-KYC block (boxed) ================= -->
+        <xpath expr="//div[@class='row']" position="before">
+            <div class="gst_invoice_box mb-0" t-if="o.company_id.account_fiscal_country_id.code == 'IN'">
+                <div class="gst_box_title">Seller Details</div>
+                <table class="gst_kv_table">
+                    <tr>
+                        <td style="width:34%;"><strong>GSTIN:</strong> <span t-field="o.company_id.vat"/></td>
+                        <td style="width:33%;"><strong>PAN:</strong> <span t-field="o.company_id.l10n_in_pan"/></td>
+                        <td style="width:33%;" t-if="o.company_id.l10n_in_cin"><strong>CIN:</strong> <span t-field="o.company_id.l10n_in_cin"/></td>
+                    </tr>
+                    <tr>
+                        <td t-if="o.company_id.l10n_in_iec"><strong>IEC:</strong> <span t-field="o.company_id.l10n_in_iec"/></td>
+                        <td t-if="o.company_id.l10n_in_tan"><strong>TAN:</strong> <span t-field="o.company_id.l10n_in_tan"/></td>
+                        <td t-if="o.company_id.l10n_in_fssai"><strong>FSSAI:</strong> <span t-field="o.company_id.l10n_in_fssai"/></td>
+                    </tr>
+                    <tr>
+                        <td t-if="o.company_id.website"><strong>Website:</strong> <span t-field="o.company_id.website"/></td>
+                        <td t-if="o.company_id.gst_invoice_contact_name"><strong>Contact:</strong> <span t-field="o.company_id.gst_invoice_contact_name"/></td>
+                        <td t-if="o.company_id.gst_invoice_contact_number"><strong>Phone:</strong> <span t-field="o.company_id.gst_invoice_contact_number"/></td>
+                    </tr>
+                </table>
+            </div>
+        </xpath>
+
+        <!-- ================= B. Customer GST-KYC (appended near existing Tax ID line) ================= -->
+        <xpath expr="//div[@id='partner_vat_no_shipping']" position="after">
+            <div t-if="o.partner_id.l10n_in_pan"><strong>PAN:</strong> <span t-field="o.partner_id.l10n_in_pan"/></div>
+            <div t-if="o.partner_id.gst_cin"><strong>CIN:</strong> <span t-field="o.partner_id.gst_cin"/></div>
+        </xpath>
+        <xpath expr="//div[@id='partner_vat_address_not_same_as_shipping']" position="after">
+            <div t-if="o.partner_id.l10n_in_pan"><strong>PAN:</strong> <span t-field="o.partner_id.l10n_in_pan"/></div>
+            <div t-if="o.partner_id.gst_cin"><strong>CIN:</strong> <span t-field="o.partner_id.gst_cin"/></div>
+        </xpath>
+        <xpath expr="//div[@id='partner_vat_address_same_as_shipping']" position="after">
+            <div t-if="o.partner_id.l10n_in_pan"><strong>PAN:</strong> <span t-field="o.partner_id.l10n_in_pan"/></div>
+            <div t-if="o.partner_id.gst_cin"><strong>CIN:</strong> <span t-field="o.partner_id.gst_cin"/></div>
+        </xpath>
+
+        <!-- ================= B2. Box the Ship To address column (rendered inline here; Bill To is rendered by
+             web.external_layout from the "address" slot and is out of this template's reach) ================= -->
+        <xpath expr="//div[@name='shipping_address_block']/.." position="attributes">
+            <attribute name="class">col-6 gst_addr_col</attribute>
+        </xpath>
+        <xpath expr="//div[@name='shipping_address_block']/strong" position="replace">
+            <div class="gst_box_title" t-if="o.company_id.account_fiscal_country_id.code == 'IN'">Ship To</div>
+            <strong class="d-block mt-3" t-if="o.company_id.account_fiscal_country_id.code != 'IN'">Shipping Address</strong>
+        </xpath>
+
+        <!-- ================= C. Shipping / transport (Shiprocket) block (boxed) ================= -->
+        <xpath expr="//div[@class='row']" position="after">
+            <div class="gst_invoice_box" t-if="o.company_id.account_fiscal_country_id.code == 'IN'">
+                <div class="gst_box_title">Shipping / Transport Details</div>
+                <table class="gst_kv_table">
+                    <t t-set="ship_partner" t-value="o.partner_shipping_id or o.partner_id"/>
+                    <tr>
+                        <td style="width:34%;"><strong>Ship To:</strong> <span t-field="ship_partner.name"/></td>
+                        <td style="width:33%;"><strong>City:</strong> <span t-field="ship_partner.city"/></td>
+                        <td style="width:33%;"><strong>State:</strong> <span t-field="ship_partner.state_id.name"/></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Country:</strong> <span t-field="ship_partner.country_id.name"/></td>
+                        <td><strong>PIN Code:</strong> <span t-field="ship_partner.zip"/></td>
+                        <td><strong>Contact:</strong> <span t-esc="o.gst_shipping_contact_name"/> <span t-if="o.gst_shipping_contact_number">(<t t-esc="o.gst_shipping_contact_number"/>)</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Courier Order ID:</strong> <span t-esc="o.gst_shiprocket_order_id or '-'"/></td>
+                        <td><strong>AWB / Tracking No.:</strong> <span t-esc="o.gst_shiprocket_awb or '-'"/></td>
+                        <td><strong>Courier:</strong> <span t-esc="o.gst_shiprocket_courier or '-'"/></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><strong>Tracking URL:</strong> <span t-esc="o.gst_shiprocket_tracking_url or '-'"/></td>
+                        <td><strong>Status:</strong> <span t-esc="o.gst_shiprocket_status or '-'"/></td>
+                    </tr>
+                </table>
+            </div>
+        </xpath>
+
+        <!-- ================= C2. Rename "Source" to "Order ID" ================= -->
+        <xpath expr="//div[@name='origin']/strong" position="replace">
+            <strong>Order ID</strong>
+        </xpath>
+
+        <!-- ================= C3. Bordered grid on the invoice line table and totals table ================= -->
+        <xpath expr="//table[@name='invoice_line_table']" position="attributes">
+            <attribute name="class" add="gst_table" separator=" "/>
+        </xpath>
+        <xpath expr="//table[hasclass('o_total_table')]" position="attributes">
+            <attribute name="class" add="gst_totals" separator=" "/>
+        </xpath>
+
+        <!-- ================= D. Invoice line: force Discount % column visible on GST invoices, plus Discount amount + Taxable/CGST/SGST/IGST columns ================= -->
+        <xpath expr="//t[@t-set='display_discount']" position="replace">
+            <t t-set="display_discount" t-value="any(l.discount for l in o.invoice_line_ids) or o.company_id.account_fiscal_country_id.code == 'IN'"/>
+        </xpath>
+        <xpath expr="//th[@name='th_taxes']" position="before">
+            <t t-if="o.company_id.account_fiscal_country_id.code == 'IN'">
+                <th class="text-end"><span>Disc. Amt</span></th>
+                <th class="text-end"><span>Taxable Val.</span></th>
+                <th class="text-end"><span>CGST</span></th>
+                <th class="text-end"><span>SGST</span></th>
+                <th class="text-end"><span>IGST</span></th>
+            </t>
+        </xpath>
+        <xpath expr="//td[@name='td_taxes']" position="before">
+            <t t-if="o.company_id.account_fiscal_country_id.code == 'IN' and line.display_type == 'product'">
+                <t t-set="gst_breakup" t-value="line._gst_get_tax_breakup()"/>
+                <td class="text-end"><span t-esc="'%.2f' % (line.price_unit * line.quantity * (line.discount or 0.0) / 100.0)"/></td>
+                <td class="text-end"><span t-esc="'%.2f' % gst_breakup['taxable']"/></td>
+                <td class="text-end"><span t-esc="'%.2f' % gst_breakup['cgst'] if gst_breakup['cgst'] else '-'"/></td>
+                <td class="text-end"><span t-esc="'%.2f' % gst_breakup['sgst'] if gst_breakup['sgst'] else '-'"/></td>
+                <td class="text-end"><span t-esc="'%.2f' % gst_breakup['igst'] if gst_breakup['igst'] else '-'"/></td>
+            </t>
+        </xpath>
+
+        <!-- ================= E. Shipping charges + Coupon/Discount/Affiliate summary ================= -->
+        <xpath expr="//div[@id='payment_term']" position="before">
+            <div class="row mb-3" t-if="o.gst_shipping_taxable_amount or o.gst_coupon_code or o.gst_affiliate_code or o.gst_manual_discount_amount">
+                <div class="col-6" t-if="o.gst_shipping_taxable_amount">
+                    <div class="gst_invoice_box">
+                        <div class="gst_box_title">Shipping Charges</div>
+                        <table class="table table-sm table-borderless mb-0" style="font-size:0.85rem;">
+                            <tr>
+                                <td>Taxable Value</td>
+                                <td class="text-end"><span t-field="o.gst_shipping_taxable_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                            </tr>
+                            <tr>
+                                <td>GST</td>
+                                <td class="text-end"><span t-field="o.gst_shipping_tax_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                            </tr>
+                            <tr class="fw-bold">
+                                <td>Total (included above)</td>
+                                <td class="text-end"><span t-field="o.gst_shipping_total_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-6" t-if="o.gst_coupon_code or o.gst_affiliate_code or o.gst_manual_discount_amount">
+                    <div class="gst_invoice_box">
+                        <div class="gst_box_title">Discounts &amp; Offers</div>
+                        <table class="table table-sm table-borderless mb-0" style="font-size:0.85rem;">
+                            <tr t-if="o.gst_coupon_code">
+                                <td>Coupon Code: <span t-field="o.gst_coupon_code"/></td>
+                                <td class="text-end"><span t-field="o.gst_coupon_discount_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                            </tr>
+                            <tr t-if="o.gst_affiliate_code">
+                                <td>
+                                    Affiliate/Referral Code: <span t-field="o.gst_affiliate_code"/>
+                                    <t t-if="o.gst_campaign_name"> (<span t-field="o.gst_campaign_name"/>)</t>
+                                </td>
+                                <td class="text-end"><span t-field="o.gst_affiliate_discount_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                            </tr>
+                            <tr t-if="o.gst_manual_discount_amount">
+                                <td>Manual Discount</td>
+                                <td class="text-end"><span t-field="o.gst_manual_discount_amount" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+        <!-- ================= F. Bank details + UPI QR code ================= -->
+        <xpath expr="//div[@id='qrcode']" position="after">
+            <div class="row mb-3 avoid-page-break-inside" t-if="o.company_id.account_fiscal_country_id.code == 'IN' and (o.company_id.gst_show_bank_details or o.gst_upi_qr_url)">
+                <div class="col-7" t-if="o.company_id.gst_show_bank_details">
+                    <div class="gst_invoice_box">
+                        <div class="gst_box_title">Bank Details</div>
+                        <table class="table table-sm table-borderless mb-0" style="font-size:0.85rem;">
+                            <tr t-if="o.company_id.gst_bank_name"><td>Bank Name</td><td><span t-field="o.company_id.gst_bank_name"/></td></tr>
+                            <tr t-if="o.company_id.gst_bank_account_holder"><td>Account Holder</td><td><span t-field="o.company_id.gst_bank_account_holder"/></td></tr>
+                            <tr t-if="o.company_id.gst_bank_account_number"><td>Account Number</td><td><span t-esc="o.company_id._gst_get_masked_account_number()"/></td></tr>
+                            <tr t-if="o.company_id.gst_bank_ifsc"><td>IFSC Code</td><td><span t-field="o.company_id.gst_bank_ifsc"/></td></tr>
+                            <tr t-if="o.company_id.gst_bank_branch"><td>Branch</td><td><span t-field="o.company_id.gst_bank_branch"/></td></tr>
+                            <tr t-if="o.company_id.l10n_in_upi_id"><td>UPI ID</td><td><span t-field="o.company_id.l10n_in_upi_id"/></td></tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-5 text-center" t-if="o.gst_upi_qr_url">
+                    <div class="gst_invoice_box">
+                        <div class="gst_box_title">Scan to Pay</div>
+                        <img t-att-src="o.gst_upi_qr_url" style="width:120px;height:120px;"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+        <!-- ================= G. Authorized signature ================= -->
+        <xpath expr="//div[@name='comment']" position="after">
+            <div class="row mt-4 avoid-page-break-inside" t-if="o.company_id.account_fiscal_country_id.code == 'IN' and o.company_id.gst_signature_image">
+                <div class="col-4 offset-8 text-center">
+                    <img t-att-src="image_data_uri(o.company_id.gst_signature_image)" style="max-height:70px;max-width:180px;"/>
+                    <img t-if="o.company_id.gst_company_stamp" t-att-src="image_data_uri(o.company_id.gst_company_stamp)" style="max-height:70px;max-width:120px;margin-left:8px;"/>
+                    <div class="border-top pt-1 mt-1">
+                        <span t-if="o.company_id.gst_signatory_name" t-field="o.company_id.gst_signatory_name"/>
+                        <div t-if="o.company_id.gst_signatory_designation" class="text-muted" style="font-size:0.8rem;">
+                            <span t-field="o.company_id.gst_signatory_designation"/>
+                        </div>
+                        <div class="text-muted" style="font-size:0.8rem;">Authorized Signatory</div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+    </template>
+</odoo>

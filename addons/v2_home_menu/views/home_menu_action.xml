@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Client Action: V2 Home Menu Dashboard -->
+    <record id="action_v2_home_menu" model="ir.actions.client">
+        <field name="name">Home</field>
+        <field name="tag">v2_home_menu.HomeMenu</field>
+        <field name="target">main</field>
+    </record>
+</odoo>

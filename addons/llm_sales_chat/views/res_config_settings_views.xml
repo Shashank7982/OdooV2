@@ -1,0 +1,21 @@
+<odoo>
+    <record id="res_config_settings_view_form_llm" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.llm.sales.chat</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="LLM Sales Chat" name="llm_sales_chat">
+                    <block title="Groq LLM Chat">
+                        <setting string="Groq API Key" help="From console.groq.com. Key is securely stored.">
+                            <field name="groq_api_key" password="True"/>
+                        </setting>
+                        <setting string="Groq Model" help="e.g. llama-3.3-70b-versatile">
+                            <field name="groq_model"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

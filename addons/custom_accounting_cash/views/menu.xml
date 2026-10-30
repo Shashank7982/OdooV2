@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_cash_management" name="Cash Management" parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="25"/>
+    <menuitem id="menu_cash_locations" name="Cash Locations" parent="menu_cash_management" action="action_account_cash_location" sequence="10"/>
+    <menuitem id="menu_petty_cash_vouchers" name="Petty Cash Vouchers" parent="menu_cash_management" action="action_account_petty_cash_voucher" sequence="20"/>
+    <menuitem id="menu_petty_cash_counts" name="Petty Cash Counts" parent="menu_cash_management" action="action_account_petty_cash_count" sequence="30"/>
+    <menuitem id="menu_cash_book" name="Cash Book" parent="menu_cash_management" action="action_cash_book_report" sequence="40"/>
+    <menuitem id="menu_petty_cash_report" name="Petty Cash Report" parent="menu_cash_management" action="action_petty_cash_report" sequence="50"/>
+</odoo>

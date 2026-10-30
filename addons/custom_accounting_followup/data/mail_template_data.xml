@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="mail_template_followup_reminder" model="mail.template">
+        <field name="name">Overdue Invoice Follow-up</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="subject">Payment Reminder — {{ object.name }}</field>
+        <field name="body_html" type="html">
+            <div>
+                <p>Dear <t t-out="object.name"/>,</p>
+                <p>Our records show you have an overdue balance with us
+                   (<t t-out="object.max_overdue_days"/> days overdue). Please arrange
+                   payment at your earliest convenience.</p>
+                <p>Thank you.</p>
+            </div>
+        </field>
+    </record>
+</odoo>

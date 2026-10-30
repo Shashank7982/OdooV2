@@ -1,0 +1,11 @@
+<odoo>
+    <record id="seq_custom_sales_inquiry" model="ir.sequence"><field name="name">Sales Inquiry</field><field name="code">custom.sales.inquiry</field><field name="prefix">INQ/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_custom_sales_contract" model="ir.sequence"><field name="name">Sales Contract</field><field name="code">custom.sales.contract</field><field name="prefix">CON/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_custom_sales_scheduling_agreement" model="ir.sequence"><field name="name">Scheduling Agreement</field><field name="code">custom.sales.scheduling.agreement</field><field name="prefix">SAG/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_custom_sales_return" model="ir.sequence"><field name="name">Sales Return Request</field><field name="code">custom.sales.return</field><field name="prefix">RET/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_custom_sales_waybill" model="ir.sequence"><field name="name">Sales Waybill</field><field name="code">custom.sales.waybill</field><field name="prefix">EWB/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_custom_purchase_request" model="ir.sequence"><field name="name">Purchase Request</field><field name="code">custom.purchase.request</field><field name="prefix">PREQ/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_custom_desk_configuration" model="ir.sequence"><field name="name">Desk Configuration</field><field name="code">custom.desk.configuration</field><field name="prefix">DESK/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_custom_accounting_close" model="ir.sequence"><field name="name">Accounting Close</field><field name="code">custom.accounting.close</field><field name="prefix">CLOSE/%(year)s/</field><field name="padding">5</field></record>
+    <record id="seq_account_petty_cash_topup" model="ir.sequence"><field name="name">Petty Cash Top-up</field><field name="code">account.petty.cash.topup</field><field name="prefix">TOPUP/%(year)s/</field><field name="padding">5</field></record>
+</odoo>

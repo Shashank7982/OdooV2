@@ -1,0 +1,24 @@
+{
+    'name': 'Custom Accounting Plan Completion',
+    'version': '1.0',
+    'category': 'Accounting/Accounting',
+    'summary': 'Plan-complete accounting controls, workflows, close, and integrations',
+    'depends': [
+        'account', 'sale_management', 'purchase', 'stock',
+        'custom_accounting_core', 'custom_accounting_reports',
+        'custom_accounting_ocr', 'custom_accounting_cash',
+        'custom_accounting_assets', 'custom_accounting_deferred',
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/ir_sequence_data.xml',
+        'views/workflow_views.xml',
+        'views/desk_views.xml',
+        'views/close_views.xml',
+        'views/topup_views.xml',
+        'views/ocr_views.xml',
+        'views/menu.xml',
+    ],
+    'license': 'LGPL-3',
+    'installable': True,
+}

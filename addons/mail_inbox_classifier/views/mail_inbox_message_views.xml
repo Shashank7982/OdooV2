@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mail_inbox_message_list" model="ir.ui.view">
+        <field name="name">mail.inbox.message.list</field>
+        <field name="model">mail.inbox.message</field>
+        <field name="arch" type="xml">
+            <list string="Inbox Messages" default_order="create_date desc">
+                <field name="received_date"/>
+                <field name="email_from"/>
+                <field name="name"/>
+                <field name="category" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mail_inbox_message_form" model="ir.ui.view">
+        <field name="name">mail.inbox.message.form</field>
+        <field name="model">mail.inbox.message</field>
+        <field name="arch" type="xml">
+            <form string="Inbox Message">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="email_from"/>
+                        <field name="category"/>
+                        <field name="received_date"/>
+                    </group>
+                    <field name="body_preview"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mail_inbox_message_search" model="ir.ui.view">
+        <field name="name">mail.inbox.message.search</field>
+        <field name="model">mail.inbox.message</field>
+        <field name="arch" type="xml">
+            <search string="Search Inbox Messages">
+                <field name="name"/>
+                <field name="email_from"/>
+                <filter string="Customer Support" name="filter_customer_support"
+                        domain="[('category', '=', 'customer_support')]"/>
+                <filter string="Order History" name="filter_order_history"
+                        domain="[('category', '=', 'order_history')]"/>
+                <filter string="General Query" name="filter_query"
+                        domain="[('category', '=', 'query')]"/>
+                <filter string="Other" name="filter_other"
+                        domain="[('category', '=', 'other')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_by_category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mail_inbox_message" model="ir.actions.act_window">
+        <field name="name">Inbox Messages</field>
+        <field name="res_model">mail.inbox.message</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_by_category': 1}</field>
+    </record>
+
+    <menuitem id="menu_mail_inbox_classifier_root"
+              name="Inbox Messages"
+              action="action_mail_inbox_message"
+              sequence="60"/>
+</odoo>

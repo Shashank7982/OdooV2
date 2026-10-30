@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_snailmail" model="ir.ui.view">
+        <field name="name">sale.order.form.snailmail</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@id='send_by_email']" position="after">
+                <button name="action_send_by_post" id="send_by_post" string="Send by Post"
+                        type="object" class="btn-secondary"
+                        invisible="state not in ('sale', 'done')"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

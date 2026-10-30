@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- These records were created by the first completion release with
+         base.group_user. Deactivate them so the role-specific ACLs in
+         custom_accounting_security are authoritative on upgrade. -->
+    <record id="access_custom_sales_inquiry_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_sales_inquiry_line_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_sales_contract_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_scheduling_agreement_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_sales_return_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_sales_waybill_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_purchase_request_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_purchase_request_line_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_desk_configuration_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_custom_accounting_close_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_account_petty_cash_topup_user" model="ir.model.access"><field name="active">False</field></record>
+    <record id="access_account_ocr_provider_config_manager" model="ir.model.access"><field name="active">False</field></record>
+</odoo>

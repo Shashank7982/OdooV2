@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_followup_root" name="Follow-up"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="100"/>
+    <menuitem id="menu_partner_overdue" name="Overdue Customers"
+              parent="menu_followup_root" action="action_partner_overdue" sequence="10"/>
+    <menuitem id="menu_followup_level" name="Follow-up Levels"
+              parent="menu_followup_root" action="action_account_followup_level" sequence="20"/>
+</odoo>

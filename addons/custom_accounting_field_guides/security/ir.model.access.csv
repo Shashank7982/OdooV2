@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_field_guide_user,account.field.guide.user,model_account_field_guide,base.group_user,1,0,0,0
+access_account_field_guide_account,account.field.guide.account,model_account_field_guide,account.group_account_invoice,1,1,1,1

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_budget_root" name="Budgets"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="70"/>
+    <menuitem id="menu_account_budget" name="Budgets"
+              parent="menu_budget_root" action="action_account_budget" sequence="10"/>
+    <menuitem id="menu_account_budget_dashboard" name="Budget Dashboard"
+              parent="menu_budget_root" action="action_account_budget_dashboard" sequence="20"/>
+</odoo>

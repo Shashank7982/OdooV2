@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Scoped strictly to account.move (invoices/credit notes) via t-if="o and o._name == 'account.move'"
+         on every inserted node, so Sales Orders, Purchase Orders and every other report using these
+         shared web.* templates are completely unaffected. -->
+
+    <!-- Move the "Bill To" address up into the header row, beside the company address, so both
+         sit side by side instead of one being in the header and the other lower down in the body. -->
+    <template id="gst_external_layout_standard_inherit" inherit_id="web.external_layout_standard">
+        <xpath expr="//div[@name='company_address']" position="before">
+            <div class="gst_addr_label" t-if="o and o._name == 'account.move'">Company Address</div>
+        </xpath>
+        <xpath expr="//div[@name='company_address']" position="after">
+            <div class="col-6 gst_addr_col" name="gst_bill_to_address" t-if="o and o._name == 'account.move' and address">
+                <div class="gst_addr_label">Bill To Address</div>
+                <t t-out="address"/>
+            </div>
+        </xpath>
+        <xpath expr="//div[contains(@t-attf-class, 'header')]" position="before">
+            <t t-if="o and o._name == 'account.move'">
+                <style>
+                    .gst_addr_label {
+                        font-size: 0.78rem; text-transform: uppercase; letter-spacing: .04em;
+                        color: #555; font-weight: 700; margin-bottom: 4px;
+                    }
+                    div[name="company_address"], div.gst_addr_col, div[name="information_block"] {
+                        border: 1px solid #333; padding: 10px 12px;
+                    }
+                </style>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- The Bill To address now renders in the header (above); suppress its original spot in the
+         body so it isn't shown twice. Ship To (information_block, only present when the shipping
+         address differs from the invoice address) still renders normally in the body. -->
+    <template id="gst_address_layout_inherit" inherit_id="web.address_layout">
+        <xpath expr="//div[@name='address']" position="attributes">
+            <attribute name="t-if">not (o and o._name == 'account.move')</attribute>
+        </xpath>
+        <xpath expr="//div[@name='information_block']" position="before">
+            <div class="gst_addr_label" t-if="o and o._name == 'account.move'">Ship To Address</div>
+        </xpath>
+    </template>
+</odoo>

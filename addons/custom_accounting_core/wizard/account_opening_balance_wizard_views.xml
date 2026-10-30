@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_opening_balance_wizard_form" model="ir.ui.view">
+        <field name="name">account.opening.balance.wizard.form</field>
+        <field name="model">account.opening.balance.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="journal_id"/>
+                    </group>
+                    <group>
+                        <field name="date"/>
+                    </group>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom">
+                        <field name="account_id"/>
+                        <field name="partner_id"/>
+                        <field name="debit" sum="Total Debit"/>
+                        <field name="credit" sum="Total Credit"/>
+                    </list>
+                </field>
+                <group class="oe_subtotal_footer">
+                    <field name="total_debit"/>
+                    <field name="total_credit"/>
+                    <field name="is_balanced" widget="boolean_toggle" readonly="1"/>
+                </group>
+                <footer>
+                    <button name="action_create_opening_entry" type="object" string="Create Opening Entry" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_opening_balance_wizard" model="ir.actions.act_window">
+        <field name="name">Set Opening Balances</field>
+        <field name="res_model">account.opening.balance.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

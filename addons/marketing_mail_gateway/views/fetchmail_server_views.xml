@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fetchmail_server_view_form_marketing" model="ir.ui.view">
+        <field name="name">fetchmail.server.form.marketing</field>
+        <field name="model">fetchmail.server</field>
+        <field name="inherit_id" ref="mail.view_email_server_form"/>
+        <field name="arch" type="xml">
+            <field name="object_id" position="after">
+                <field name="is_marketing_mailbox"/>
+                <field name="marketing_unsubscribe_keywords" invisible="not is_marketing_mailbox"/>
+                <div class="text-warning fst-italic" colspan="2" role="alert"
+                     invisible="not is_marketing_mailbox">
+                    <field name="outgoing_match_status" nolabel="1"/>
+                </div>
+            </field>
+        </field>
+    </record>
+</odoo>

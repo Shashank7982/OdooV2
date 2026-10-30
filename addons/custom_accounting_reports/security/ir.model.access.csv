@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_financial_report_wizard,financial.report.wizard,model_financial_report_wizard,account.group_account_invoice,1,1,1,1
+access_financial_report_wizard_line,financial.report.wizard.line,model_financial_report_wizard_line,account.group_account_invoice,1,1,1,1
+access_aged_partner_report_wizard,aged.partner.report.wizard,model_aged_partner_report_wizard,account.group_account_invoice,1,1,1,1
+access_aged_partner_report_wizard_line,aged.partner.report.wizard.line,model_aged_partner_report_wizard_line,account.group_account_invoice,1,1,1,1

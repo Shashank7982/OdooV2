@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_gst_sandbox_verification" model="ir.ui.view">
+        <field name="name">res.partner.form.gst.sandbox.verification</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_in_gst_invoice_customization.view_partner_form_gst_invoice"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="before">
+                <button name="action_verify_gstin" type="object" string="Verify GSTIN" class="oe_highlight" icon="fa-check-circle" invisible="not vat"/>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="after">
+                <field name="gst_verification_status" readonly="1"/>
+                <field name="gst_verified_at" readonly="1"/>
+                <field name="gst_verified_legal_name" readonly="1"/>
+                <field name="gst_verified_trade_name" readonly="1"/>
+                <field name="gst_verified_pan" readonly="1"/>
+                <field name="gst_verified_registration_status" readonly="1"/>
+                <field name="gst_verified_registration_date" readonly="1"/>
+                <field name="gst_verified_state" readonly="1"/>
+                <field name="gst_verified_transaction_id" readonly="1"/>
+                <field name="gst_verification_message" readonly="1"/>
+                <field name="gst_verification_response" readonly="1" widget="text" invisible="not gst_verification_response"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

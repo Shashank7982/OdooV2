@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Force contact creation through the "New Contact" type wizard: hide the
+         native "New" button on the main Contacts browse views. Other create
+         paths (quick-create from a dropdown on an unrelated form, imports,
+         API/webhooks) are untouched - only the Contacts app browse UI, which
+         is where this classification decision belongs, is affected. -->
+    <record id="res_partner_kanban_view_no_create" model="ir.ui.view">
+        <field name="name">res.partner.kanban.no.create</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_tree_no_create" model="ir.ui.view">
+        <field name="name">res.partner.list.no.create</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="create">false</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_partner_filter_classification" model="ir.ui.view">
+        <field name="name">res.partner.filter.classification</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <filter name="type_company" position="after">
+                <separator/>
+                <filter string="Employees" name="filter_type_employee" domain="[('role_employee', '=', True)]"/>
+                <filter string="Vendors" name="filter_type_vendor" domain="[('role_vendor', '=', True)]"/>
+                <filter string="Customers" name="filter_type_customer" domain="[('role_customer', '=', True)]"/>
+                <filter string="Affiliates" name="filter_type_affiliate" domain="[('role_affiliate', '=', True)]"/>
+                <filter string="Consultants" name="filter_type_consultant" domain="[('role_consultant', '=', True)]"/>
+            </filter>
+            <group name="group_by" position="inside">
+                <filter name="group_contact_type" string="Primary Contact Type" context="{'group_by': 'contact_type'}"/>
+                <filter name="group_customer_classification" string="Customer Category" context="{'group_by': 'customer_classification'}"/>
+            </group>
+        </field>
+    </record>
+
+    <!-- Dedicated search view for the standalone Contacts Dashboard: adds a
+         clickable sidebar (search panel) with one category per role and a
+         live count, so picking "Employee" instantly filters the same screen
+         to just employee contacts, no menu navigation needed. -->
+    <record id="view_res_partner_filter_dashboard" model="ir.ui.view">
+        <field name="name">res.partner.filter.dashboard</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="view_res_partner_filter_classification"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <searchpanel>
+                    <field name="contact_type" string="Contact Type" icon="fa-users" enable_counters="1"/>
+                    <field name="customer_classification" string="Customer Category" icon="fa-tags" enable_counters="1"/>
+                </searchpanel>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_contacts_dashboard" model="ir.actions.act_window">
+        <field name="name">Contacts Dashboard</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="search_view_id" ref="view_res_partner_filter_dashboard"/>
+        <field name="context">{'default_is_company': True}</field>
+    </record>
+
+
+    <record id="view_partner_form_classification" model="ir.ui.view">
+        <field name="name">res.partner.form.classification</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority" eval="100"/>
+        <field name="arch" type="xml">
+
+            <field name="category_id" position="after">
+                <field name="contact_type" help="Set when this contact was created. Change it here if it was set wrong - it controls which tab (Employee/Vendor/Customer/...) is shown below."/>
+                <field name="customer_classification" invisible="not role_customer"/>
+            </field>
+
+            <notebook position="before">
+                <group string="Also acts as (a contact can have more than one role - tick any that apply)" name="contact_roles_group">
+                    <group>
+                        <field name="role_employee" widget="boolean_toggle" string="Employee"/>
+                        <field name="role_vendor" widget="boolean_toggle" string="Vendor"/>
+                        <field name="role_customer" widget="boolean_toggle" string="Customer"/>
+                    </group>
+                    <group>
+                        <field name="role_affiliate" widget="boolean_toggle" string="Affiliate / Commission Partner"/>
+                        <field name="role_consultant" widget="boolean_toggle" string="Consultant"/>
+                        <field name="role_other" widget="boolean_toggle" string="Other"/>
+                    </group>
+                </group>
+            </notebook>
+
+            <div name="button_box" position="inside">
+                <button type="object" class="oe_stat_button" icon="fa-handshake-o"
+                    name="action_view_affiliate"
+                    invisible="not role_affiliate">
+                    <div class="o_form_field o_stat_info">
+                        <span class="o_stat_text" invisible="not affiliate_id">Affiliate Profile</span>
+                        <span class="o_stat_text" invisible="affiliate_id">Create Affiliate Profile</span>
+                    </div>
+                </button>
+                <button type="object" class="oe_stat_button" icon="fa-money"
+                    name="action_view_payments"
+                    invisible="payment_count == 0 or not (role_vendor or role_customer or role_consultant)">
+                    <field string="Payments" name="payment_count" widget="statinfo"/>
+                </button>
+            </div>
+
+            <!-- Purchases: vendors and consultants (paid like vendors) -->
+            <xpath expr="//field[@name='purchase_order_count']/ancestor::button" position="attributes">
+                <attribute name="invisible">not role_vendor and not role_consultant</attribute>
+            </xpath>
+
+            <!-- Sales: customers only -->
+            <xpath expr="//field[@name='sale_order_count']/ancestor::button" position="attributes">
+                <attribute name="invisible">not role_customer</attribute>
+            </xpath>
+
+            <!-- Invoiced (receivables): customers only -->
+            <xpath expr="//field[@name='total_invoiced']/ancestor::button" position="attributes">
+                <attribute name="invisible">not role_customer</attribute>
+            </xpath>
+
+            <!-- Vendor Bills (payable): vendors and consultants -->
+            <xpath expr="//field[@name='supplier_invoice_count']/ancestor::button" position="attributes">
+                <attribute name="invisible">supplier_invoice_count == 0 or (not role_vendor and not role_consultant)</attribute>
+            </xpath>
+
+            <!-- GST / business-registration fields (l10n_in, l10n_in_gst_invoice_customization,
+                 gstincheck_verification) only make sense for a business-facing role
+                 (Vendor/Customer/Consultant/Other), not for a pure Employee or Affiliate. -->
+            <xpath expr="//field[@name='l10n_in_gst_treatment']" position="attributes">
+                <attribute name="invisible">'IN' not in fiscal_country_codes or not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <!-- PAN is India's universal tax ID (individuals and businesses
+                 alike), unlike GSTIN which is business-only - so it stays
+                 visible and mandatory for every contact type, including
+                 Employee and Affiliate. Required in the view (not a Python
+                 constraint) so it doesn't retroactively block writes to
+                 pre-existing/unrelated partners created elsewhere in Odoo
+                 (delivery contacts, portal signups, other addons, etc.). -->
+            <xpath expr="//field[@name='l10n_in_pan']" position="attributes">
+                <attribute name="invisible">'IN' not in fiscal_country_codes</attribute>
+                <attribute name="required">'IN' in fiscal_country_codes</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_verify_gstin']" position="attributes">
+                <attribute name="invisible">not vat or not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verification_status']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_at']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_legal_name']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_trade_name']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_pan']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_registration_status']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_registration_date']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_state']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verified_address']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verification_message']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_verification_response']" position="attributes">
+                <attribute name="invisible">not gst_verification_response or not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='business_type']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+                <attribute name="required">is_company</attribute>
+            </xpath>
+            <xpath expr="//field[@name='business_type_other']" position="attributes">
+                <attribute name="invisible">business_type != 'other' or not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_cin']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_iec']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_tan']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_tan_applicable']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other) or business_type in ('private_limited', 'public_limited')</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_is_food_business']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_fssai']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_contact_person']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//field[@name='gst_contact_number']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+
+            <!-- Hide Odoo's generic "Sales &amp; Purchase" / "Invoicing" tabs for a contact
+                 that is ONLY an Employee or Affiliate - those tabs are business-transaction
+                 fields (payment terms, fiscal position, invoicing settings) that don't apply
+                 to a pure Employee or Affiliate contact. Contacts &amp; Addresses and Internal
+                 Notes stay for everyone. -->
+            <xpath expr="//page[@name='sales_purchases']" position="attributes">
+                <attribute name="invisible">not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//page[@name='accounting']" position="attributes">
+                <attribute name="invisible">(not is_company and parent_id) or not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+            <xpath expr="//page[@name='accounting_disabled']" position="attributes">
+                <attribute name="invisible">(is_company or not parent_id) or not (role_vendor or role_customer or role_consultant or role_other)</attribute>
+            </xpath>
+
+            <notebook position="inside">
+                <page string="Vendor" name="vendor_details" invisible="not role_vendor">
+                    <group>
+                        <group string="Identification">
+                            <field name="vendor_code"/>
+                            <field name="category_id" widget="many2many_tags" string="Vendor Category" options="{'color_field': 'color'}"/>
+                            <field name="gst_principal_place_of_business"/>
+                            <field name="gst_contact_person" string="Purchase Contact Name"/>
+                            <field name="gst_contact_number" string="Purchase Contact Number"/>
+                        </group>
+                        <group string="Payment">
+                            <field name="property_supplier_payment_term_id" string="Payment Terms"/>
+                            <field name="preferred_payment_method"/>
+                            <field name="property_account_payable_id" groups="account.group_account_invoice,account.group_account_readonly"/>
+                            <field name="partner_currency_id"/>
+                            <field name="property_account_position_id" string="Fiscal Position"/>
+                        </group>
+                    </group>
+                    <group string="Bank Details">
+                        <field name="bank_ids" nolabel="1" context="{'default_partner_id': id}" widget="auto_save_res_partner">
+                            <list>
+                                <field name="sequence" widget="handle"/>
+                                <field name="acc_number"/>
+                                <field name="bank_id"/>
+                                <field name="allow_out_payment"/>
+                                <field name="acc_holder_name" column_invisible="True"/>
+                            </list>
+                        </field>
+                    </group>
+                    <p class="text-muted">
+                        Purchase history, vendor bills and outstanding payable balance are on the
+                        smart buttons above ("Purchases", "Vendor Bills", "Payments", "Total Payable").
+                        GST/PAN/CIN/TAN/IEC are in the GST section above the tabs. Vendor agreements
+                        and documents can be attached via the chatter's paperclip icon on the right.
+                    </p>
+                </page>
+
+                <page string="Customer" name="customer_details" invisible="not role_customer">
+                    <group>
+                        <group string="Identification">
+                            <field name="customer_code"/>
+                            <field name="customer_classification" string="Customer Category"/>
+                            <field name="user_id" string="Salesperson"/>
+                            <field name="sale_team_id"/>
+                        </group>
+                        <group string="Payment">
+                            <field name="property_payment_term_id" string="Payment Terms"/>
+                            <field name="credit_limit" groups="account.group_account_invoice,account.group_account_readonly"/>
+                            <field name="preferred_payment_method"/>
+                            <field name="property_account_receivable_id" groups="account.group_account_invoice,account.group_account_readonly"/>
+                            <field name="partner_currency_id"/>
+                            <field name="property_account_position_id" string="Fiscal Position"/>
+                        </group>
+                    </group>
+                    <p class="text-muted">
+                        Billing and shipping addresses are on the "Contacts &amp; Addresses" tab
+                        (address type Invoice / Delivery). Sales history, quotations, sales orders,
+                        invoices, payments and outstanding receivable balance are on the smart
+                        buttons above ("Sales", "Invoiced", "Payments", "Total Receivable"). GST/PAN/CIN
+                        are in the GST section above the tabs.
+                    </p>
+                </page>
+
+                <page string="Affiliate Details" name="affiliate_details" invisible="not role_affiliate">
+                    <group>
+                        <group string="Commission">
+                            <field name="affiliate_commission_rate" readonly="1"/>
+                            <field name="affiliate_total_commission" readonly="1"/>
+                            <field name="affiliate_paid_commission" readonly="1"/>
+                            <field name="affiliate_pending_commission" readonly="1"/>
+                        </group>
+                        <group string="Referral">
+                            <field name="affiliate_referral_code" readonly="1" widget="url"/>
+                            <field name="preferred_payment_method" string="Payout Method"/>
+                        </group>
+                    </group>
+                    <group string="Payout Bank Details">
+                        <field name="bank_ids" nolabel="1" context="{'default_partner_id': id}" widget="auto_save_res_partner">
+                            <list>
+                                <field name="sequence" widget="handle"/>
+                                <field name="acc_number"/>
+                                <field name="bank_id"/>
+                                <field name="allow_out_payment"/>
+                                <field name="acc_holder_name" column_invisible="True"/>
+                            </list>
+                        </field>
+                    </group>
+                    <p class="text-muted" invisible="affiliate_id">
+                        Click "Create Affiliate Profile" above to set the commission plan and rate.
+                    </p>
+                    <p class="text-muted" invisible="not affiliate_id">
+                        Commission plan/rate, linked orders and full payout history are edited on the
+                        Affiliate Profile record above. PAN/GSTIN are in the GST section above the tabs.
+                    </p>
+                </page>
+
+                <page string="Consultant Details" name="consultant_details" invisible="not role_consultant">
+                    <group>
+                        <group string="Service">
+                            <field name="consultant_service_description" nolabel="1"/>
+                        </group>
+                        <group string="Contract">
+                            <field name="consultant_contract_start"/>
+                            <field name="consultant_contract_end"/>
+                            <field name="consultant_billing_rate"/>
+                            <field name="property_supplier_payment_term_id" string="Payment Terms"/>
+                        </group>
+                    </group>
+                    <group string="Bank Details">
+                        <field name="bank_ids" nolabel="1" context="{'default_partner_id': id}" widget="auto_save_res_partner">
+                            <list>
+                                <field name="sequence" widget="handle"/>
+                                <field name="acc_number"/>
+                                <field name="bank_id"/>
+                                <field name="allow_out_payment"/>
+                                <field name="acc_holder_name" column_invisible="True"/>
+                            </list>
+                        </field>
+                    </group>
+                    <p class="text-muted">
+                        Bills, payments and outstanding payable are on the smart buttons above
+                        ("Purchases", "Vendor Bills", "Payments") - consultants are paid the same way
+                        as vendors. PAN/GSTIN are in the GST section above the tabs. Contracts and
+                        supporting documents can be attached via the chatter's paperclip icon.
+                    </p>
+                </page>
+            </notebook>
+
+        </field>
+    </record>
+
+</odoo>

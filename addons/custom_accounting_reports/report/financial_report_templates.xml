@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_financial_report" model="ir.actions.report">
+        <field name="name">Financial Report</field>
+        <field name="model">financial.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_accounting_reports.financial_report_document</field>
+        <field name="print_report_name">'Financial Report - %s' % (object.report_type)</field>
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <template id="financial_report_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>
+                            <span t-field="o.report_type"/>
+                        </h2>
+                        <p>
+                            <span t-if="o.report_type != 'balance_sheet'">
+                                Period: <span t-field="o.date_from"/> to <span t-field="o.date_to"/>
+                            </span>
+                            <span t-else="">As of <span t-field="o.date_to"/></span>
+                            &#8212; <span t-field="o.company_id.name"/>
+                        </p>
+                        <table class="table table-sm table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th t-if="o.report_type in ('general_ledger', 'journal_audit')">Date</th>
+                                    <th t-if="o.report_type in ('general_ledger', 'journal_audit')">Partner</th>
+                                    <th class="text-end">Debit</th>
+                                    <th class="text-end">Credit</th>
+                                    <th class="text-end">Balance</th>
+                                    <th t-if="o.report_type in ('general_ledger', 'journal_audit')" class="text-end">Running Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line" t-att-class="'fw-bold' if line.is_subtotal else ''">
+                                    <td>
+                                        <span t-if="line.account_id" t-esc="line.account_id.display_name"/>
+                                        <span t-else="" t-esc="line.label"/>
+                                    </td>
+                                    <td t-if="o.report_type in ('general_ledger', 'journal_audit')"><span t-if="not line.is_subtotal" t-field="line.entry_date"/></td>
+                                    <td t-if="o.report_type in ('general_ledger', 'journal_audit')"><span t-if="not line.is_subtotal" t-esc="line.partner_id.display_name"/></td>
+                                    <td class="text-end"><span t-if="not line.is_subtotal" t-field="line.debit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td class="text-end"><span t-if="not line.is_subtotal" t-field="line.credit" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td class="text-end"><span t-field="line.balance" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                    <td t-if="o.report_type in ('general_ledger', 'journal_audit')" class="text-end"><span t-if="not line.is_subtotal" t-field="line.running_balance" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

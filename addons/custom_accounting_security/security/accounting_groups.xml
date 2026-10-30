@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <record id="module_category_custom_accounting" model="ir.module.category">
+        <field name="name">Custom Accounting</field>
+        <field name="description">Access rights for the custom_full_accounting suite</field>
+        <field name="sequence">15</field>
+        <field name="parent_id" ref="base.module_category_accounting"/>
+    </record>
+
+    <record id="module_category_custom_accounting_audit" model="ir.module.category">
+        <field name="name">Custom Accounting Audit</field>
+        <field name="description">Read-only audit access for the custom accounting suite</field>
+        <field name="sequence">20</field>
+        <field name="parent_id" ref="base.module_category_accounting"/>
+    </record>
+
+    <record id="group_accounting_user" model="res.groups">
+        <field name="name">Accounting User</field>
+        <field name="category_id" ref="module_category_custom_accounting"/>
+        <field name="implied_ids" eval="[(5, 0, 0), (4, ref('account.group_account_invoice'))]"/>
+        <field name="comment">Creates and edits accounting entries while they are in Draft.</field>
+    </record>
+
+    <record id="group_accounting_manager" model="res.groups">
+        <field name="name">Accounting Manager</field>
+        <field name="category_id" ref="module_category_custom_accounting"/>
+        <field name="implied_ids" eval="[(5, 0, 0), (4, ref('account.group_account_invoice'))]"/>
+        <field name="comment">Approves and posts submitted accounting entries.</field>
+    </record>
+
+    <record id="group_accounting_finance_controller" model="res.groups">
+        <field name="name">Finance Controller</field>
+        <field name="category_id" ref="module_category_custom_accounting"/>
+        <field name="implied_ids" eval="[(5, 0, 0), (4, ref('account.group_account_invoice'))]"/>
+        <field name="comment">Submits draft accounting entries for approval.</field>
+    </record>
+
+    <record id="group_accounting_auditor" model="res.groups">
+        <field name="name">Auditor</field>
+        <field name="category_id" ref="module_category_custom_accounting_audit"/>
+        <field name="comment">Read-only access across all accounting models and reports, for audit purposes. Does not imply any write rights.</field>
+    </record>
+
+    <record id="group_accounting_cfo_admin" model="res.groups">
+        <field name="name">CFO / Admin</field>
+        <field name="category_id" ref="module_category_custom_accounting"/>
+        <field name="implied_ids" eval="[(5, 0, 0)]"/>
+        <field name="comment">Read-only accounting visibility for CFO/administration.</field>
+    </record>
+</odoo>

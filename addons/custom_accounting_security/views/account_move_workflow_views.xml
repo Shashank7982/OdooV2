@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_workflow" model="ir.ui.view">
+        <field name="name">account.move.form.workflow</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_post'][1]" position="before">
+                <button name="action_submit" string="Submit" type="object" class="oe_highlight"
+                        context="{'accounting_workflow_transition': True}"
+                        invisible="state != 'draft'"/>
+                <button name="action_approve" string="Approve" type="object" class="oe_highlight"
+                        context="{'accounting_workflow_transition': True}"
+                        invisible="state != 'submitted'"/>
+            </xpath>
+            <xpath expr="//button[@name='action_post'][1]" position="attributes">
+                <attribute name="invisible">state != 'approved' or move_type != 'entry'</attribute>
+                <attribute name="context">{'accounting_workflow_transition': True}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_post'][2]" position="attributes">
+                <attribute name="invisible">state != 'approved' or move_type == 'entry' or display_inactive_currency_warning</attribute>
+                <attribute name="context">{'accounting_workflow_transition': True}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='state'][1]" position="attributes">
+                <attribute name="statusbar_visible">draft,submitted,approved,posted</attribute>
+            </xpath>
+            <xpath expr="//page[@name='aml_tab']" position="attributes">
+                <attribute name="groups">account.group_account_readonly,custom_accounting_security.group_accounting_finance_controller,custom_accounting_security.group_accounting_manager,custom_accounting_security.group_accounting_cfo_admin</attribute>
+            </xpath>
+            <xpath expr="//page[@name='aml_tab']/field[@name='line_ids']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='aml_tab']" position="after">
+                <page name="aml_workflow_edit_tab" string="Journal Items"
+                      groups="custom_accounting_security.group_accounting_user">
+                    <field name="line_ids" mode="list" readonly="state != 'draft'">
+                        <list editable="bottom" string="Journal Items">
+                            <field name="account_id" required="1"
+                                   domain="[('deprecated', '=', False), ('company_ids', 'parent_of', parent.company_id)]"/>
+                            <field name="name"/>
+                            <field name="debit" sum="Total Debit"/>
+                            <field name="credit" sum="Total Credit"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+            <xpath expr="//button[@name='button_cancel']" position="attributes">
+                <attribute name="groups">custom_accounting_security.group_accounting_user</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_res_users_accounting_roles" model="ir.ui.view">
+        <field name="name">res.users.form.custom.accounting.roles</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='access_rights']" position="inside">
+                <group string="Custom Accounting Roles" groups="base.group_system">
+                    <field name="accounting_role_ids" widget="many2many_tags" readonly="1"
+                           options="{'no_create': True, 'no_open': True}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_petty_cash_voucher_workflow_security" model="ir.ui.view">
+        <field name="name">account.petty.cash.voucher.form.workflow.security</field>
+        <field name="model">account.petty.cash.voucher</field>
+        <field name="inherit_id" ref="custom_accounting_cash.view_account_petty_cash_voucher_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_submit']" position="attributes">
+                <attribute name="groups">custom_accounting_security.group_accounting_finance_controller</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

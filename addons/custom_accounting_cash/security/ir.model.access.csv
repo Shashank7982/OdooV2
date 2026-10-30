@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cash_location_user,account.cash.location user,model_account_cash_location,account.group_account_invoice,1,0,0,0
+access_cash_location_manager,account.cash.location manager,model_account_cash_location,account.group_account_manager,1,1,1,1
+access_petty_cash_voucher_user,account.petty.cash.voucher user,model_account_petty_cash_voucher,account.group_account_invoice,1,1,1,0
+access_petty_cash_voucher_manager,account.petty.cash.voucher manager,model_account_petty_cash_voucher,account.group_account_manager,1,1,1,1
+access_petty_cash_count_user,account.petty.cash.count user,model_account_petty_cash_count,account.group_account_invoice,1,1,1,0
+access_petty_cash_count_manager,account.petty.cash.count manager,model_account_petty_cash_count,account.group_account_manager,1,1,1,1
+access_cash_book_wizard_user,cash.book.report.wizard user,model_cash_book_report_wizard,base.group_user,1,1,1,1
+access_cash_book_line_user,cash.book.report.line user,model_cash_book_report_line,base.group_user,1,1,1,1
+access_petty_cash_report_wizard_user,petty.cash.report.wizard user,model_petty_cash_report_wizard,base.group_user,1,1,1,1
+access_petty_cash_report_line_user,petty.cash.report.line user,model_petty_cash_report_line,base.group_user,1,1,1,1

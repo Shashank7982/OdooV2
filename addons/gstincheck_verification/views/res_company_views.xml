@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_form_gstincheck_verification" model="ir.ui.view">
+        <field name="name">res.company.form.gstincheck.verification</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="l10n_in_gst_invoice_customization.view_company_form_gst_invoice"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='gst_invoice_details']" position="inside">
+                <group string="GSTIN Verification API (gstincheck.co.in)">
+                    <field name="gst_check_enabled"/>
+                    <field name="gst_check_api_key" password="True" invisible="not gst_check_enabled"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

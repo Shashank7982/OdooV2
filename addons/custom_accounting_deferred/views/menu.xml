@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_deferred_root" name="Deferred Revenue/Expense"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="90"/>
+    <menuitem id="menu_account_deferred_schedule" name="Schedules"
+              parent="menu_deferred_root" action="action_account_deferred_schedule" sequence="10"/>
+</odoo>

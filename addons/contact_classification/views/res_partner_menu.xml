@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Make the main Contacts screen open grouped by Contact Type by default,
+         so it reads as an at-a-glance directory instead of a flat list. -->
+    <record id="contacts.action_contacts" model="ir.actions.act_window">
+        <field name="context">{'default_is_company': True, 'search_default_group_contact_type': 1}</field>
+    </record>
+
+    <!-- One action + menu per contact type, all reusing the same
+         kanban/list/form views as the main Contacts screen (so "New" stays
+         routed through the type wizard) but pre-filtered and pre-grouped. -->
+
+    <record id="action_contacts_employees" model="ir.actions.act_window">
+        <field name="name">Employees</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('role_employee', '=', True)]</field>
+        <field name="context">{'default_is_company': False, 'default_contact_type': 'employee', 'default_role_employee': True}</field>
+    </record>
+
+    <record id="action_contacts_vendors" model="ir.actions.act_window">
+        <field name="name">Vendors</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('role_vendor', '=', True)]</field>
+        <field name="context">{'default_is_company': True, 'default_contact_type': 'vendor', 'default_role_vendor': True}</field>
+    </record>
+
+    <record id="action_contacts_customers" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('role_customer', '=', True)]</field>
+        <field name="context">{'default_is_company': True, 'default_contact_type': 'customer', 'default_role_customer': True, 'search_default_group_customer_classification': 1}</field>
+    </record>
+
+    <record id="action_contacts_affiliates" model="ir.actions.act_window">
+        <field name="name">Affiliates / Commission Partners</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('role_affiliate', '=', True)]</field>
+        <field name="context">{'default_is_company': False, 'default_contact_type': 'affiliate', 'default_role_affiliate': True}</field>
+    </record>
+
+    <record id="action_contacts_consultants" model="ir.actions.act_window">
+        <field name="name">Consultants</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('role_consultant', '=', True)]</field>
+        <field name="context">{'default_is_company': False, 'default_contact_type': 'consultant', 'default_role_consultant': True}</field>
+    </record>
+
+    <record id="action_contacts_uncategorized" model="ir.actions.act_window">
+        <field name="name">Other / Uncategorized</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form,activity</field>
+        <field name="search_view_id" ref="base.view_res_partner_filter"/>
+        <field name="domain">[('role_employee', '=', False), ('role_vendor', '=', False), ('role_customer', '=', False), ('role_affiliate', '=', False), ('role_consultant', '=', False)]</field>
+        <field name="context">{'default_contact_type': 'other', 'default_role_other': True}</field>
+    </record>
+
+    <menuitem id="menu_contacts_by_type"
+        name="By Type"
+        parent="contacts.menu_contacts"
+        sequence="3"/>
+
+    <menuitem id="menu_contacts_employees"
+        action="action_contacts_employees"
+        parent="menu_contacts_by_type"
+        sequence="1"/>
+
+    <menuitem id="menu_contacts_vendors"
+        action="action_contacts_vendors"
+        parent="menu_contacts_by_type"
+        sequence="2"/>
+
+    <menuitem id="menu_contacts_customers"
+        action="action_contacts_customers"
+        parent="menu_contacts_by_type"
+        sequence="3"/>
+
+    <menuitem id="menu_contacts_affiliates"
+        action="action_contacts_affiliates"
+        parent="menu_contacts_by_type"
+        sequence="4"/>
+
+    <menuitem id="menu_contacts_consultants"
+        action="action_contacts_consultants"
+        parent="menu_contacts_by_type"
+        sequence="5"/>
+
+    <menuitem id="menu_contacts_uncategorized"
+        action="action_contacts_uncategorized"
+        parent="menu_contacts_by_type"
+        sequence="6"/>
+
+</odoo>

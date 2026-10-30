@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Ensure INR and USD are both active, since the preferred-currency
+         setting (res.users.preferred_currency_id) and the accounting
+         dashboard currency selector only offer active currencies. -->
+    <function model="res.currency" name="write">
+        <value model="res.currency" eval="[ref('base.INR'), ref('base.USD')]"/>
+        <value eval="{'active': True}"/>
+    </function>
+
+</odoo>

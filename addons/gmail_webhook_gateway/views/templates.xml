@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="oauth_error" name="Gmail OAuth Error">
+        <t t-call="web.layout">
+            <t t-set="head">
+                <title>Gmail Connection Failed</title>
+            </t>
+            <div class="container mt-5">
+                <h2>Gmail account connection failed</h2>
+                <p t-esc="error"/>
+                <a href="/odoo" class="btn btn-primary">Back to Odoo</a>
+            </div>
+        </t>
+    </template>
+</odoo>

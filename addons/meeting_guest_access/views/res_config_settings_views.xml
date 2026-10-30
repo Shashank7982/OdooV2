@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">meeting.guest.access.res.config.settings.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Discuss" name="meeting_guest_access" groups="base.group_system">
+                    <block title="Meeting dial-in" name="meeting_dialin_settings">
+                        <setting string="Enable meeting dial-in" help="Allow phone participants to join an open Discuss meeting through a voice conference provider.">
+                            <field name="meeting_dialin_enabled"/>
+                        </setting>
+                        <setting string="Voice provider" help="The provider must be configured to POST incoming calls to /meeting/dialin/voice.">
+                            <field name="meeting_dialin_provider"/>
+                        </setting>
+                        <setting string="Dial-in phone number" help="A voice-capable number callers can dial. SMS-only numbers cannot be used.">
+                            <field name="meeting_dialin_phone_number" placeholder="+1 555 010 1234"/>
+                        </setting>
+                        <setting string="Provider account SID">
+                            <field name="meeting_dialin_account_sid" password="True"/>
+                        </setting>
+                        <setting string="Provider auth token">
+                            <field name="meeting_dialin_auth_token" password="True"/>
+                        </setting>
+                        <div class="text-muted mt-2">Configure the number webhook as https://your-odoo-host/meeting/dialin/voice. A separate six-digit PIN is generated for each meeting.</div>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

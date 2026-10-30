@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Reusable email-marketing design.
+
+        Compliance notes:
+        * /unsubscribe_from_list is intentionally left as Odoo's placeholder;
+          mass_mailing replaces it with a recipient-specific, signed URL and
+          adds the List-Unsubscribe headers when the message is sent.
+        * The sender should replace the example CTA URL and keep the company
+          identity/address populated in Settings before sending.
+        * This template is a design aid, not legal advice; local consent,
+          privacy, retention and advertising rules still apply.
+    -->
+    <data noupdate="0">
+    <record id="marketing_email_template_feature_update" model="mailing.mailing">
+        <field name="name">Aurora — Product Update</field>
+        <field name="subject">A brighter way to get more done</field>
+        <field name="preview">A few thoughtful improvements, made for your next big win.</field>
+        <field name="favorite">True</field>
+        <field name="mailing_model_id" ref="mass_mailing.model_mailing_list"/>
+        <field name="mailing_domain">[]</field>
+        <field name="reply_to_mode">new</field>
+        <field name="body_arch" type="html">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:0;padding:0;background-color:#f4f7fb;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;color:#172033;">
+    <tr>
+        <td align="center" style="padding:24px 12px;">
+            <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;margin:0 auto;background-color:#ffffff;border-collapse:collapse;">
+                <tr>
+                    <td style="padding:18px 32px;background-color:#172554;">
+                        <a href="https://www.example.com" target="_blank" style="font-size:20px;line-height:28px;font-weight:bold;letter-spacing:.5px;color:#ffffff;text-decoration:none;">
+                            {{ user.company_id.name or 'AURORA' }}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:48px 40px 40px;background-color:#172554;color:#ffffff;">
+                        <p style="margin:0 0 16px;font-size:12px;line-height:18px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#93c5fd;">A NOTE FOR YOU</p>
+                        <h1 style="margin:0 0 18px;font-size:38px;line-height:44px;font-weight:700;color:#ffffff;">Make room for your best work.</h1>
+                        <p style="margin:0;font-size:18px;line-height:28px;color:#dbeafe;">We’ve made a few thoughtful improvements to help you move from idea to impact with less friction.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:36px 40px 12px;">
+                        <p style="margin:0 0 12px;font-size:15px;line-height:24px;color:#536079;">Hi {{ object.name or 'there' }},</p>
+                        <h2 style="margin:0 0 12px;font-size:25px;line-height:32px;color:#172033;">Small changes. A noticeably better day.</h2>
+                        <p style="margin:0;font-size:16px;line-height:26px;color:#536079;">Your time is valuable. That’s why this update focuses on clarity, speed, and the details that make your everyday workflow feel effortless.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:24px 40px 10px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                            <tr>
+                                <td width="48" valign="top" style="width:48px;height:48px;padding:0 16px 20px 0;">
+                                    <div style="width:44px;height:44px;background-color:#dbeafe;border-radius:12px;text-align:center;font-size:22px;line-height:44px;color:#2563eb;">✦</div>
+                                </td>
+                                <td valign="top" style="padding:0 0 20px;">
+                                    <h3 style="margin:0 0 5px;font-size:17px;line-height:24px;color:#172033;">A clearer view</h3>
+                                    <p style="margin:0;font-size:14px;line-height:22px;color:#64748b;">See what matters first, with a calmer and more focused experience.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="48" valign="top" style="width:48px;height:48px;padding:0 16px 20px 0;">
+                                    <div style="width:44px;height:44px;background-color:#d1fae5;border-radius:12px;text-align:center;font-size:22px;line-height:44px;color:#059669;">↗</div>
+                                </td>
+                                <td valign="top" style="padding:0 0 20px;">
+                                    <h3 style="margin:0 0 5px;font-size:17px;line-height:24px;color:#172033;">Fewer steps</h3>
+                                    <p style="margin:0;font-size:14px;line-height:22px;color:#64748b;">Get from first click to finished task faster than before.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="48" valign="top" style="width:48px;padding:0 16px 0 0;">
+                                    <div style="width:44px;height:44px;background-color:#fef3c7;border-radius:12px;text-align:center;font-size:22px;line-height:44px;color:#d97706;">♥</div>
+                                </td>
+                                <td valign="top" style="padding:0;">
+                                    <h3 style="margin:0 0 5px;font-size:17px;line-height:24px;color:#172033;">More delight</h3>
+                                    <p style="margin:0;font-size:14px;line-height:22px;color:#64748b;">A handful of polished details that make the experience feel yours.</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding:34px 40px 42px;">
+                        <a href="https://www.example.com" target="_blank" style="display:inline-block;padding:15px 26px;background-color:#2563eb;border-radius:8px;color:#ffffff;font-size:16px;line-height:22px;font-weight:bold;text-decoration:none;">Explore the update&#160; →</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:24px 40px;background-color:#f8fafc;border-top:1px solid #e5e7eb;">
+                        <p style="margin:0;font-size:13px;line-height:21px;color:#64748b;">You’re receiving this because you opted in to updates from {{ user.company_id.name or 'our team' }}. We’ll only send useful news and never sell your information.</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" style="padding:28px 32px;background-color:#172033;">
+                        <p style="margin:0 0 12px;font-size:12px;line-height:18px;color:#cbd5e1;">
+                            {{ user.company_id.name or 'Your Company' }}<br/>
+                            {{ user.company_id.street or '123 Example Street' }}, {{ user.company_id.city or 'Your City' }}<br/>
+                            {{ user.company_id.country_id.name or 'Your Country' }}
+                        </p>
+                        <p style="margin:0;font-size:12px;line-height:18px;">
+                            <a href="https://www.example.com/privacy" target="_blank" style="color:#93c5fd;text-decoration:underline;">Privacy</a>
+                            <span style="color:#64748b;">&#160;·&#160;</span>
+                            <a href="/unsubscribe_from_list" target="_blank" style="color:#93c5fd;text-decoration:underline;">Unsubscribe</a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <p style="margin:16px 0 0;font-size:11px;line-height:17px;color:#94a3b8;">Please add your registered business address in the company settings before sending.</p>
+        </td>
+    </tr>
+</table>
+        </field>
+    </record>
+    </data>
+</odoo>

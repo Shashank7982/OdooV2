@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_asset_revaluation_wizard_form" model="ir.ui.view">
+        <field name="name">account.asset.revaluation.wizard.form</field>
+        <field name="model">account.asset.revaluation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Revalue Asset">
+                <group>
+                    <field name="asset_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="revaluation_date"/>
+                    <field name="new_value"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Confirm Revaluation" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

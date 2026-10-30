@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="v2_login_layout" inherit_id="web.login_layout" name="V2 Login Layout">
+        <xpath expr="//div[contains(@class, 'container') and contains(@class, 'py-5')]" position="replace">
+            <style>
+                body.o_web_client {
+                    background: radial-gradient(circle at 15% 20%, #334c86 0, #16213e 38%, #0b1020 100%) !important;
+                    min-height: 100vh;
+                }
+                .v2-login-shell { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px 18px; position: relative; overflow: hidden; }
+                .v2-login-shell:before, .v2-login-shell:after { content: ''; position: absolute; border-radius: 50%; filter: blur(2px); opacity: .22; }
+                .v2-login-shell:before { width: 340px; height: 340px; background: #5eead4; top: -140px; right: -90px; }
+                .v2-login-shell:after { width: 280px; height: 280px; background: #a78bfa; bottom: -130px; left: -100px; }
+                .v2-login-card { position: relative; z-index: 1; width: min(430px, 100%); padding: 38px; border: 1px solid rgba(255,255,255,.18); border-radius: 24px; background: rgba(255,255,255,.96); box-shadow: 0 28px 70px rgba(0,0,0,.35); }
+                .v2-login-brand { width: 62px; height: 62px; border-radius: 18px; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #4f46e5, #14b8a6); color: white; font-size: 27px; font-weight: 800; box-shadow: 0 10px 24px rgba(79,70,229,.3); }
+                .v2-login-title { margin: 22px 0 6px; color: #111827; font-size: 29px; font-weight: 750; letter-spacing: -.6px; }
+                .v2-login-subtitle { margin-bottom: 28px; color: #6b7280; font-size: 14px; }
+                .v2-login-card .form-label { color: #374151; font-size: 13px; font-weight: 650; }
+                .v2-login-card .form-control { height: 48px; border: 1px solid #dbe1ea; border-radius: 12px; background: #f8fafc; padding: 0 14px; }
+                .v2-login-card .form-control:focus { border-color: #6366f1; box-shadow: 0 0 0 4px rgba(99,102,241,.13); background: white; }
+                .v2-login-card .btn-primary { height: 48px; border: 0; border-radius: 12px; background: linear-gradient(135deg, #4f46e5, #14b8a6); font-weight: 700; box-shadow: 0 10px 20px rgba(79,70,229,.22); }
+                .v2-login-card .btn-primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
+                .v2-login-footer { margin-top: 26px; color: #9ca3af; font-size: 12px; text-align: center; }
+                .v2-login-footer a { color: #6366f1; text-decoration: none; }
+            </style>
+            <div class="v2-login-shell">
+                <div class="v2-login-card o_database_list">
+                    <div class="text-center">
+                        <div class="v2-login-brand">ODOO</div>
+                        <h1 class="v2-login-title">Welcome back</h1>
+                        <p class="v2-login-subtitle">Sign in to continue to your workspace</p>
+                    </div>
+                    <t t-out="0"/>
+                    <div class="v2-login-footer">
+                        <t t-if="not disable_database_manager">
+                            <a href="/web/database/manager">Manage Databases</a>
+                            <span class="mx-2">•</span>
+                        </t>
+                        <span>ODOO workspace</span>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

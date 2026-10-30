@@ -1,0 +1,13 @@
+<odoo>
+    <menuitem id="menu_custom_accounting_plan_completion" name="Plan Workflows" parent="account.menu_finance" sequence="80"/>
+    <menuitem id="menu_custom_sales_inquiry" name="Sales Inquiries" parent="menu_custom_accounting_plan_completion" action="action_custom_sales_inquiry" sequence="10"/>
+    <menuitem id="menu_custom_sales_contract" name="Sales Contracts" parent="menu_custom_accounting_plan_completion" action="action_custom_sales_contract" sequence="20"/>
+    <menuitem id="menu_custom_scheduling_agreement" name="Scheduling Agreements" parent="menu_custom_accounting_plan_completion" action="action_custom_scheduling_agreement" sequence="30"/>
+    <menuitem id="menu_custom_sales_return" name="Sales Returns" parent="menu_custom_accounting_plan_completion" action="action_custom_sales_return" sequence="40"/>
+    <menuitem id="menu_custom_sales_waybill" name="Waybills / E-way Boundary" parent="menu_custom_accounting_plan_completion" action="action_custom_sales_waybill" sequence="50"/>
+    <menuitem id="menu_custom_purchase_request" name="Purchase Requests" parent="menu_custom_accounting_plan_completion" action="action_custom_purchase_request" sequence="60"/>
+    <menuitem id="menu_custom_desk_configuration" name="Desk Configurations" parent="menu_custom_accounting_plan_completion" action="action_custom_desk_configuration" sequence="70"/>
+    <menuitem id="menu_custom_accounting_close" name="Period Close" parent="account.menu_finance" action="action_custom_accounting_close" sequence="85" groups="account.group_account_manager"/>
+    <menuitem id="menu_account_petty_cash_topup" name="Petty Cash Top-ups" parent="account.menu_finance" action="action_account_petty_cash_topup" sequence="86"/>
+    <menuitem id="menu_account_ocr_provider_config" name="OCR Provider Configuration" parent="account.menu_finance_configuration" action="action_account_ocr_provider_config" sequence="90" groups="base.group_system"/>
+</odoo>

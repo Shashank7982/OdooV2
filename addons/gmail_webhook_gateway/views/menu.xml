@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_gmail_webhook_root" name="Gmail Webhook"
+              parent="base.menu_administration"
+              groups="gmail_webhook_gateway.group_gmail_webhook_manager"
+              sequence="90"/>
+    <menuitem id="menu_gmail_webhook_accounts" name="Accounts"
+              parent="menu_gmail_webhook_root"
+              action="action_gmail_webhook_account"
+              sequence="10"/>
+</odoo>

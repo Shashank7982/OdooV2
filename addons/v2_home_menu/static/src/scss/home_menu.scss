@@ -1,0 +1,371 @@
+// =====================================================================
+// V2 Home Menu — SCSS
+// =====================================================================
+
+// ── Design Tokens ────────────────────────────────────────────────────
+
+$hm-bg-from:        #0f0c29;
+$hm-bg-to:          #302b63;
+$hm-accent:         #7c3aed;
+$hm-accent-light:   #a78bfa;
+$hm-glass-bg:       rgba(255, 255, 255, 0.08);
+$hm-glass-border:   rgba(255, 255, 255, 0.18);
+$hm-text:           #f1f5f9;
+$hm-muted:          rgba(241, 245, 249, 0.55);
+$hm-card-hover-bg:  rgba(255, 255, 255, 0.14);
+$hm-radius:         18px;
+$hm-radius-sm:      12px;
+$hm-shadow:         0 8px 32px rgba(0, 0, 0, 0.35);
+$hm-transition:     0.22s cubic-bezier(0.4, 0, 0.2, 1);
+
+// ── Root container ───────────────────────────────────────────────────
+
+.v2_home_menu {
+    background: linear-gradient(135deg, $hm-bg-from 0%, $hm-bg-to 100%);
+    min-height: 100vh;
+    color: $hm-text;
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+    position: relative;
+    overflow-x: hidden;
+}
+
+// ── Animated orbs (background decoration) ───────────────────────────
+
+.v2hm_bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.v2hm_orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.18;
+    animation: v2hm_float 12s ease-in-out infinite alternate;
+}
+
+.v2hm_orb1 {
+    width: 520px;
+    height: 520px;
+    background: #7c3aed;
+    top: -200px;
+    left: -150px;
+    animation-duration: 14s;
+}
+
+.v2hm_orb2 {
+    width: 380px;
+    height: 380px;
+    background: #2563eb;
+    bottom: -120px;
+    right: -100px;
+    animation-duration: 10s;
+    animation-delay: -4s;
+}
+
+.v2hm_orb3 {
+    width: 280px;
+    height: 280px;
+    background: #ec4899;
+    top: 50%;
+    left: 55%;
+    animation-duration: 16s;
+    animation-delay: -8s;
+    opacity: 0.12;
+}
+
+@keyframes v2hm_float {
+    from { transform: translateY(0) scale(1); }
+    to   { transform: translateY(40px) scale(1.06); }
+}
+
+// ── Header ───────────────────────────────────────────────────────────
+
+.v2hm_header {
+    position: relative;
+    z-index: 1;
+}
+
+.v2hm_greeting {
+    font-size: 1.1rem;
+    color: $hm-muted;
+    letter-spacing: 0.03em;
+}
+
+.v2hm_clock {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 30%, $hm-accent-light 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.25rem;
+    text-shadow: none;
+    font-variant-numeric: tabular-nums;
+}
+
+.v2hm_date {
+    font-size: 1rem;
+    color: $hm-muted;
+    letter-spacing: 0.02em;
+}
+
+// ── Search bar ───────────────────────────────────────────────────────
+
+.v2hm_search_wrap {
+    max-width: 580px;
+    width: 100%;
+}
+
+.v2hm_search_icon {
+    position: absolute;
+    top: 50%;
+    left: 1.1rem;
+    transform: translateY(-50%);
+    color: $hm-muted;
+    font-size: 0.95rem;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.v2hm_search_input {
+    width: 100%;
+    padding: 0.85rem 3rem 0.85rem 2.8rem;
+    background: $hm-glass-bg;
+    border: 1.5px solid $hm-glass-border;
+    border-radius: 50px;
+    color: $hm-text;
+    font-size: 1rem;
+    backdrop-filter: blur(12px);
+    transition: border-color $hm-transition, box-shadow $hm-transition, background $hm-transition;
+    outline: none;
+
+    &::placeholder {
+        color: $hm-muted;
+    }
+
+    &:focus {
+        background: rgba(255, 255, 255, 0.13);
+        border-color: $hm-accent-light;
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25);
+    }
+}
+
+.v2hm_search_clear {
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: $hm-muted;
+    cursor: pointer;
+    padding: 0.25rem 0.4rem;
+    border-radius: 50%;
+    transition: color $hm-transition, background $hm-transition;
+    z-index: 2;
+
+    &:hover {
+        color: $hm-text;
+        background: rgba(255, 255, 255, 0.12);
+    }
+}
+
+// ── Search dropdown ──────────────────────────────────────────────────
+
+.v2hm_search_dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: rgba(20, 16, 48, 0.92);
+    border: 1px solid $hm-glass-border;
+    border-radius: $hm-radius-sm;
+    backdrop-filter: blur(20px);
+    box-shadow: $hm-shadow;
+    z-index: 100;
+    overflow: hidden;
+    animation: v2hm_dropdown_in 0.18s ease-out;
+}
+
+@keyframes v2hm_dropdown_in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.v2hm_search_result {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.75rem 1.25rem;
+    background: none;
+    border: none;
+    color: $hm-text;
+    text-align: left;
+    cursor: pointer;
+    transition: background $hm-transition;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+}
+
+.v2hm_sr_icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $hm-glass-bg;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    color: $hm-accent-light;
+    flex-shrink: 0;
+}
+
+.v2hm_sr_label {
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.v2hm_sr_type {
+    font-size: 0.75rem;
+    color: $hm-muted;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.v2hm_search_empty {
+    padding: 1.5rem;
+    text-align: center;
+    color: $hm-muted;
+    font-size: 0.9rem;
+}
+
+// ── App grid ─────────────────────────────────────────────────────────
+
+.v2hm_grid_wrap {
+    position: relative;
+    z-index: 1;
+}
+
+.v2hm_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1.5rem;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0.5rem 0.5rem 2rem;
+
+    @media (max-width: 576px) {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+    }
+}
+
+// ── App card ─────────────────────────────────────────────────────────
+
+.v2hm_app_card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    background: $hm-glass-bg;
+    border: 1.5px solid $hm-glass-border;
+    border-radius: $hm-radius;
+    padding: 1.4rem 0.75rem 1.1rem;
+    cursor: pointer;
+    transition:
+        transform $hm-transition,
+        background $hm-transition,
+        border-color $hm-transition,
+        box-shadow $hm-transition;
+    backdrop-filter: blur(8px);
+    color: $hm-text;
+    text-decoration: none;
+
+    &:hover {
+        background: $hm-card-hover-bg;
+        border-color: rgba(167, 139, 250, 0.5);
+        transform: translateY(-5px) scale(1.03);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(167, 139, 250, 0.2);
+        color: $hm-text;
+    }
+
+    &:active {
+        transform: translateY(-2px) scale(1.01);
+    }
+
+    &:focus-visible {
+        outline: 2px solid $hm-accent-light;
+        outline-offset: 3px;
+    }
+}
+
+// ── App icon box ─────────────────────────────────────────────────────
+
+.v2hm_icon_box {
+    width: 64px;
+    height: 64px;
+    border-radius: $hm-radius-sm;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, $hm-accent 0%, #2563eb 100%);
+    box-shadow: 0 4px 16px rgba(124, 58, 237, 0.4);
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: box-shadow $hm-transition;
+
+    i {
+        font-size: 1.6rem;
+        color: #fff;
+    }
+
+    .v2hm_app_card:hover & {
+        box-shadow: 0 6px 24px rgba(124, 58, 237, 0.6);
+    }
+}
+
+.v2hm_app_img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+}
+
+// ── App label ────────────────────────────────────────────────────────
+
+.v2hm_app_label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-align: center;
+    color: $hm-text;
+    line-height: 1.3;
+    word-break: break-word;
+    max-width: 100%;
+}
+
+// ── No results state ─────────────────────────────────────────────────
+
+.v2hm_no_results {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    color: $hm-muted;
+    text-align: center;
+}

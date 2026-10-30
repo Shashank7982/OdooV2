@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_accounting_dashboard_form_affiliate" model="ir.ui.view">
+        <field name="name">accounting.dashboard.form.affiliate</field>
+        <field name="model">accounting.dashboard</field>
+        <field name="inherit_id" ref="custom_accounting_dashboard.view_accounting_dashboard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='budget_variance']/ancestor::group[2]" position="after">
+                <group string="Affiliate Commissions" invisible="not affiliate_module_installed">
+                    <group>
+                        <field name="affiliate_count"/>
+                        <field name="affiliate_total_commission"/>
+                    </group>
+                    <group>
+                        <field name="affiliate_paid_commission"/>
+                        <field name="affiliate_pending_commission"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

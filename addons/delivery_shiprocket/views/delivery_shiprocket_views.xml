@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_delivery_carrier_form_shiprocket" model="ir.ui.view">
+        <field name="name">delivery.carrier.form.shiprocket</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="shiprocket_config" string="Shiprocket Configuration" invisible="delivery_type != 'shiprocket'">
+                    <button name="action_shiprocket_test_connection" type="object"
+                            string="Test Connection" class="btn-secondary mb-3"/>
+                    <group>
+                        <group name="shiprocket_credentials" string="Credentials">
+                            <field name="shiprocket_email"/>
+                            <field name="shiprocket_password" password="True"/>
+                            <field name="shiprocket_pickup_location"/>
+                            <field name="shiprocket_courier_id"/>
+                        </group>
+                        <group name="shiprocket_package" string="Default Package Values">
+                            <field name="shiprocket_default_weight"/>
+                            <field name="shiprocket_default_package_length"/>
+                            <field name="shiprocket_default_package_width"/>
+                            <field name="shiprocket_default_package_height"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="meeting_join_page" name="Secure meeting join page">
+        <html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <title>Join meeting</title>
+            <style>body{background:#f5f5f5;font-family:sans-serif}.card{max-width:460px;margin:10vh auto;padding:2rem;background:white;border-radius:12px;box-shadow:0 4px 24px #0001}label{display:block;margin-top:1rem;font-weight:600}input{width:100%;box-sizing:border-box;padding:.7rem;margin-top:.3rem;border:1px solid #ccc;border-radius:6px}button{width:100%;margin-top:1.5rem;padding:.8rem;border:0;border-radius:6px;background:#714b67;color:white;font-weight:600}.error{color:#b42318;background:#fef3f2;padding:.7rem;border-radius:6px}</style>
+        </head><body><main class="card"><h1>Join meeting</h1><p>Enter the meeting credentials shared by the host.</p>
+            <div t-if="error" class="error"><t t-if="error == 'name'">Enter a valid guest name.</t><t t-else="">The meeting credentials are invalid, expired, or the meeting is closed.</t></div>
+            <form method="post" action="/meeting/join/validate"><input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <label for="meeting_id">Meeting ID</label><input id="meeting_id" name="meeting_id" required="required" autocomplete="off"/>
+                <label for="password">Password</label><input id="password" name="password" type="password" required="required" autocomplete="off"/>
+                <label for="guest_name">Guest Name</label><input id="guest_name" name="guest_name" required="required" maxlength="512" autocomplete="name"/>
+                <button type="submit">Join meeting</button>
+            </form>
+        </main></body></html>
+    </template>
+    <template id="meeting_wait_page" name="Meeting waiting page">
+        <html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><title>Waiting for host</title>
+            <style>body{background:#f5f5f5;font-family:sans-serif}.card{max-width:460px;margin:18vh auto;padding:2rem;background:white;border-radius:12px;box-shadow:0 4px 24px #0001;text-align:center}</style>
+        </head><body><main class="card"><h1>Waiting for the host</h1><p id="status">Your request to join was received. The host must open the meeting and admit you.</p>
+            <script>const token=location.pathname.split('/').pop();async function poll(){try{const r=await fetch('/meeting/status/'+token,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jsonrpc:'2.0',method:'call',params:{}})});const j=await r.json();const s=j.result?.result||j.result;if(s?.state==='admitted'){location.href=s.url}else if(s?.state==='invalid'){document.getElementById('status').textContent='This meeting is no longer available.'}else{setTimeout(poll,2000)}}catch(e){setTimeout(poll,3000)}}poll();</script>
+        </main></body></html>
+    </template>
+</odoo>

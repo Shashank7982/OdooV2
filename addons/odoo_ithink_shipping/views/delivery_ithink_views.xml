@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_delivery_carrier_form_ithink" model="ir.ui.view">
+        <field name="name">delivery.carrier.form.ithink</field>
+        <field name="model">delivery.carrier</field>
+        <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="ithink_config" string="iThink Logistics Configuration" invisible="delivery_type != 'ithink'">
+                    <button name="action_ithink_test_connection" type="object"
+                            string="Test Connection" class="btn-secondary mb-3"/>
+                    <group>
+                        <group name="ithink_credentials" string="Credentials">
+                            <field name="ithink_access_token" password="True"/>
+                            <field name="ithink_secret_key" password="True"/>
+                            <field name="ithink_test_mode"/>
+                            <field name="ithink_pickup_address_id"/>
+                            <field name="ithink_return_address_id"/>
+                            <field name="ithink_logistics"/>
+                        </group>
+                        <group name="ithink_package" string="Default Package Values">
+                            <field name="ithink_default_weight"/>
+                            <field name="ithink_default_package_length"/>
+                            <field name="ithink_default_package_width"/>
+                            <field name="ithink_default_package_height"/>
+                        </group>
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

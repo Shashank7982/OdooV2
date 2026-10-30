@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_financial_report_wizard_form" model="ir.ui.view">
+        <field name="name">financial.report.wizard.form</field>
+        <field name="model">financial.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="report_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"/>
+                            <field name="journal_ids" widget="many2many_tags"/>
+                            <field name="account_ids" widget="many2many_tags"/>
+                            <field name="partner_ids" widget="many2many_tags"/>
+                            <field name="analytic_account_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="date_from" invisible="report_type == 'balance_sheet'"/>
+                            <field name="date_to"/>
+                        </group>
+                    </group>
+                    <div class="mb-3">
+                        <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                        <button name="action_print_pdf" type="object" string="Print PDF" class="btn-secondary" invisible="not line_ids"/>
+                        <button name="action_export_csv" type="object" string="Export CSV" class="btn-secondary" invisible="not line_ids"/>
+                        <button name="action_export_xlsx" type="object" string="Export XLSX" class="btn-secondary" invisible="not line_ids"/>
+                    </div>
+                    <field name="line_ids">
+                        <list editable="bottom" create="false" delete="false" decoration-bf="is_subtotal">
+                            <field name="label" invisible="account_id"/>
+                            <field name="account_id" invisible="not account_id"/>
+                            <field name="entry_date" invisible="not entry_date"/>
+                            <field name="partner_id" invisible="not partner_id"/>
+                            <field name="debit" sum="Total" invisible="is_subtotal"/>
+                            <field name="credit" sum="Total" invisible="is_subtotal"/>
+                            <field name="balance" sum="Total"/>
+                            <field name="running_balance" invisible="not running_balance"/>
+                            <field name="is_subtotal" column_invisible="True"/>
+                            <button name="action_view_journal_items" type="object" string="View Items" icon="fa-search" invisible="is_subtotal"/>
+                        </list>
+                    </field>
+                    <group class="oe_subtotal_footer" invisible="report_type != 'trial_balance'">
+                        <field name="total_debit"/>
+                        <field name="total_credit"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_financial_report_wizard_list" model="ir.ui.view">
+        <field name="name">financial.report.wizard.list</field>
+        <field name="model">financial.report.wizard</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="create_date" string="Generated On"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_financial_report_wizard" model="ir.actions.act_window">
+        <field name="name">Trial Balance</field>
+        <field name="res_model">financial.report.wizard</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('report_type', '=', 'trial_balance')]</field>
+        <field name="context">{'default_report_type': 'trial_balance'}</field>
+    </record>
+
+    <record id="action_profit_and_loss" model="ir.actions.act_window">
+        <field name="name">Profit and Loss</field>
+        <field name="res_model">financial.report.wizard</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('report_type', '=', 'profit_loss')]</field>
+        <field name="context">{'default_report_type': 'profit_loss'}</field>
+    </record>
+
+    <record id="action_balance_sheet" model="ir.actions.act_window">
+        <field name="name">Balance Sheet</field>
+        <field name="res_model">financial.report.wizard</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('report_type', '=', 'balance_sheet')]</field>
+        <field name="context">{'default_report_type': 'balance_sheet'}</field>
+    </record>
+
+    <record id="action_general_ledger" model="ir.actions.act_window">
+        <field name="name">General Ledger</field>
+        <field name="res_model">financial.report.wizard</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('report_type', '=', 'general_ledger')]</field>
+        <field name="context">{'default_report_type': 'general_ledger'}</field>
+    </record>
+
+    <record id="action_cash_flow_statement" model="ir.actions.act_window">
+        <field name="name">Cash Flow Statement</field>
+        <field name="res_model">financial.report.wizard</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('report_type', '=', 'cash_flow')]</field>
+        <field name="context">{'default_report_type': 'cash_flow'}</field>
+    </record>
+
+    <record id="action_journal_audit" model="ir.actions.act_window">
+        <field name="name">Journal Audit</field>
+        <field name="res_model">financial.report.wizard</field>
+        <field name="view_mode">list,form</field>
+        <field name="target">current</field>
+        <field name="domain">[('report_type', '=', 'journal_audit')]</field>
+        <field name="context">{'default_report_type': 'journal_audit'}</field>
+    </record>
+</odoo>

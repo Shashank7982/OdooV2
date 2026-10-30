@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_profitability_report_wizard_form" model="ir.ui.view">
+        <field name="name">profitability.report.wizard.form</field>
+        <field name="model">profitability.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"/>
+                    </group>
+                    <group>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="group_by"/>
+                    </group>
+                </group>
+                <button name="action_generate" type="object" string="Generate" class="btn-primary mb-3"/>
+
+                <group class="oe_subtotal_footer" invisible="not line_ids" col="3">
+                    <field name="total_revenue"/>
+                    <field name="total_cogs"/>
+                    <field name="total_opex"/>
+                    <field name="gross_profit"/>
+                    <field name="net_profit"/>
+                    <field name="profit_margin" widget="percentage"/>
+                </group>
+
+                <field name="line_ids">
+                    <list create="false" delete="false" decoration-bf="True">
+                        <field name="group_label" string="Breakdown"/>
+                        <field name="analytic_account_id" optional="hide"/>
+                        <field name="revenue" sum="Total"/>
+                        <field name="cogs" sum="Total"/>
+                        <field name="opex" sum="Total"/>
+                        <field name="gross_profit" sum="Total"/>
+                        <field name="net_profit" sum="Total"/>
+                        <field name="margin" widget="percentage"/>
+                    </list>
+                </field>
+                <footer>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_profitability_report_wizard" model="ir.actions.act_window">
+        <field name="name">Advanced Analytics</field>
+        <field name="res_model">profitability.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

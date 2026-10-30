@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_financial_reports_root" name="Financial Reports"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="40"/>
+
+    <!-- Statements: directly under Financial Reports, no subfolder.
+         Aged Receivable/Payable are intentionally not exposed as duplicate
+         menu entries; Customer/Supplier Subledger use the same report wizard. -->
+    <record id="menu_aged_receivable" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+    <record id="menu_aged_payable" model="ir.ui.menu">
+        <field name="active">False</field>
+    </record>
+    <menuitem id="menu_customer_subledger" name="Customer Subledger"
+              parent="menu_financial_reports_root" action="action_aged_partner_report_wizard" sequence="25"/>
+    <menuitem id="menu_supplier_subledger" name="Supplier Subledger"
+              parent="menu_financial_reports_root" action="action_aged_payable_report_wizard" sequence="26"/>
+    <menuitem id="menu_trial_balance" name="Trial Balance"
+              parent="menu_financial_reports_root" action="action_financial_report_wizard" sequence="30"/>
+    <menuitem id="menu_profit_and_loss" name="Profit and Loss"
+              parent="menu_financial_reports_root" action="action_profit_and_loss" sequence="40"/>
+    <menuitem id="menu_balance_sheet" name="Balance Sheet"
+              parent="menu_financial_reports_root" action="action_balance_sheet" sequence="50"/>
+    <menuitem id="menu_general_ledger" name="General Ledger"
+              parent="menu_financial_reports_root" action="action_general_ledger" sequence="55"/>
+    <menuitem id="menu_cash_flow_statement" name="Cash Flow Statement"
+              parent="menu_financial_reports_root" action="action_cash_flow_statement" sequence="56"/>
+    <menuitem id="menu_journal_audit" name="Journal Audit"
+              parent="menu_financial_reports_root" action="action_journal_audit" sequence="57"/>
+
+    <!-- "Reports" group -->
+    <menuitem id="menu_reports_group" name="Reports"
+              parent="menu_financial_reports_root" sequence="60"/>
+    <menuitem id="menu_bank_reports" name="Bank Reports"
+              parent="menu_reports_group" action="action_bank_reports" sequence="10"/>
+    <menuitem id="menu_transaction_reports" name="Transaction Reports"
+              parent="menu_reports_group" action="action_transaction_reports" sequence="20"/>
+    <menuitem id="menu_pos_reports_root" name="POS Reports"
+              parent="menu_reports_group" sequence="30"/>
+    <menuitem id="menu_pos_sales_analysis" name="POS Sales Analysis"
+              parent="menu_pos_reports_root" action="point_of_sale.action_report_pos_order_all" sequence="10"/>
+    <menuitem id="menu_pos_payments" name="POS Payments"
+              parent="menu_pos_reports_root" action="point_of_sale.action_pos_payment_form" sequence="20"/>
+
+    <!-- "Advanced Analysis" group -->
+    <menuitem id="menu_advanced_analysis_root" name="Advanced Analysis"
+              parent="menu_financial_reports_root" sequence="70"/>
+    <menuitem id="menu_expense_by_vendor" name="Expense Analysis"
+              parent="menu_advanced_analysis_root" action="action_expense_by_vendor" sequence="10"/>
+    <menuitem id="menu_invoice_analysis" name="Invoice Analysis"
+              parent="menu_advanced_analysis_root" action="action_invoice_analysis" sequence="20"/>
+    <menuitem id="menu_payment_analysis" name="Payment Analysis"
+              parent="menu_advanced_analysis_root" action="action_payment_analysis" sequence="30"/>
+    <menuitem id="menu_revenue_analysis" name="Revenue"
+              parent="menu_advanced_analysis_root" action="action_revenue_by_customer" sequence="40"/>
+    <!-- Profitability Analysis menu item is defined in custom_accounting_analytic
+         (menu_profitability_analysis), which depends on this module. -->
+    <menuitem id="menu_product_margin_analysis" name="Product Margin"
+              parent="menu_advanced_analysis_root" action="action_product_margin_analysis" sequence="60"/>
+</odoo>

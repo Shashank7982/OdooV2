@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="mailing_template_delivery_test" model="mailing.mailing">
+            <field name="name">Storeget Customer Care Update</field>
+            <field name="subject">A quick update from Storeget Customer Care</field>
+            <field name="favorite" eval="True"/>
+            <field name="mailing_type">mail</field>
+            <field name="mailing_model_id" ref="mass_mailing.model_mailing_list"/>
+            <field name="email_from">{{ user.email_formatted or '' }}</field>
+
+            <field name="body_arch" type="html">
+                <div style="margin:0;padding:0;background:#f4f7fb;font-family:Arial,Helvetica,sans-serif;color:#243447;">
+                    <div style="max-width:640px;margin:0 auto;padding:30px 16px;">
+                        <div style="background:#ffffff;border:1px solid #e5eaf0;border-radius:16px;overflow:hidden;">
+
+                            <div style="padding:28px 32px;background:#123b5d;">
+                                <div style="font-size:23px;font-weight:bold;color:#ffffff;">
+                                    Storeget
+                                </div>
+                                <div style="margin-top:7px;font-size:13px;color:#cfe5f5;">
+                                    Customer Care
+                                </div>
+                            </div>
+
+                            <div style="padding:38px 32px;">
+                                <div style="font-size:25px;line-height:1.3;font-weight:bold;color:#123b5d;margin-bottom:20px;">
+                                    A quick update for you
+                                </div>
+
+                                <p style="font-size:15px;line-height:1.7;color:#425466;margin:0 0 18px;">
+                                    Hello,
+                                </p>
+
+                                <p style="font-size:15px;line-height:1.7;color:#425466;margin:0 0 18px;">
+                                    We wanted to share a quick update with you from the Storeget Customer Care team.
+                                </p>
+
+                                <div style="margin:25px 0;padding:20px;border-left:4px solid #2aa198;background:#f1fbfa;border-radius:8px;">
+                                    <p style="font-size:14px;line-height:1.7;color:#244b50;margin:0;">
+                                        If you need any assistance, simply reply to this email and our team will be happy to help.
+                                    </p>
+                                </div>
+
+                                <p style="font-size:15px;line-height:1.7;color:#425466;margin:0 0 22px;">
+                                    Thank you for choosing Storeget.
+                                </p>
+
+                                <p style="font-size:15px;line-height:1.7;color:#425466;margin:0;">
+                                    Warm regards,<br/>
+                                    <strong style="color:#123b5d;">
+                                        Storeget Customer Care
+                                    </strong>
+                                </p>
+
+                                <div style="text-align:center;margin:32px 0 4px;">
+                                    <a role="button" href="#" style="display:inline-block;background:#2aa198;color:#ffffff;font-size:14px;font-weight:bold;text-decoration:none;padding:12px 30px;border-radius:8px;">
+                                        Contact Us
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div style="padding:26px 32px;background:#123b5d;text-align:center;">
+                                <div style="margin-bottom:18px;">
+                                    <a href="https://www.facebook.com/" style="display:inline-block;width:34px;height:34px;line-height:34px;border-radius:50%;background:#1c4a70;margin:0 5px;text-decoration:none;">
+                                        <span class="fa fa-facebook" style="color:#ffffff;font-size:16px;"></span>
+                                    </a>
+                                    <a href="https://www.instagram.com/" style="display:inline-block;width:34px;height:34px;line-height:34px;border-radius:50%;background:#1c4a70;margin:0 5px;text-decoration:none;">
+                                        <span class="fa fa-instagram" style="color:#ffffff;font-size:16px;"></span>
+                                    </a>
+                                    <a href="https://twitter.com/" style="display:inline-block;width:34px;height:34px;line-height:34px;border-radius:50%;background:#1c4a70;margin:0 5px;text-decoration:none;">
+                                        <span class="fa fa-twitter" style="color:#ffffff;font-size:16px;"></span>
+                                    </a>
+                                    <a href="https://www.linkedin.com/" style="display:inline-block;width:34px;height:34px;line-height:34px;border-radius:50%;background:#1c4a70;margin:0 5px;text-decoration:none;">
+                                        <span class="fa fa-linkedin" style="color:#ffffff;font-size:16px;"></span>
+                                    </a>
+                                </div>
+                                <p style="font-size:12px;line-height:1.6;color:#cfe5f5;margin:0 0 6px;">
+                                    Storeget Customer Care
+                                </p>
+                                <p style="font-size:12px;margin:0;">
+                                    <a role="button" href="/unsubscribe_from_list" style="color:#9db9cf;text-decoration:underline;">Unsubscribe</a>
+                                </p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="followup_level_1" model="account.followup.level">
+        <field name="name">Level 1 - Gentle Reminder</field>
+        <field name="delay_days">7</field>
+        <field name="action">email</field>
+        <field name="mail_template_id" ref="mail_template_followup_reminder"/>
+    </record>
+    <record id="followup_level_2" model="account.followup.level">
+        <field name="name">Level 2 - Formal Reminder</field>
+        <field name="delay_days">30</field>
+        <field name="action">email</field>
+        <field name="mail_template_id" ref="mail_template_followup_reminder"/>
+    </record>
+    <record id="followup_level_3" model="account.followup.level">
+        <field name="name">Level 3 - Escalation</field>
+        <field name="delay_days">60</field>
+        <field name="action">activity</field>
+        <field name="activity_type_id" ref="mail.mail_activity_data_call"/>
+        <field name="activity_summary">Overdue 60+ days — call customer</field>
+    </record>
+</odoo>

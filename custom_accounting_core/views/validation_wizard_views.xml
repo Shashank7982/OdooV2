@@ -1,0 +1,31 @@
+<odoo>
+    <record id="view_account_validation_wizard_form" model="ir.ui.view">
+        <field name="name">account.validation.wizard.form</field>
+        <field name="model">account.validation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Validate Accounting Entries">
+                <group>
+                    <field name="company_id"/>
+                    <field name="move_ids" widget="many2many_tags" domain="[('company_id', '=', company_id)]"/>
+                </group>
+                <footer>
+                    <button name="action_validate" string="Validate" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_validation_wizard" model="ir.actions.act_window">
+        <field name="name">Validate Entries</field>
+        <field name="res_model">account.validation.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_account_validation_wizard"
+              name="Validate Entries"
+              parent="account.menu_finance"
+              action="action_account_validation_wizard"
+              sequence="100"/>
+</odoo>

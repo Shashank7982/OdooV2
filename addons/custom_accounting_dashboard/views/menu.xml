@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="custom_accounting_core.menu_custom_accounting_core_root" model="ir.ui.menu">
+        <field name="name">Accounting</field>
+        <field name="action" ref="action_accounting_dashboard"/>
+    </record>
+    <record id="custom_accounting_core.menu_dashboard_journals" model="ir.ui.menu">
+        <field name="name">Journal Dashboard</field>
+    </record>
+    <menuitem id="menu_accounting_dashboard" name="Dashboard"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" action="action_accounting_dashboard" sequence="5"/>
+    <menuitem id="menu_accounting_expenses" name="Expenses and Receipts"
+              parent="custom_accounting_core.menu_custom_accounting_entries_root"
+              action="custom_accounting_core.action_expense_entry" sequence="3"/>
+</odoo>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_deferred_schedule_form" model="ir.ui.view">
+        <field name="name">account.deferred.schedule.form</field>
+        <field name="model">account.deferred.schedule</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_schedule" type="object" string="Generate Schedule" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_terminate_early" type="object" string="Terminate Early" invisible="state != 'running'" confirm="Recognize the remaining balance immediately and stop the schedule?"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="deferred_type"/>
+                            <field name="partner_id"/>
+                            <field name="journal_id"/>
+                        </group>
+                        <group>
+                            <field name="source_account_id"/>
+                            <field name="target_account_id"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                    </group>
+                    <group string="Amounts">
+                        <group>
+                            <field name="total_amount"/>
+                        </group>
+                        <group>
+                            <field name="recognized_amount"/>
+                            <field name="remaining_amount"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Recognition Schedule" name="schedule">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="date"/>
+                                    <field name="amount" sum="Total" readonly="posted"/>
+                                    <field name="posted"/>
+                                    <field name="move_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_account_deferred_schedule_list" model="ir.ui.view">
+        <field name="name">account.deferred.schedule.list</field>
+        <field name="model">account.deferred.schedule</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="deferred_type"/>
+                <field name="partner_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="remaining_amount" sum="Total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_account_deferred_schedule" model="ir.actions.act_window">
+        <field name="name">Deferred Revenue / Expense</field>
+        <field name="res_model">account.deferred.schedule</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

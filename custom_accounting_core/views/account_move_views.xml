@@ -1,0 +1,19 @@
+<odoo>
+    <record id="view_move_form_inherit_audit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit.audit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Audit Information" groups="base.group_system">
+                    <field name="source_model" readonly="1"/>
+                    <field name="source_id" readonly="1"/>
+                    <field name="audit_action" readonly="1"/>
+                    <field name="audit_user_id" readonly="1"/>
+                    <field name="audit_timestamp" readonly="1"/>
+                    <field name="reversal_move_id" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_gmail_webhook_account_form" model="ir.ui.view">
+        <field name="name">gmail.webhook.account.form</field>
+        <field name="model">gmail.webhook.account</field>
+        <field name="arch" type="xml">
+            <form string="Gmail Webhook Account">
+                <header>
+                    <button name="action_connect_gmail_account" type="object" string="Connect Gmail Account"
+                            class="oe_highlight" invisible="state == 'watching'"/>
+                    <button name="action_start_watching" type="object" string="Start Watching"
+                            class="oe_highlight" invisible="state in ('draft', 'watching')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,authorized,watching"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-danger" role="alert" invisible="not error_message">
+                        <field name="error_message"/>
+                    </div>
+                    <group>
+                        <group string="Mailbox">
+                            <field name="email"/>
+                            <field name="notify_user_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="OAuth2 App Credentials">
+                            <field name="client_id"/>
+                            <field name="client_secret" password="True"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Pub/Sub">
+                            <field name="gcp_project_id"/>
+                            <field name="pubsub_topic_name"/>
+                        </group>
+                        <group string="Webhook (point your Pub/Sub push subscription here)">
+                            <field name="webhook_url"/>
+                        </group>
+                    </group>
+                    <group string="Watch State" invisible="state == 'draft'">
+                        <field name="last_history_id"/>
+                        <field name="watch_expiration"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_gmail_webhook_account_list" model="ir.ui.view">
+        <field name="name">gmail.webhook.account.list</field>
+        <field name="model">gmail.webhook.account</field>
+        <field name="arch" type="xml">
+            <list string="Gmail Webhook Accounts">
+                <field name="email"/>
+                <field name="state"/>
+                <field name="watch_expiration"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_gmail_webhook_account" model="ir.actions.act_window">
+        <field name="name">Gmail Webhook Accounts</field>
+        <field name="res_model">gmail.webhook.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

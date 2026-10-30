@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_form_gst_invoice" model="ir.ui.view">
+        <field name="name">res.company.form.gst.invoice</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <page name="branches" position="before">
+                <page string="GST Invoice Details" name="gst_invoice_details">
+                    <group>
+                        <group string="Statutory Numbers">
+                            <field name="vat" string="GSTIN"/>
+                            <field name="l10n_in_pan" string="PAN"/>
+                            <field name="l10n_in_cin"/>
+                            <field name="l10n_in_iec"/>
+                            <field name="l10n_in_tan"/>
+                            <field name="l10n_in_fssai"/>
+                        </group>
+                        <group string="Invoice Contact">
+                            <field name="gst_invoice_contact_name"/>
+                            <field name="gst_invoice_contact_number"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Bank Details">
+                            <field name="gst_show_bank_details"/>
+                            <field name="gst_mask_account_number"/>
+                            <field name="gst_bank_name" invisible="not gst_show_bank_details"/>
+                            <field name="gst_bank_account_holder" invisible="not gst_show_bank_details"/>
+                            <field name="gst_bank_account_number" invisible="not gst_show_bank_details"/>
+                            <field name="gst_bank_ifsc" invisible="not gst_show_bank_details"/>
+                            <field name="gst_bank_branch" invisible="not gst_show_bank_details"/>
+                            <field name="l10n_in_upi_id" string="UPI ID"/>
+                        </group>
+                        <group string="UPI QR Code">
+                            <field name="gst_show_upi_qr"/>
+                            <field name="gst_qr_merchant_name" invisible="not gst_show_upi_qr"/>
+                            <field name="gst_qr_include_amount" invisible="not gst_show_upi_qr"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Authorized Signature">
+                            <field name="gst_signature_image" widget="image" class="oe_avatar"/>
+                            <field name="gst_signatory_name"/>
+                            <field name="gst_signatory_designation"/>
+                        </group>
+                        <group string="Company Stamp">
+                            <field name="gst_company_stamp" widget="image" class="oe_avatar"/>
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+</odoo>

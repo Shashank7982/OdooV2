@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="utm_source_indiamart" model="utm.source">
+        <field name="name">Indiamart</field>
+    </record>
+</odoo>

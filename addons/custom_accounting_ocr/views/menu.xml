@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ocr_root" name="Bill Digitization"
+              parent="custom_accounting_core.menu_custom_accounting_core_root" sequence="110"/>
+    <menuitem id="menu_account_bill_digitization" name="Digitize Vendor Bill"
+              parent="menu_ocr_root" action="action_account_bill_digitization" sequence="10"/>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cash_book_report_wizard_form" model="ir.ui.view">
+        <field name="name">cash.book.report.wizard.form</field>
+        <field name="model">cash.book.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cash Book">
+                <group><field name="company_id"/><field name="date_from"/><field name="date_to"/><field name="journal_ids" widget="many2many_tags"/><field name="location_id"/><field name="transaction_mode"/></group>
+                <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                <group><field name="total_receipts"/><field name="total_payments"/><field name="closing_balance"/></group>
+                <field name="line_ids" readonly="1"><list><field name="date"/><field name="journal_id"/><field name="location_id"/><field name="reference"/><field name="partner_id"/><field name="debit"/><field name="credit"/><field name="balance"/><field name="running_balance"/></list></field>
+            </form>
+        </field>
+    </record>
+    <record id="action_cash_book_report" model="ir.actions.act_window">
+        <field name="name">Cash Book</field><field name="res_model">cash.book.report.wizard</field><field name="view_mode">form</field><field name="target">new</field>
+    </record>
+    <record id="view_petty_cash_report_wizard_form" model="ir.ui.view">
+        <field name="name">petty.cash.report.wizard.form</field>
+        <field name="model">petty.cash.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Petty Cash Report">
+                <group><field name="company_id"/><field name="date_from"/><field name="date_to"/><field name="location_id"/><field name="custodian_id"/></group>
+                <button name="action_generate" type="object" string="Generate" class="btn-primary"/>
+                <field name="total_amount"/>
+                <field name="line_ids" readonly="1"><list><field name="date"/><field name="voucher_id"/><field name="location_id"/><field name="custodian_id"/><field name="payee"/><field name="purpose"/><field name="amount"/><field name="state"/></list></field>
+            </form>
+        </field>
+    </record>
+    <record id="action_petty_cash_report" model="ir.actions.act_window">
+        <field name="name">Petty Cash Report</field><field name="res_model">petty.cash.report.wizard</field><field name="view_mode">form</field><field name="target">new</field>
+    </record>
+</odoo>

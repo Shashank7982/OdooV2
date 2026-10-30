@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_cash_location_list" model="ir.ui.view">
+        <field name="name">account.cash.location.list</field>
+        <field name="model">account.cash.location</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id"/>
+                <field name="journal_id"/>
+                <field name="custodian_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_account_cash_location_form" model="ir.ui.view">
+        <field name="name">account.cash.location.form</field>
+        <field name="model">account.cash.location</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" placeholder="e.g. Head Office Petty Cash"/></h1></div>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="journal_id"/>
+                        <field name="custodian_id"/>
+                        <field name="active"/>
+                    </group>
+                    <field name="notes" placeholder="Operating notes..."/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_account_cash_location" model="ir.actions.act_window">
+        <field name="name">Cash Locations</field>
+        <field name="res_model">account.cash.location</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>
